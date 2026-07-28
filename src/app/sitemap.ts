@@ -1,15 +1,12 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
+import { getSiteUrl } from "@/lib/seo/site";
 
 /** Build/prerender must not require DATABASE_URL (Vercel may lack it until env is configured). */
 export const dynamic = "force-dynamic";
 
-function baseUrl() {
-  return process.env.AUTH_URL ?? "http://localhost:3000";
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = baseUrl();
+  const base = getSiteUrl();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
