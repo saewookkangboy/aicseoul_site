@@ -28,13 +28,14 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
   const url = absolutePath(input.path);
   const image = input.image ?? DEFAULT_OG_IMAGE;
   const type = input.type ?? "website";
+  const desc = input.description || DEFAULT_DESCRIPTION;
   const title = input.absoluteTitle
     ? { absolute: input.title }
     : input.title;
 
   return {
     title,
-    description: input.description || DEFAULT_DESCRIPTION,
+    description: desc,
     alternates: { canonical: url },
     robots: input.robots,
     openGraph: {
@@ -42,7 +43,7 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
       locale: "ko_KR",
       siteName: SITE_NAME,
       title: input.title,
-      description: input.description,
+      description: desc,
       url,
       images: [{ url: image, width: 1200, height: 630 }],
       ...(type === "article" && input.publishedTime
@@ -52,7 +53,7 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
     twitter: {
       card: "summary_large_image",
       title: input.title,
-      description: input.description,
+      description: desc,
       images: [image],
     },
   };

@@ -7,6 +7,7 @@ import {
 } from "./site";
 
 function abs(path: string): string {
+  if (/^https?:\/\//i.test(path)) return path;
   const base = getSiteUrl();
   if (path === "/" || path === "") return `${base}/`;
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
