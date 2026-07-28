@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import type { AuthFormState } from "@/lib/actions/auth";
+import { btnPrimaryClass, fieldClass, labelClass, labelHintClass } from "./ui";
 
 type Props = {
   action: (prev: AuthFormState, formData: FormData) => Promise<AuthFormState>;
@@ -15,48 +16,43 @@ export function AuthForm({ action, submitLabel, includeName }: Props) {
   const [state, formAction, pending] = useActionState(action, initial);
 
   return (
-    <form action={formAction} className="flex w-full max-w-md flex-col gap-4">
+    <form action={formAction} className="flex w-full flex-col gap-4">
       {includeName ? (
-        <label className="flex flex-col gap-1.5 text-sm">
-          <span className="text-[var(--color-ink-muted)]">이름</span>
-          <input
-            name="name"
-            required
-            className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-[var(--color-ink)] outline-none focus:border-[var(--color-gold)]"
-          />
+        <label className={labelClass}>
+          <span className={labelHintClass}>이름</span>
+          <input name="name" required className={fieldClass} />
         </label>
       ) : null}
-      <label className="flex flex-col gap-1.5 text-sm">
-        <span className="text-[var(--color-ink-muted)]">이메일</span>
+      <label className={labelClass}>
+        <span className={labelHintClass}>이메일</span>
         <input
           name="email"
           type="email"
           required
           autoComplete="email"
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-[var(--color-ink)] outline-none focus:border-[var(--color-gold)]"
+          className={fieldClass}
         />
       </label>
-      <label className="flex flex-col gap-1.5 text-sm">
-        <span className="text-[var(--color-ink-muted)]">비밀번호</span>
+      <label className={labelClass}>
+        <span className={labelHintClass}>비밀번호</span>
         <input
           name="password"
           type="password"
           required
           minLength={8}
           autoComplete={includeName ? "new-password" : "current-password"}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-[var(--color-ink)] outline-none focus:border-[var(--color-gold)]"
+          className={fieldClass}
         />
       </label>
       {state.error ? (
-        <p className="text-sm text-[var(--color-cta)]" role="alert">
+        <p
+          className="rounded-[var(--radius)] bg-[color-mix(in_srgb,var(--color-cta)_10%,transparent)] px-3 py-2 text-sm text-[var(--color-cta)]"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
-      <button
-        type="submit"
-        disabled={pending}
-        className="mt-2 rounded-full bg-[var(--color-cta)] px-5 py-3 text-sm font-medium text-white transition-opacity disabled:opacity-60"
-      >
+      <button type="submit" disabled={pending} className={`${btnPrimaryClass} mt-2 w-full`}>
         {pending ? "처리 중…" : submitLabel}
       </button>
     </form>

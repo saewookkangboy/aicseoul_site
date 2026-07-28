@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { AdminPageHeader } from "@/components/admin/ui";
 import { UsersTable } from "@/components/admin/UsersTable";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -28,13 +29,10 @@ export default async function UsersPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-3xl font-medium tracking-tight">사용자·권한</h1>
-        <p className="mt-2 max-w-[60ch] text-sm text-[var(--color-ink-muted)]">
-          SuperAdmin(최대 3명)만 접근합니다. pending 사용자를 승인하고 모듈
-          권한을 부여하세요.
-        </p>
-      </div>
+      <AdminPageHeader
+        title="사용자·권한"
+        description="SuperAdmin(최대 3명)만 접근합니다. pending 사용자를 승인하고 모듈 권한을 부여하세요."
+      />
       <UsersTable users={users} />
     </div>
   );

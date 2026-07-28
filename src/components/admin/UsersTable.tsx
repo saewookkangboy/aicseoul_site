@@ -6,6 +6,15 @@ import {
   disableUser,
   updateUserPermissions,
 } from "@/lib/actions/users";
+import {
+  AdminBadge,
+  btnDangerGhostClass,
+  btnGhostClass,
+  tableClass,
+  tableWrapClass,
+  tdClass,
+  thClass,
+} from "@/components/admin/ui";
 
 type UserRow = {
   id: string;
@@ -20,34 +29,51 @@ type UserRow = {
   permSettings: boolean;
 };
 
+function statusTone(status: string) {
+  switch (status) {
+    case "pending":
+      return "warn" as const;
+    case "active":
+      return "success" as const;
+    case "disabled":
+      return "neutral" as const;
+    default:
+      return "neutral" as const;
+  }
+}
+
 export function UsersTable({ users }: { users: UserRow[] }) {
   const [pending, start] = useTransition();
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+    <div className={tableWrapClass}>
+      <table className={`${tableClass} min-w-[720px]`}>
         <thead>
-          <tr className="border-b border-[var(--color-border)] text-[var(--color-ink-muted)]">
-            <th className="py-3 pr-4 font-medium">사용자</th>
-            <th className="py-3 pr-4 font-medium">상태</th>
-            <th className="py-3 pr-4 font-medium">권한</th>
-            <th className="py-3 font-medium">액션</th>
+          <tr>
+            <th className={thClass}>사용자</th>
+            <th className={thClass}>상태</th>
+            <th className={thClass}>권한</th>
+            <th className={thClass}>액션</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id} className="border-b border-[var(--color-border)] align-top">
-              <td className="py-4 pr-4">
+            <tr key={user.id} className="align-top">
+              <td className={tdClass}>
                 <div className="font-medium text-[var(--color-ink)]">
-                  {user.name ?? "—"}
+                  {user.name ?? "이름 없음"}
                 </div>
                 <div className="text-[var(--color-ink-muted)]">{user.email}</div>
-                <div className="mt-1 font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--color-gold)]">
-                  {user.role}
+                <div className="mt-2">
+                  <AdminBadge tone="gold">{user.role}</AdminBadge>
                 </div>
               </td>
-              <td className="py-4 pr-4">{user.status}</td>
-              <td className="py-4 pr-4">
+              <td className={tdClass}>
+                <AdminBadge tone={statusTone(user.status)}>
+                  {user.status}
+                </AdminBadge>
+              </td>
+              <td className={tdClass}>
                 {user.role === "superadmin" ? (
                   <span className="text-[var(--color-ink-muted)]">전체</span>
                 ) : (
@@ -87,20 +113,20 @@ export function UsersTable({ users }: { users: UserRow[] }) {
                     <button
                       type="submit"
                       disabled={pending}
-                      className="mt-1 w-fit text-xs text-[var(--color-cta)] underline"
+                      className={`${btnGhostClass} mt-1 w-fit text-xs text-[var(--color-cta)]`}
                     >
                       권한 저장
                     </button>
                   </form>
                 )}
               </td>
-              <td className="py-4">
+              <td className={tdClass}>
                 <div className="flex flex-col gap-2">
                   {user.status === "pending" ? (
                     <button
                       type="button"
                       disabled={pending}
-                      className="text-left text-xs text-[var(--color-cta)] underline"
+                      className="text-left text-xs font-medium text-[var(--color-cta)]"
                       onClick={() => start(() => approveUser(user.id))}
                     >
                       승인
@@ -110,7 +136,7 @@ export function UsersTable({ users }: { users: UserRow[] }) {
                     <button
                       type="button"
                       disabled={pending}
-                      className="text-left text-xs text-[var(--color-ink-muted)] underline"
+                      className={`${btnDangerGhostClass} text-left text-xs`}
                       onClick={() => start(() => disableUser(user.id))}
                     >
                       비활성

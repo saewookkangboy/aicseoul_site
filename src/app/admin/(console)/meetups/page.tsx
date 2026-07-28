@@ -1,4 +1,14 @@
 import Link from "next/link";
+import {
+  AdminBadge,
+  AdminEmpty,
+  AdminPageHeader,
+  AdminPanel,
+  btnDangerGhostClass,
+  btnGhostClass,
+  btnPrimaryClass,
+  fieldClass,
+} from "@/components/admin/ui";
 import { updateMeetupCtaAction, deleteClassAction } from "@/lib/actions/meetups";
 import { requireModule } from "@/lib/admin";
 import { prisma } from "@/lib/db";
@@ -16,71 +26,94 @@ export default async function AdminMeetupsPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-10">
-      <div>
-        <h1 className="text-3xl font-medium tracking-tight">Meetups</h1>
-        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-          CTA · 클래스 기록 · 사진벽
-        </p>
-      </div>
+    <div className="flex flex-col gap-8">
+      <AdminPageHeader
+        title="Meetups"
+        description="CTA · 클래스 기록 · 사진벽"
+        actions={
+          <>
+            <Link href="/admin/meetups/archive" className={btnGhostClass}>
+              사진벽
+            </Link>
+            <Link href="/admin/meetups/classes/new" className={btnPrimaryClass}>
+              클래스 추가
+            </Link>
+          </>
+        }
+      />
 
-      <section className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-        <h2 className="font-medium">정기 모임 신청 CTA URL</h2>
-        <form action={updateMeetupCtaAction} className="mt-3 flex flex-wrap gap-2">
+      <AdminPanel
+        title="정기 모임 신청 CTA"
+        description="공개 Meetups 페이지 버튼 링크"
+      >
+        <form action={updateMeetupCtaAction} className="flex flex-wrap gap-2">
           <input
             name="meetup.ctaUrl"
             defaultValue={settings["meetup.ctaUrl"] ?? "/contact"}
-            className="min-w-[240px] flex-1 rounded-[var(--radius)] border border-[var(--color-border)] px-3 py-2 text-sm"
+            className={`${fieldClass} min-w-[240px] flex-1`}
           />
-          <button
-            type="submit"
-            className="rounded-full bg-[var(--color-cta)] px-4 py-2 text-sm text-white"
-          >
+          <button type="submit" className={btnPrimaryClass}>
             저장
           </button>
         </form>
-      </section>
+      </AdminPanel>
 
       <section>
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-xl font-medium">원데이 클래스</h2>
-          <div className="flex gap-3">
-            <Link href="/admin/meetups/archive" className="text-sm underline">
-              사진벽
-            </Link>
-            <Link
-              href="/admin/meetups/classes/new"
-              className="rounded-full bg-[var(--color-cta)] px-4 py-2 text-sm text-white"
-            >
-              클래스 추가
-            </Link>
-          </div>
-        </div>
-        <ul className="mt-4 divide-y divide-[var(--color-border)]">
-          {classes.map((c) => (
-            <li key={c.id} className="flex items-center justify-between gap-4 py-4">
-              <div>
-                <p className="font-medium">{c.title}</p>
-                <p className="text-xs text-[var(--color-ink-muted)]">
-                  {formatDateKo(c.date)} · {c.status}
-                </p>
-              </div>
-              <div className="flex gap-3 text-sm">
+        <h2 className="font-display text-lg font-medium tracking-tight">
+          원데이 클래스
+        </h2>
+        {classes.length > 0 ? (
+          <ul className="mt-4 divide-y divide-[var(--color-border)] overflow-hidden rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-soft)]">
+            {classes.map((c) => (
+              <li
+                key={c.id}
+                className="flex flex-wrap items-center justify-between gap-4 px-5 py-4"
+              >
+                <div className="min-w-0">
+                  <p className="font-medium">{c.title}</p>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                    <span className="text-xs text-[var(--color-ink-muted)]">
+                      {formatDateKo(c.date)}
+                    </span>
+                    <AdminBadge
+                      tone={c.status === "published" ? "success" : "neutral"}
+                    >
+                      {c.status}
+                    </AdminBadge>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <Link
+                    href={`/admin/meetups/classes/${c.id}`}
+                    className="font-medium text-[var(--color-cta)]"
+                  >
+                    편집
+                  </Link>
+                  <form action={deleteClassAction.bind(null, c.id)}>
+                    <button type="submit" className={btnDangerGhostClass}>
+                      삭제
+                    </button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mt-4">
+            <AdminEmpty
+              title="클래스가 없습니다"
+              description="원데이 클래스 기록을 추가하세요."
+              action={
                 <Link
-                  href={`/admin/meetups/classes/${c.id}`}
-                  className="text-[var(--color-cta)] underline"
+                  href="/admin/meetups/classes/new"
+                  className={btnPrimaryClass}
                 >
-                  편집
+                  클래스 추가
                 </Link>
-                <form action={deleteClassAction.bind(null, c.id)}>
-                  <button type="submit" className="underline text-[var(--color-ink-muted)]">
-                    삭제
-                  </button>
-                </form>
-              </div>
-            </li>
-          ))}
-        </ul>
+              }
+            />
+          </div>
+        )}
       </section>
     </div>
   );

@@ -1,4 +1,11 @@
 import Link from "next/link";
+import {
+  AdminBadge,
+  AdminEmpty,
+  AdminPageHeader,
+  btnDangerGhostClass,
+  btnPrimaryClass,
+} from "@/components/admin/ui";
 import { deleteInsightAction } from "@/lib/actions/insights-contact";
 import { requireModule } from "@/lib/admin";
 import { formatDateKo } from "@/lib/content/copy";
@@ -12,50 +19,60 @@ export default async function AdminInsightsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-medium tracking-tight">Insights</h1>
-          <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-            CMS · Featured는 1건만
-          </p>
-        </div>
-        <Link
-          href="/admin/insights/new"
-          className="rounded-full bg-[var(--color-cta)] px-4 py-2 text-sm text-white"
-        >
-          글 작성
-        </Link>
-      </div>
-      <ul className="divide-y divide-[var(--color-border)]">
-        {posts.map((p) => (
-          <li key={p.id} className="flex items-center justify-between gap-4 py-4">
-            <div>
-              <p className="font-medium">
-                {p.title}{" "}
-                {p.isFeatured ? (
-                  <span className="text-xs text-[var(--color-gold)]">Featured</span>
-                ) : null}
-              </p>
-              <p className="text-xs text-[var(--color-ink-muted)]">
-                {p.category} · {p.status} · {formatDateKo(p.publishedAt)}
-              </p>
-            </div>
-            <div className="flex gap-3 text-sm">
-              <Link
-                href={`/admin/insights/${p.id}/edit`}
-                className="text-[var(--color-cta)] underline"
-              >
-                편집
-              </Link>
-              <form action={deleteInsightAction.bind(null, p.id)}>
-                <button type="submit" className="underline text-[var(--color-ink-muted)]">
-                  삭제
-                </button>
-              </form>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <AdminPageHeader
+        title="Insights"
+        description="CMS · Featured는 1건만"
+        actions={
+          <Link href="/admin/insights/new" className={btnPrimaryClass}>
+            글 작성
+          </Link>
+        }
+      />
+      {posts.length > 0 ? (
+        <ul className="divide-y divide-[var(--color-border)] overflow-hidden rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-soft)]">
+          {posts.map((p) => (
+            <li
+              key={p.id}
+              className="flex flex-wrap items-center justify-between gap-4 px-5 py-4"
+            >
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-medium">{p.title}</p>
+                  {p.isFeatured ? (
+                    <AdminBadge tone="gold">Featured</AdminBadge>
+                  ) : null}
+                </div>
+                <p className="mt-1.5 text-xs text-[var(--color-ink-muted)]">
+                  {p.category} · {p.status} · {formatDateKo(p.publishedAt)}
+                </p>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <Link
+                  href={`/admin/insights/${p.id}/edit`}
+                  className="font-medium text-[var(--color-cta)]"
+                >
+                  편집
+                </Link>
+                <form action={deleteInsightAction.bind(null, p.id)}>
+                  <button type="submit" className={btnDangerGhostClass}>
+                    삭제
+                  </button>
+                </form>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <AdminEmpty
+          title="글이 없습니다"
+          description="첫 Insights를 작성해 보세요."
+          action={
+            <Link href="/admin/insights/new" className={btnPrimaryClass}>
+              글 작성
+            </Link>
+          }
+        />
+      )}
     </div>
   );
 }
