@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isSuperAdmin } from "@/lib/permissions";
+import { planUserPermissionUpdate } from "@/lib/user-permission-update";
 
 export async function approveUser(userId: string) {
   const session = await auth();
@@ -53,6 +54,7 @@ export async function updateUserPermissions(
     permContact: boolean;
     permSettings: boolean;
     promoteSuperadmin?: boolean;
+    demoteSuperadmin?: boolean;
   },
 ) {
   const session = await auth();
@@ -63,26 +65,26 @@ export async function updateUserPermissions(
   const target = await prisma.user.findUnique({ where: { id: userId } });
   if (!target) throw new Error("User not found");
 
-  let role = target.role;
-  if (perms.promoteSuperadmin && target.role !== "superadmin") {
-    const count = await prisma.user.count({ where: { role: "superadmin" } });
-    if (count >= 3) {
-      throw new Error("SuperAdmin은 최대 3명입니다.");
-    }
-    role = "superadmin";
+  const superadminCount = await prisma.user.count({
+    where: { role: "superadmin" },
+  });
+
+  const planned = planUserPermissionUpdate({
+    actorId: session.user.id,
+    targetId: userId,
+    targetRole: target.role,
+    targetStatus: target.status,
+    superadminCount,
+    perms,
+  });
+
+  if (!planned.ok) {
+    throw new Error(planned.error);
   }
 
   await prisma.user.update({
     where: { id: userId },
-    data: {
-      role,
-      status: target.status === "pending" ? "active" : target.status,
-      permPeople: role === "superadmin" ? true : perms.permPeople,
-      permMeetups: role === "superadmin" ? true : perms.permMeetups,
-      permInsights: role === "superadmin" ? true : perms.permInsights,
-      permContact: role === "superadmin" ? true : perms.permContact,
-      permSettings: role === "superadmin" ? true : perms.permSettings,
-    },
+    data: planned.data,
   });
 
   revalidatePath("/admin/users");
