@@ -3,8 +3,8 @@ import { auth } from "@/lib/auth";
 import { updateSession } from "@/utils/supabase/middleware";
 
 function copyCookies(from: NextResponse, to: NextResponse) {
-  from.cookies.getAll().forEach((cookie) => {
-    to.cookies.set(cookie.name, cookie.value);
+  from.cookies.getAll().forEach(({ name, value }) => {
+    to.cookies.set(name, value);
   });
   return to;
 }
