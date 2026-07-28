@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "bash scripts/vercel-build.sh",
     "start": "next start",
     "lint": "eslint",
     "db:up": "docker compose up -d",
@@ -12,7 +12,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:prod": "tsx prisma/seed-production.ts",
     "db:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "postinstall": "bash scripts/prisma-generate.sh"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
