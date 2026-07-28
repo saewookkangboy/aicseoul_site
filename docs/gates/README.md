@@ -9,6 +9,7 @@
 2. 상태가 `pending_review`이면 구현/다음 단계 착수 금지.
 3. 사용자가 채팅에서 **「승인」** (또는 동등한 명시)을 하면 상태를 `approved`로 바꾸고 다음 단계를 시작한다.
 4. 수정 요청이 있으면 해당 게이트 문서를 갱신하고 다시 `pending_review`로 둔다.
+5. **구현은 feature 브랜치 + Pull Request로만 `main`에 반영한다.** `main`에 직접 장기간 WIP를 쌓지 않는다. 완료 시 Superpowers `finishing-a-development-branch`로 merge/PR/유지/폐기를 선택한다.
 
 ## 단계 맵
 
@@ -24,5 +25,13 @@
 
 ## 현재 위치
 
-**G5b — P4 연동·품질 구현 진행 중 → 완료 후 검수**  
-G0–G5(계획): `approved`
+**G6 / P5 — Vercel 환경 준비 완료 · Tier A 수집 대기**
+
+| 문서 | 내용 |
+|---|---|
+| [P5-plan.md](./P5-plan.md) | 출시 계획 (`approved`) |
+| [P5-content-guide.md](./P5-content-guide.md) | DB 적재 스펙 |
+| [P5-vercel-setup.md](./P5-vercel-setup.md) | GitHub→Vercel env·빌드 |
+| [P5-tier-a-checklist.md](./P5-tier-a-checklist.md) | **자료 수집 체크리스트** |
+
+다음 트리거: 사용자 **「Tier A 준비 완료」** → Production 배포 + 시드 + 적재 → G6b 검수.
