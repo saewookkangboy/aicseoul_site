@@ -31,11 +31,12 @@ export default async function UsersPage() {
       <div>
         <h1 className="text-3xl font-medium tracking-tight">사용자·권한</h1>
         <p className="mt-2 max-w-[60ch] text-sm text-[var(--color-ink-muted)]">
-          SuperAdmin(최대 3명)만 접근합니다. pending 사용자를 승인하고 모듈
-          권한을 부여하세요.
+          SuperAdmin(최대 3명, 최소 1명)만 접근합니다. pending 승인, 모듈
+          권한, SuperAdmin 승격·강등이 가능합니다. 본인 역할은 변경할 수
+          없습니다. 역할이 바뀐 사용자는 재로그인 후 권한이 반영됩니다.
         </p>
       </div>
-      <UsersTable users={users} />
+      <UsersTable users={users} currentUserId={session.user.id} />
     </div>
   );
 }
