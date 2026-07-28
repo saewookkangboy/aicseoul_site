@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Reveal } from "@/components/motion/Reveal";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { contactCopy } from "@/lib/content/copy";
 import { getSiteSettingsMap } from "@/lib/queries/content";
+import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Contact",
   description: "협업·후원, 교육, 커뮤니티 참여 문의.",
-};
+  path: "/contact",
+});
 
 export default async function ContactPage() {
   const settings = await getSiteSettingsMap();
@@ -17,7 +20,14 @@ export default async function ContactPage() {
   const email = settings["contact.email"] ?? "hello@aic-seoul.example";
 
   return (
-    <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ])}
+      />
+      <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
       <div className="grid gap-14 lg:grid-cols-[1fr_0.95fr]">
         <div>
           <Reveal>
@@ -64,5 +74,6 @@ export default async function ContactPage() {
         </Reveal>
       </div>
     </section>
+    </>
   );
 }

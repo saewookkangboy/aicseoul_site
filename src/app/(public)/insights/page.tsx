@@ -1,18 +1,21 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { FeaturedPost, PostCard } from "@/components/insights/cards";
 import { Reveal } from "@/components/motion/Reveal";
+import { JsonLd } from "@/components/seo/JsonLd";
 import {
   getFeaturedInsight,
   getPublishedInsights,
 } from "@/lib/queries/content";
+import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Insights",
   description: "모임 기록, 클래스 노트, 커뮤니티 이야기를 남깁니다.",
-};
+  path: "/insights",
+});
 
 type Props = { searchParams: Promise<{ page?: string }> };
 
@@ -25,7 +28,14 @@ export default async function InsightsPage({ searchParams }: Props) {
   ]);
 
   return (
-    <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Insights", path: "/insights" },
+        ])}
+      />
+      <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
       <Reveal>
         <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
           Insights
@@ -64,5 +74,6 @@ export default async function InsightsPage({ searchParams }: Props) {
         </div>
       ) : null}
     </section>
+    </>
   );
 }
