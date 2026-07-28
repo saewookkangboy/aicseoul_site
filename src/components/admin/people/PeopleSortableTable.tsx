@@ -15,9 +15,17 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { DotsSixVertical } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { reorderMembersAction } from "@/lib/actions/cms";
+import {
+  AdminBadge,
+  tableClass,
+  tableWrapClass,
+  tdClass,
+  thClass,
+} from "@/components/admin/ui";
 
 type MemberRow = {
   id: string;
@@ -36,32 +44,36 @@ function SortableRow({ member }: { member: MemberRow }) {
     <tr
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className="border-b border-[var(--color-border)]"
     >
-      <td className="py-3 pr-2">
+      <td className={`${tdClass} w-10`}>
         <button
           type="button"
-          className="cursor-grab px-2 text-[var(--color-ink-muted)]"
+          className="cursor-grab rounded-md p-1 text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-cream)] hover:text-[var(--color-ink)] active:cursor-grabbing"
+          aria-label="순서 변경"
           {...attributes}
           {...listeners}
         >
-          ⋮⋮
+          <DotsSixVertical className="size-5" weight="bold" />
         </button>
       </td>
-      <td className="py-3 pr-4">
+      <td className={tdClass}>
         <div className="font-medium">{member.nameKr}</div>
-        <div className="text-xs text-[var(--color-ink-muted)]">{member.nameEn}</div>
+        <div className="text-xs text-[var(--color-ink-muted)]">
+          {member.nameEn}
+        </div>
       </td>
-      <td className="py-3 pr-4 text-sm text-[var(--color-ink-muted)]">
+      <td className={`${tdClass} max-w-[28ch] text-[var(--color-ink-muted)]`}>
         {member.bio}
       </td>
-      <td className="py-3 pr-4 text-sm">
-        {member.isVisible ? "노출" : "숨김"}
+      <td className={tdClass}>
+        <AdminBadge tone={member.isVisible ? "success" : "neutral"}>
+          {member.isVisible ? "노출" : "숨김"}
+        </AdminBadge>
       </td>
-      <td className="py-3">
+      <td className={tdClass}>
         <Link
           href={`/admin/people/${member.id}/edit`}
-          className="text-sm text-[var(--color-cta)] underline"
+          className="text-sm font-medium text-[var(--color-cta)]"
         >
           편집
         </Link>
@@ -90,22 +102,24 @@ export function PeopleSortableTable({ members }: { members: MemberRow[] }) {
   return (
     <div>
       {pending ? (
-        <p className="mb-2 text-xs text-[var(--color-ink-muted)]">순서 저장 중…</p>
+        <p className="mb-2 text-xs text-[var(--color-ink-muted)]">
+          순서 저장 중…
+        </p>
       ) : null}
-      <div className="overflow-x-auto">
+      <div className={tableWrapClass}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={onDragEnd}
         >
-          <table className="w-full min-w-[640px] text-left text-sm">
+          <table className={tableClass}>
             <thead>
-              <tr className="border-b border-[var(--color-border)] text-[var(--color-ink-muted)]">
-                <th className="py-2 w-10" />
-                <th className="py-2">이름</th>
-                <th className="py-2">소개</th>
-                <th className="py-2">상태</th>
-                <th className="py-2"> </th>
+              <tr>
+                <th className={`${thClass} w-10`} />
+                <th className={thClass}>이름</th>
+                <th className={thClass}>소개</th>
+                <th className={thClass}>상태</th>
+                <th className={thClass}> </th>
               </tr>
             </thead>
             <SortableContext

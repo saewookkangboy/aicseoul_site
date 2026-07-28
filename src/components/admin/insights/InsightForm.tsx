@@ -3,6 +3,13 @@
 import { useState } from "react";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
 import { RichTextEditor } from "@/components/admin/insights/RichTextEditor";
+import {
+  AdminPanel,
+  btnPrimaryClass,
+  fieldClass,
+  labelClass,
+  labelHintClass,
+} from "@/components/admin/ui";
 import { looksLikeHtml } from "@/lib/sanitize-html";
 
 const CATEGORIES = ["Meetup Recap", "Class Note", "Community"] as const;
@@ -45,103 +52,103 @@ export function InsightForm({ action, initial, submitLabel }: Props) {
   const [thumbnailUrl, setThumbnailUrl] = useState(initial?.thumbnailUrl ?? "");
 
   return (
-    <form action={action} className="flex max-w-2xl flex-col gap-4">
-      <input type="hidden" name="thumbnailUrl" value={thumbnailUrl} />
-      <label className="flex flex-col gap-1 text-sm">
-        <span>제목</span>
-        <input
-          name="title"
-          required
-          defaultValue={initial?.title}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
+    <AdminPanel>
+      <form action={action} className="flex max-w-2xl flex-col gap-4">
+        <input type="hidden" name="thumbnailUrl" value={thumbnailUrl} />
+        <label className={labelClass}>
+          <span className={labelHintClass}>제목</span>
+          <input
+            name="title"
+            required
+            defaultValue={initial?.title}
+            className={fieldClass}
+          />
+        </label>
+        <label className={labelClass}>
+          <span className={labelHintClass}>카테고리</span>
+          <input
+            name="category"
+            list="insight-categories"
+            required
+            defaultValue={initial?.category ?? "Community"}
+            className={fieldClass}
+          />
+          <datalist id="insight-categories">
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
+        </label>
+        <label className={labelClass}>
+          <span className={labelHintClass}>요약</span>
+          <textarea
+            name="summary"
+            required
+            rows={2}
+            defaultValue={initial?.summary}
+            className={fieldClass}
+          />
+        </label>
+        <div className="flex flex-col gap-1.5 text-sm">
+          <span className={labelHintClass}>본문</span>
+          <p className="text-xs text-[var(--color-ink-muted)]">
+            위지윅 에디터로 작성합니다. 굵게·제목·목록·링크 등을 툴바에서 사용할
+            수 있습니다.
+          </p>
+          <RichTextEditor
+            name="body"
+            required
+            initialHtml={bodyToEditorHtml(initial?.body)}
+          />
+        </div>
+        <ImageUploadField
+          module="insights"
+          folder="insights"
+          value={thumbnailUrl}
+          onUploaded={setThumbnailUrl}
+          label="썸네일 (선택)"
         />
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>카테고리</span>
-        <input
-          name="category"
-          list="insight-categories"
-          required
-          defaultValue={initial?.category ?? "Community"}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        />
-        <datalist id="insight-categories">
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c} />
-          ))}
-        </datalist>
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>요약</span>
-        <textarea
-          name="summary"
-          required
-          rows={2}
-          defaultValue={initial?.summary}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        />
-      </label>
-      <div className="flex flex-col gap-1 text-sm">
-        <span>본문</span>
-        <p className="text-xs text-[var(--color-ink-muted)]">
-          위지윅 에디터로 작성합니다. 굵게·제목·목록·링크 등을 툴바에서 사용할 수
-          있습니다.
-        </p>
-        <RichTextEditor
-          name="body"
-          required
-          initialHtml={bodyToEditorHtml(initial?.body)}
-        />
-      </div>
-      <ImageUploadField
-        module="insights"
-        folder="insights"
-        value={thumbnailUrl}
-        onUploaded={setThumbnailUrl}
-        label="썸네일 (선택)"
-      />
-      <label className="flex flex-col gap-1 text-sm">
-        <span>작성자</span>
-        <input
-          name="author"
-          defaultValue={initial?.author ?? "AIC Seoul"}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        />
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>발행일</span>
-        <input
-          name="publishedAt"
-          type="date"
-          defaultValue={initial?.publishedAt}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        />
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>상태</span>
-        <select
-          name="status"
-          defaultValue={initial?.status ?? "draft"}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        >
-          <option value="draft">초안</option>
-          <option value="published">발행</option>
-        </select>
-      </label>
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          name="isFeatured"
-          defaultChecked={initial?.isFeatured}
-        />
-        Featured (대표글 — 기존 Featured는 자동 해제)
-      </label>
-      <button
-        type="submit"
-        className="mt-2 w-fit rounded-full bg-[var(--color-cta)] px-5 py-2.5 text-sm text-white"
-      >
-        {submitLabel}
-      </button>
-    </form>
+        <label className={labelClass}>
+          <span className={labelHintClass}>작성자</span>
+          <input
+            name="author"
+            defaultValue={initial?.author ?? "AIC Seoul"}
+            className={fieldClass}
+          />
+        </label>
+        <label className={labelClass}>
+          <span className={labelHintClass}>발행일</span>
+          <input
+            name="publishedAt"
+            type="date"
+            defaultValue={initial?.publishedAt}
+            className={fieldClass}
+          />
+        </label>
+        <label className={labelClass}>
+          <span className={labelHintClass}>상태</span>
+          <select
+            name="status"
+            defaultValue={initial?.status ?? "draft"}
+            className={fieldClass}
+          >
+            <option value="draft">초안</option>
+            <option value="published">발행</option>
+          </select>
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="isFeatured"
+            defaultChecked={initial?.isFeatured}
+            className="accent-[var(--color-cta)]"
+          />
+          Featured (대표글 - 기존 Featured는 자동 해제)
+        </label>
+        <button type="submit" className={`${btnPrimaryClass} mt-2 w-fit`}>
+          {submitLabel}
+        </button>
+      </form>
+    </AdminPanel>
   );
 }

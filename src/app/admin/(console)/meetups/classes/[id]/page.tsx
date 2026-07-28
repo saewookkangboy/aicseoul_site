@@ -3,6 +3,7 @@ import { updateClassAction } from "@/lib/actions/meetups";
 import { requireModule } from "@/lib/admin";
 import { prisma } from "@/lib/db";
 import { ClassForm } from "@/components/admin/meetups/ClassForm";
+import { AdminPageHeader } from "@/components/admin/ui";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -22,7 +23,7 @@ export default async function EditClassPage({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-medium tracking-tight">클래스 편집</h1>
+      <AdminPageHeader title="클래스 편집" description={meetup.title} />
       <ClassForm
         action={updateClassAction.bind(null, id)}
         submitLabel="업데이트"
