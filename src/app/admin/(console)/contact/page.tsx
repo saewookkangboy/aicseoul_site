@@ -25,13 +25,28 @@ export default async function AdminContactPage({ searchParams }: Props) {
     take: 100,
   });
 
+  const exportQs = new URLSearchParams();
+  if (params.type) exportQs.set("type", params.type);
+  if (params.status) exportQs.set("status", params.status);
+  const exportHref = `/api/admin/contact/export${
+    exportQs.toString() ? `?${exportQs.toString()}` : ""
+  }`;
+
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-3xl font-medium tracking-tight">문의함</h1>
-        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-          유형·상태 필터 · 이메일 알림은 P4
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-medium tracking-tight">문의함</h1>
+          <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
+            유형·상태 필터 · Resend 알림(키 있을 때) · CSV 내보내기
+          </p>
+        </div>
+        <a
+          href={exportHref}
+          className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-sm"
+        >
+          CSV 내보내기
+        </a>
       </div>
       <div className="flex flex-wrap gap-2 text-sm">
         <FilterChip href="/admin/contact" label="전체" />

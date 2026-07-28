@@ -15,7 +15,7 @@
 | **P1** | Next.js · Postgres · Auth · 토큰 · 셸 | ✅ 구현·검수 승인 |
 | **P2** | 퍼블릭 5페이지 (Home / Meetups / People / Insights / Contact) | ✅ 구현·검수 승인 |
 | **P3** | Admin CMS (People·Meetups·Insights·Contact·Settings·Users) | ✅ 구현·검수 승인 |
-| **P4** | Cloudinary · Resend · SEO · a11y · 보안 마감 | 🔄 계획 승인 → **구현 진행 중** |
+| **P4** | Cloudinary · Resend · SEO · CSV · a11y | ✅ 구현 → **검수 대기 (G5b)** |
 | **P5** | MVP 출시 (도메인 DNS) | ⏳ 대기 |
 
 게이트 문서: `docs/gates/` · 프로세스: `docs/PROCESS.md` · 제품 요구: `PRD.md`
@@ -39,10 +39,10 @@
 - **People** — CRUD + DnD 순서 변경
 - **Meetups** — CTA/클래스 CRUD, 아카이브 다중 업로드
 - **Insights** — CMS(초안/발행), Featured 유일, 마크다운 본문
-- **Contact Inbox** — 필터·상태(new/seen/done)·메모
+- **Contact Inbox** — 필터·상태(new/seen/done)·메모·CSV 내보내기
 - **Settings** — 통계 수치·문의 이메일 등 key-value
 - **미디어** — 로컬 디스크 업로드 + sharp→WebP; Cloudinary 어댑터(env 있으면 원격)
-- **P4 일부** — `sitemap`/`robots`/OG 기본, Resend 알림 헬퍼 (검수·마감 전)
+- **연동·품질 (P4)** — `sitemap`/`robots`/OG, Resend 문의 알림 헬퍼
 
 ### 데이터·인프라
 - Prisma 스키마: User, Member, Meetup(+Photo), ArchivePhoto, InsightPost, ContactSubmission, SiteSetting, MediaAsset
@@ -122,16 +122,17 @@ public/placeholders # 시드용 플레이스홀더 이미지
 | `SUPERADMIN_EMAILS` | SuperAdmin 이메일 (최대 3, 쉼표 구분) |
 | `SUPERADMIN_SEED_PASSWORD` | 시드 SuperAdmin 비밀번호 |
 | `CONTACT_EMAIL_PLACEHOLDER` | 문의 이메일 시드값 |
-| `CLOUDINARY_*` | P4 — 있으면 원격 업로드 (미설정 시 로컬) |
-| `RESEND_*` / `NOTIFY_EMAILS` | P4 — Contact 알림 메일 |
+| `CLOUDINARY_*` | 있으면 원격 업로드 (미설정 시 로컬) |
+| `RESEND_API_KEY` / `RESEND_FROM` | Contact 알림 메일 |
+| `NOTIFY_EMAILS` | 알림 수신 (비우면 SiteSetting contact.email) |
 
 `.env`는 커밋하지 않습니다.
 
 ---
 
-## 다음 단계 (P4 → P5)
+## 다음 단계 (G5b → P5)
 
-1. **P4 마감** — Cloudinary/Resend 실계정 연동 검증, a11y·보안 점검, (선택) Contact CSV, G5b 검수
+1. **G5b 검수** — Cloudinary/Resend 실계정 연동 검증, a11y·보안 체크리스트 통과 후 승인
 2. **P5 MVP** — Vercel 프로덕션 env, 커스텀 도메인 DNS (미확정)
 
 의도적 보류: Hero 장문 CMS, Insights 카테고리 필터 UI, 멤버 게시판, 결제/티켓팅.
