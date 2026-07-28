@@ -18,13 +18,13 @@ export async function POST(req: Request) {
 
   const form = await req.formData();
   const file = form.get("file");
-  const module = String(form.get("module") ?? "") as PermissionModule;
-  const folder = String(form.get("folder") || module || "general");
+  const permissionModule = String(form.get("module") ?? "") as PermissionModule;
+  const folder = String(form.get("folder") || permissionModule || "general");
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "file required" }, { status: 400 });
   }
-  if (!MODULES.has(module) || !canAccessModule(session.user, module)) {
+  if (!MODULES.has(permissionModule) || !canAccessModule(session.user, permissionModule)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
