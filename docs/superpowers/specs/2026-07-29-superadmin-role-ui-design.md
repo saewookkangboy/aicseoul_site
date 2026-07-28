@@ -1,7 +1,7 @@
 # SuperAdmin 역할 설정 UI — Design Spec
 
 - 작성일: 2026-07-29
-- 상태: draft (구현 전 사용자 검토)
+- 상태: **approved** (2026-07-29 사용자 승인)
 - 관련: P0 Admin 권한 모델, `/admin/users`, `updateUserPermissions`
 
 ## 1. 문제
