@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  superadmin
+  operator
+}
+
+enum UserStatus {
+  pending
+  active
+  disabled
+}
+
+enum MeetupType {
+  monthly
+  class
+}
+
+enum ContentStatus {
+  draft
+  published
+}
+
+enum ContactType {
+  partnership
+  education
+  community
+  other
+}
+
+enum ContactStatus {
+  new
+  seen
+  done
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String?
+  role         UserRole   @default(operator)
+  status       UserStatus @default(pending)
+  permPeople   Boolean    @default(false)
+  permMeetups  Boolean    @default(false)
+  permInsights Boolean    @default(false)
+  permContact  Boolean    @default(false)
+  permSettings Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  lastLoginAt  DateTime?
+}
+
+model Member {
+  id          String   @id @default(cuid())
+  nameKr      String
+  nameEn      String
+  bio         String
+  photoUrl    String?
+  linkedinUrl String?
+  websiteUrl  String?
+  sortOrder   Int      @default(0)
+  isFounder   Boolean  @default(false)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Meetup {
+  id            String         @id @default(cuid())
+  type          MeetupType
+  title         String
+  date          DateTime
+  headcount     Int?
+  summary       String?
+  testimonials  Json?
+  status        ContentStatus  @default(draft)
+  photos        MeetupPhoto[]
+  archivePhotos ArchivePhoto[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model MeetupPhoto {
+  id       String @id @default(cuid())
+  meetupId String
+  meetup   Meetup @relation(fields: [meetupId], references: [id], onDelete: Cascade)
+  imageUrl String
+  sortOrder Int   @default(0)
+}
+
+model ArchivePhoto {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  meetupId  String?
+  meetup    Meetup?  @relation(fields: [meetupId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+}
+
+model InsightPost {
+  id           String        @id @default(cuid())
+  title        String
+  category     String
+  summary      String
+  body         String
+  thumbnailUrl String?
+  author       String
+  publishedAt  DateTime?
+  isFeatured   Boolean       @default(false)
+  status       ContentStatus @default(draft)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model ContactSubmission {
+  id        String        @id @default(cuid())
+  type      ContactType
+  name      String
+  org       String?
+  email     String
+  message   String
+  status    ContactStatus @default(new)
+  memo      String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String?
+  width     Int?
+  height    Int?
+  alt       String?
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: aic
+      POSTGRES_PASSWORD: aic
+      POSTGRES_DB: aic_seoul
+    volumes:
+      - aic_pgdata:/var/lib/postgresql/data
+
+volumes:
+  aic_pgdata:
