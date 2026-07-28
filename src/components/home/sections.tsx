@@ -19,20 +19,20 @@ export function HomeHero() {
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="mt-6 max-w-[16ch] text-4xl font-medium leading-[1.12] tracking-tight md:text-6xl lg:text-7xl">
+          <h1 className="mt-6 max-w-[14em] whitespace-pre-line text-4xl font-medium leading-[1.2] tracking-tight md:text-6xl lg:text-7xl">
             {homeCopy.headline}
           </h1>
         </Reveal>
         <Reveal delay={0.14}>
-          <p className="mt-5 max-w-[40ch] font-[family-name:var(--font-space-grotesk)] text-base text-[color-mix(in_srgb,var(--color-cream)_72%,transparent)] md:text-lg">
+          <p className="mt-5 max-w-[36em] font-[family-name:var(--font-space-grotesk)] text-base text-[color-mix(in_srgb,var(--color-cream)_72%,transparent)] md:text-lg">
             {homeCopy.headlineEn}
           </p>
         </Reveal>
         <Reveal delay={0.2}>
-          <p className="mt-8 max-w-[58ch] text-base leading-relaxed text-[color-mix(in_srgb,var(--color-cream)_78%,transparent)] md:text-lg">
+          <p className="mt-8 max-w-[36em] text-base leading-relaxed text-[color-mix(in_srgb,var(--color-cream)_78%,transparent)] md:text-lg">
             {homeCopy.body}
           </p>
-          <p className="mt-4 max-w-[50ch] text-sm text-[color-mix(in_srgb,var(--color-cream)_55%,transparent)]">
+          <p className="mt-4 max-w-[32em] text-sm text-[color-mix(in_srgb,var(--color-cream)_55%,transparent)]">
             {homeCopy.aux}
           </p>
         </Reveal>
@@ -75,10 +75,10 @@ export function HomeStats({
   return (
     <section className="mx-auto grid max-w-[1400px] gap-10 px-5 py-20 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-28">
       <Reveal>
-        <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+        <h2 className="whitespace-pre-line text-3xl font-medium leading-snug tracking-tight md:text-4xl">
           {homeCopy.globalTitle}
         </h2>
-        <p className="mt-5 max-w-[55ch] text-base leading-relaxed text-[var(--color-ink-muted)]">
+        <p className="mt-5 max-w-[36em] text-base leading-relaxed text-[var(--color-ink-muted)]">
           {homeCopy.globalBody}
         </p>
       </Reveal>
@@ -108,13 +108,13 @@ export function HomeReasons() {
           <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
             {homeCopy.whyEyebrow}
           </p>
-          <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">
+          <h2 className="mt-3 whitespace-pre-line text-3xl font-medium leading-snug tracking-tight md:text-4xl">
             {homeCopy.whyTitle}
           </h2>
-          <p className="mt-5 max-w-[60ch] text-[var(--color-ink-muted)]">
+          <p className="mt-5 max-w-[38em] text-[var(--color-ink-muted)]">
             {homeCopy.whyLead}
           </p>
-          <p className="mt-3 max-w-[60ch] text-[var(--color-ink-muted)]">
+          <p className="mt-3 max-w-[38em] text-[var(--color-ink-muted)]">
             {homeCopy.whyBody}
           </p>
         </Reveal>
@@ -144,10 +144,10 @@ export function HomeActivities() {
         <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
           {homeCopy.whatEyebrow}
         </p>
-        <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">
+        <h2 className="mt-3 whitespace-pre-line text-3xl font-medium leading-snug tracking-tight md:text-4xl">
           {homeCopy.whatTitle}
         </h2>
-        <p className="mt-5 max-w-[60ch] text-[var(--color-ink-muted)]">
+        <p className="mt-5 max-w-[38em] text-[var(--color-ink-muted)]">
           {homeCopy.whatLead}
         </p>
       </Reveal>
@@ -181,10 +181,10 @@ export function HomePeopleTeaser() {
     <section className="border-y border-[var(--color-border)] bg-[var(--color-cream)]/40">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
         <Reveal>
-          <h2 className="max-w-[20ch] text-3xl font-medium tracking-tight md:text-4xl">
+          <h2 className="max-w-[14em] whitespace-pre-line text-3xl font-medium leading-snug tracking-tight md:text-4xl">
             {homeCopy.peopleTitle}
           </h2>
-          <p className="mt-6 max-w-[62ch] leading-relaxed text-[var(--color-ink-muted)]">
+          <p className="mt-6 max-w-[38em] leading-relaxed text-[var(--color-ink-muted)]">
             {homeCopy.peopleBody}
           </p>
           <Link
@@ -206,10 +206,10 @@ export function HomePartner() {
         <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
           {homeCopy.partnerEyebrow}
         </p>
-        <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">
+        <h2 className="mt-3 whitespace-pre-line text-3xl font-medium leading-snug tracking-tight md:text-4xl">
           {homeCopy.partnerTitle}
         </h2>
-        <p className="mt-5 max-w-[60ch] text-[var(--color-ink-muted)]">
+        <p className="mt-5 max-w-[38em] text-[var(--color-ink-muted)]">
           {homeCopy.partnerBody}
         </p>
         <Link
@@ -228,10 +228,10 @@ export function HomeFinalCta({ linkedin }: { linkedin?: string }) {
     <section className="border-t border-[var(--color-border)] bg-[var(--color-dark)] text-[var(--color-cream)]">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
         <Reveal>
-          <h2 className="max-w-[18ch] text-3xl font-medium tracking-tight md:text-4xl">
+          <h2 className="max-w-[14em] whitespace-pre-line text-3xl font-medium leading-snug tracking-tight md:text-4xl">
             {homeCopy.finalTitle}
           </h2>
-          <p className="mt-5 max-w-[50ch] text-[color-mix(in_srgb,var(--color-cream)_70%,transparent)]">
+          <p className="mt-5 max-w-[32em] text-[color-mix(in_srgb,var(--color-cream)_70%,transparent)]">
             {homeCopy.finalBody}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

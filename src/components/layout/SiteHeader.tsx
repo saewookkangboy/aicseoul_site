@@ -12,7 +12,6 @@ const NAV = [
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-stone)_92%,transparent)] backdrop-blur-md">
@@ -41,14 +40,6 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          {isHome ? (
-            <span
-              className="hidden text-xs tracking-widest text-[var(--color-gold)] md:inline"
-              aria-hidden
-            >
-              KR / EN
-            </span>
-          ) : null}
         </nav>
       </div>
     </header>

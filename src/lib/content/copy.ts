@@ -1,14 +1,14 @@
 export const homeCopy = {
   kicker: "The AI Collective · Seoul Chapter",
-  headline: "AI 시대, 좋은 질문은 대화에서 나옵니다.",
+  headline: "AI 시대, 좋은 질문은\n대화에서 나옵니다.",
   headlineEn: "In the AI era, better questions come from conversation.",
   body: "The AI Collective Seoul Chapter는 AI를 혼자 따라가지 않아도 되는 커뮤니티입니다. 우리는 매달 서울에서 모여 AI가 바꾸는 일과 커리어, 조직과 사회의 변화를 함께 이야기하고, 서로의 경험에서 배웁니다.",
   aux: "특별한 전문성이 없어도 괜찮습니다. 같은 질문을 나눌 동료가 있으면 충분합니다.",
-  globalTitle: "The AI Collective의 서울 챕터",
+  globalTitle: "The AI Collective의\n서울 챕터",
   globalBody:
     "The AI Collective는 전 세계 사람들이 AI를 함께 이야기하는 글로벌 커뮤니티입니다. AIC 서울 챕터는 그 네트워크의 일원으로, 서울에서 우리만의 대화를 만들어갑니다.",
   whyEyebrow: "Why we gather",
-  whyTitle: "왜 지금, 우리는 모이는가",
+  whyTitle: "왜 지금,\n우리는 모이는가",
   whyLead:
     "AI 정보는 온라인에 넘칩니다. 그런데도 우리가 굳이 얼굴을 맞대고 모이는 이유가 있습니다.",
   whyBody:
@@ -28,7 +28,7 @@ export const homeCopy = {
     },
   ],
   whatEyebrow: "What we do",
-  whatTitle: "AIC 서울 챕터에서는 무엇을 하나요",
+  whatTitle: "AIC 서울 챕터에서는\n무엇을 하나요",
   whatLead:
     "AIC 서울 챕터는 정기 오프라인 모임을 중심으로 운영됩니다. 발표만 듣고 헤어지는 자리가 아니라, 함께 묻고, 대화하고, 실험하는 시간을 지향합니다.",
   activities: [
@@ -54,14 +54,14 @@ export const homeCopy = {
       cta: "문의하기 →",
     },
   ],
-  peopleTitle: "AIC 서울 챕터를 함께 만드는 사람들",
+  peopleTitle: "AIC 서울 챕터를\n함께 만드는 사람들",
   peopleBody:
     "AIC 서울 챕터의 운영진은 관리자가 아니라 가장 먼저 움직이는 멤버입니다. 누군가는 커뮤니티의 방향을 설계하고, 누군가는 대화가 사라지지 않도록 기록하고, 누군가는 처음 온 사람을 맞이합니다. 그리고 우리 모두, AI 앞에서는 함께 배우는 사람입니다.",
   partnerEyebrow: "Partner",
-  partnerTitle: "함께할 파트너를 기다립니다",
+  partnerTitle: "함께할 파트너를\n기다립니다",
   partnerBody:
     "AIC 서울 챕터는 커뮤니티의 배움과 연결에 기여하는 협업을 우선합니다. 공동 세션, 콘텐츠 협업, 공간 파트너십부터 커뮤니티를 지원하는 후원까지, 다양한 방식으로 AI 시대의 의미 있는 대화를 함께 만들 수 있습니다.",
-  finalTitle: "서울에서 이어지는 다음 대화에 함께하세요",
+  finalTitle: "서울에서 이어지는\n다음 대화에 함께하세요",
   finalBody:
     "AI 시대를 혼자 따라갈 필요는 없습니다. 함께 묻고, 이야기하고, 배울 사람들이 서울에 있습니다.",
 } as const;
