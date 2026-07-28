@@ -37,6 +37,7 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 !.env.example
+!.env.vercel.example
 
 # vercel
 .vercel
@@ -48,3 +49,4 @@ next-env.d.ts
 # local uploads (P3)
 /public/uploads/**
 !/public/uploads/.gitkeep
+.env*.local

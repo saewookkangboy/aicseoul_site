@@ -59,24 +59,32 @@ export function MemberForm({ action, initial, submitLabel }: Props) {
           className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>LinkedIn URL</span>
-        <input
-          name="linkedinUrl"
-          type="url"
-          defaultValue={initial?.linkedinUrl ?? ""}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        />
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>개인 사이트 URL</span>
-        <input
-          name="websiteUrl"
-          type="url"
-          defaultValue={initial?.websiteUrl ?? ""}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
-        />
-      </label>
+      <fieldset className="flex flex-col gap-3 rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+        <legend className="px-1 text-sm font-medium">프로필 링크</legend>
+        <p className="text-xs text-[var(--color-ink-muted)]">
+          입력한 주소는 People 페이지에 LinkedIn·웹 아이콘으로 노출됩니다.
+        </p>
+        <label className="flex flex-col gap-1 text-sm">
+          <span>LinkedIn URL</span>
+          <input
+            name="linkedinUrl"
+            type="url"
+            placeholder="https://www.linkedin.com/in/…"
+            defaultValue={initial?.linkedinUrl ?? ""}
+            className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
+          />
+        </label>
+        <label className="flex flex-col gap-1 text-sm">
+          <span>웹사이트 / 개인 사이트 URL</span>
+          <input
+            name="websiteUrl"
+            type="url"
+            placeholder="https://…"
+            defaultValue={initial?.websiteUrl ?? ""}
+            className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
+          />
+        </label>
+      </fieldset>
       <label className="flex items-center gap-2 text-sm">
         <input
           type="checkbox"

@@ -12,6 +12,28 @@ type Member = {
   websiteUrl: string | null;
 };
 
+function ProfileLink({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={label}
+      className="inline-flex size-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink-muted)] transition-[color,border-color,background-color,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--color-gold)] hover:bg-[var(--color-cream)] hover:text-[var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]"
+    >
+      {children}
+    </a>
+  );
+}
+
 export function PeopleGrid({ members }: { members: Member[] }) {
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
@@ -29,52 +51,53 @@ export function PeopleGrid({ members }: { members: Member[] }) {
       </Reveal>
 
       <div className="mt-14 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6 md:gap-y-14">
-        {members.map((m, i) => (
-          <Reveal key={m.id} delay={(i % 4) * 0.04}>
-            <article>
-              <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius)] bg-[var(--color-border)]">
-                {m.photoUrl ? (
-                  <Image
-                    src={m.photoUrl}
-                    alt={`${m.nameKr} 프로필`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width:768px) 50vw, 25vw"
-                  />
+        {members.map((m, i) => {
+          const hasLinks = Boolean(m.linkedinUrl || m.websiteUrl);
+          return (
+            <Reveal key={m.id} delay={(i % 4) * 0.04}>
+              <article className="group">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius)] bg-[var(--color-border)]">
+                  {m.photoUrl ? (
+                    <Image
+                      src={m.photoUrl}
+                      alt={`${m.nameKr} 프로필`}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                      sizes="(max-width:768px) 50vw, 25vw"
+                    />
+                  ) : null}
+                </div>
+                <h2 className="mt-4 text-lg font-medium">{m.nameKr}</h2>
+                <p className="font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
+                  {m.nameEn}
+                </p>
+                <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
+                  {m.bio}
+                </p>
+                {hasLinks ? (
+                  <div className="mt-4 flex items-center gap-2">
+                    {m.linkedinUrl ? (
+                      <ProfileLink
+                        href={m.linkedinUrl}
+                        label={`${m.nameKr} LinkedIn`}
+                      >
+                        <LinkedinLogo size={18} weight="fill" />
+                      </ProfileLink>
+                    ) : null}
+                    {m.websiteUrl ? (
+                      <ProfileLink
+                        href={m.websiteUrl}
+                        label={`${m.nameKr} 웹사이트`}
+                      >
+                        <Globe size={18} weight="regular" />
+                      </ProfileLink>
+                    ) : null}
+                  </div>
                 ) : null}
-              </div>
-              <h2 className="mt-4 text-lg font-medium">{m.nameKr}</h2>
-              <p className="font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
-                {m.nameEn}
-              </p>
-              <p className="mt-2 text-sm text-[var(--color-ink-muted)]">{m.bio}</p>
-              <div className="mt-3 flex gap-3">
-                {m.linkedinUrl ? (
-                  <a
-                    href={m.linkedinUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${m.nameKr} LinkedIn`}
-                    className="text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-                  >
-                    <LinkedinLogo size={18} weight="regular" />
-                  </a>
-                ) : null}
-                {m.websiteUrl ? (
-                  <a
-                    href={m.websiteUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${m.nameKr} 웹사이트`}
-                    className="text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-                  >
-                    <Globe size={18} weight="regular" />
-                  </a>
-                ) : null}
-              </div>
-            </article>
-          </Reveal>
-        ))}
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );

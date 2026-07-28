@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
 import { ThumbnailFallback } from "@/components/insights/cards";
+import { InsightBody } from "@/components/insights/InsightBody";
 import { formatDateKo } from "@/lib/content/copy";
 import { getInsightById } from "@/lib/queries/content";
 
@@ -66,9 +66,7 @@ export default async function InsightDetailPage({ params }: Props) {
         )}
       </div>
       <p className="mt-8 text-lg text-[var(--color-ink-muted)]">{post.summary}</p>
-      <div className="prose-aic mt-8 space-y-4 text-base leading-relaxed [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-medium [&_p]:text-[var(--color-ink)] [&_ul]:list-disc [&_ul]:pl-5">
-        <ReactMarkdown>{post.body}</ReactMarkdown>
-      </div>
+      <InsightBody body={post.body} />
     </article>
   );
 }

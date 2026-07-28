@@ -1,7 +1,7 @@
 # Superpowers × Gates 오버레이 + WIP PR 마무리
 
 - 작성일: 2026-07-29
-- 상태: draft (사용자 스펙 리뷰 대기)
+- 상태: **approved** (2026-07-29 사용자 「스펙 승인」)
 - 접근안: **B** — 게이트 유지 + Superpowers 오버레이
 - 관련: [obra/superpowers](https://github.com/obra/superpowers), `docs/PROCESS.md`, `docs/gates/`
 

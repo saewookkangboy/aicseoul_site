@@ -83,7 +83,8 @@ async function seedMembers() {
       nameEn: "Jeongim Lee",
       bio: "AIC 서울 챕터를 시작했습니다",
       photoUrl: "/placeholders/p1.jpg",
-      linkedinUrl: "https://www.linkedin.com",
+      linkedinUrl: "https://www.linkedin.com/in/",
+      websiteUrl: "https://www.theaic.org/",
       isFounder: true,
       sortOrder: 0,
     },
@@ -92,6 +93,7 @@ async function seedMembers() {
       nameEn: "Doyun Kim",
       bio: "모임에서 질문이 끊기지 않게",
       photoUrl: "/placeholders/p2.jpg",
+      linkedinUrl: "https://www.linkedin.com/in/",
       sortOrder: 1,
     },
     {
@@ -99,6 +101,7 @@ async function seedMembers() {
       nameEn: "Seoyeon Park",
       bio: "기록을 남겨 대화를 이어갑니다",
       photoUrl: "/placeholders/p3.jpg",
+      linkedinUrl: "https://www.linkedin.com/in/",
       websiteUrl: "https://example.com",
       sortOrder: 2,
     },
@@ -107,6 +110,7 @@ async function seedMembers() {
       nameEn: "Hajun Jung",
       bio: "처음 오신 분을 맞이합니다",
       photoUrl: "/placeholders/p4.jpg",
+      websiteUrl: "https://example.com",
       sortOrder: 3,
     },
     {
@@ -114,6 +118,8 @@ async function seedMembers() {
       nameEn: "Yujin Choi",
       bio: "클래스 운영을 챙깁니다",
       photoUrl: "/placeholders/p5.jpg",
+      linkedinUrl: "https://www.linkedin.com/in/",
+      websiteUrl: "https://example.com",
       sortOrder: 4,
     },
     {
@@ -121,6 +127,7 @@ async function seedMembers() {
       nameEn: "Jiho Han",
       bio: "현장의 변화를 나눕니다",
       photoUrl: "/placeholders/p6.jpg",
+      linkedinUrl: "https://www.linkedin.com/in/",
       sortOrder: 5,
     },
     {
@@ -128,6 +135,7 @@ async function seedMembers() {
       nameEn: "Subin Oh",
       bio: "파트너십을 연결합니다",
       photoUrl: "/placeholders/p7.jpg",
+      websiteUrl: "https://example.com",
       sortOrder: 6,
     },
     {
@@ -135,6 +143,8 @@ async function seedMembers() {
       nameEn: "Chaewon Yoon",
       bio: "콘텐츠로 배움을 확장합니다",
       photoUrl: "/placeholders/p8.jpg",
+      linkedinUrl: "https://www.linkedin.com/in/",
+      websiteUrl: "https://example.com",
       sortOrder: 7,
     },
   ];
