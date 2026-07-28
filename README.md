@@ -119,6 +119,7 @@ public/placeholders # 시드용 플레이스홀더 이미지
 |---|---|
 | `DATABASE_URL` | Postgres (로컬 기본 `localhost:5433`) |
 | `AUTH_SECRET` / `AUTH_URL` | Auth.js |
+| `NEXT_PUBLIC_SITE_URL` | SEO canonical/OG 절대 URL (로컬 `http://localhost:3000`, 프로덕션 `https://aic.kr`) |
 | `SUPERADMIN_EMAILS` | SuperAdmin 이메일 (최대 3, 쉼표 구분) |
 | `SUPERADMIN_SEED_PASSWORD` | 시드 SuperAdmin 비밀번호 |
 | `CONTACT_EMAIL_PLACEHOLDER` | 문의 이메일 시드값 |
