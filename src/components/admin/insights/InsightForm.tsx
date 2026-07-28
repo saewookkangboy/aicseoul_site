@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { RichTextEditor } from "@/components/admin/insights/RichTextEditor";
+import { looksLikeHtml } from "@/lib/sanitize-html";
 
 const CATEGORIES = ["Meetup Recap", "Class Note", "Community"] as const;
 
@@ -20,6 +22,24 @@ type Props = {
   };
   submitLabel: string;
 };
+
+/** 기존 마크다운 시드를 TipTap HTML로 가볍게 감쌈 */
+function bodyToEditorHtml(body?: string): string {
+  if (!body?.trim()) return "";
+  if (looksLikeHtml(body)) return body;
+  return body
+    .split(/\n\n+/)
+    .map((block) => {
+      const lines = block
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
+      if (lines.length === 0) return "";
+      return `<p>${lines.join("<br>")}</p>`;
+    })
+    .filter(Boolean)
+    .join("");
+}
 
 export function InsightForm({ action, initial, submitLabel }: Props) {
   const [thumbnailUrl, setThumbnailUrl] = useState(initial?.thumbnailUrl ?? "");
@@ -61,16 +81,18 @@ export function InsightForm({ action, initial, submitLabel }: Props) {
           className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2"
         />
       </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span>본문 (마크다운)</span>
-        <textarea
+      <div className="flex flex-col gap-1 text-sm">
+        <span>본문</span>
+        <p className="text-xs text-[var(--color-ink-muted)]">
+          위지윅 에디터로 작성합니다. 굵게·제목·목록·링크 등을 툴바에서 사용할 수
+          있습니다.
+        </p>
+        <RichTextEditor
           name="body"
           required
-          rows={12}
-          defaultValue={initial?.body}
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 font-mono text-sm"
+          initialHtml={bodyToEditorHtml(initial?.body)}
         />
-      </label>
+      </div>
       <ImageUploadField
         module="insights"
         folder="insights"

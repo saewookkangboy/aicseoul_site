@@ -38,3 +38,16 @@ Next.js · PostgreSQL · Auth(이메일/비번) · Cloudinary 또는 S3 · Resen
 - 동일 자격으로 **로그인**
 - **SuperAdmin 최대 3명**이 하위 운영진 권한 설정
 - 공개 가입이 즉시 전체 권한을 갖지 않도록 **승인/권한 부여** 필수
+
+## Superpowers 오버레이
+
+승인 게이트(`docs/gates/`)는 그대로다. 구현 사이클만 [Superpowers](https://github.com/obra/superpowers) 스킬로 정렬한다. 스킬 본문은 Cursor 플러그인에 두고 레포에 복사하지 않는다.
+
+| 게이트 단계 | Superpowers 스킬 |
+|---|---|
+| Gn 계획 작성·승인 전 | `brainstorming` → `writing-plans` |
+| 구현 | `using-git-worktrees`(권장) + `test-driven-development` / `subagent-driven-development` 또는 `executing-plans` |
+| 구현 검수 직전 | `verification-before-completion` + `requesting-code-review` |
+| 구현 완료·main 반영 | `finishing-a-development-branch` (**기본: Push + PR**) |
+
+스펙·플랜: `docs/superpowers/specs/`, `docs/superpowers/plans/`
