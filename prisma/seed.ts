@@ -20,7 +20,7 @@ async function seedSettings() {
     { key: "stats.countries", value: "50+" },
     { key: "contact.email", value: PLACEHOLDER_EMAIL },
     { key: "contact.sla", value: "3~5일" },
-    { key: "social.linkedin", value: "https://www.linkedin.com" },
+    { key: "social.linkedin", value: "https://www.linkedin.com/company/117154975" },
     { key: "meetup.ctaUrl", value: "/contact" },
   ];
 

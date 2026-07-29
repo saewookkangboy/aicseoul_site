@@ -59,7 +59,7 @@ Admin `/admin/settings` 또는 시드.
 | `stats.countries` | 공식 (예: `50+`) | 동일 |
 | `contact.email` | 실주소 확보 전: `hello@aic-seoul.example` 유지 / 확보 후 실메일 | UI에 그대로 노출됨 |
 | `contact.sla` | 실제 응답 기준 (예: `3~5일`) | 운영진 합의 후 |
-| `social.linkedin` | 챕터/대표 LinkedIn **실 URL** | 없으면 빈 문자열 → Final CTA에서 링크 숨김 |
+| `social.linkedin` | `https://www.linkedin.com/company/117154975` | 없으면 빈 문자열 → Footer·Final CTA에서 링크 숨김 |
 | `meetup.ctaUrl` | 외부 신청(Luma 등) 있으면 그 URL, 없으면 `/contact` | P0 기본 Contact |
 
 **추천 시드 정책 (P5-A):** Settings만 실값으로 upsert, 데모 Member/Insights는 Admin으로 교체.
