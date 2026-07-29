@@ -62,7 +62,7 @@ Auth.js + Prisma 스택. Supabase Auth/Storage는 사용하지 않음. Data API�
 
 | Key | Notes |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | `https://cjlapwteqeiweznomnez.supabase.co` (`aic-seoul`) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Dashboard → Project URL (호스팅 Postgres와 동일 프로젝트) |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Dashboard publishable key (동일 프로젝트) |
 
 Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`가 `DATABASE_URL` 폴백을 오염시킬 수 있음 → Integration 해제 또는 해당 변수 삭제.
@@ -93,10 +93,10 @@ Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`
 
 ---
 
-## 4. 호스팅 DB (Supabase `aic-seoul`)
+## 4. 호스팅 DB (Supabase)
 
-1. 프로젝트: `cjlapwteqeiweznomnez` (ap-northeast-2)
-2. Session pooler connection → Vercel `DATABASE_URL` (`aic_app` 권장)
+1. 대시보드에서 운영 Postgres 프로젝트 확인 (리전: ap-northeast-2 권장)
+2. Session/Transaction pooler connection → Vercel `DATABASE_URL` (`aic_app` 권장)
    - **서버리스(Vercel)는 Transaction pooler (`:6543` + `pgbouncer=true` + `connection_limit=1`) 권장**
    - Session pooler(`:5432`)는 동시 연결 한도(EMAXCONNSESSION)로 공개 페이지 500이 날 수 있음
 3. 스키마 변경 SoT: **Prisma migrate**. RLS/권한만 `supabase/migrations`

@@ -42,6 +42,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Cursor local MCP (may contain project_ref) — use mcp.json.example
+.cursor/mcp.json
+
 # local git worktrees
 .worktrees/
 

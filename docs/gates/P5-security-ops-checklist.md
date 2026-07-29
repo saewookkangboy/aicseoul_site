@@ -5,7 +5,7 @@
 - 범위: 출시 직전 **플랫폼·env** 점검 (코드 Turnstile/Redis 아님)
 - 예외: **`SUPERADMIN_SEED_PASSWORD` Vercel 삭제는 진행하지 않음** (사용자 지시)
 - 선행: 앱 레벨 하드닝 스펙 `docs/superpowers/specs/2026-07-29-p5-security-hardening-design.md`
-- 프로젝트: Vercel `aicseoul-site` · Supabase `aic-seoul` (`cjlapwteqeiweznomnez`)
+- 프로젝트: Vercel `aicseoul-site` · Supabase 호스팅 Postgres (프로젝트 ref는 대시보드에서만 확인)
 
 ---
 
@@ -28,7 +28,7 @@
 
 담당: _______________ · 점검일: 2026-07-29
 
-- [x] 프로젝트 `aic-seoul` / ref `cjlapwteqeiweznomnez` ACTIVE
+- [x] 운영 Supabase 프로젝트 ACTIVE (이름·ref는 대시보드 확인)
 - [x] Prisma SoT — Data API는 anon/authenticated 권한 회수 + RLS enable (policy 없음 = API 차단; `supabase/migrations/20260729055042_lock_down_public_data_api.sql`)
 - [x] Security Advisor: WARN/ERROR 없음 (INFO만 = `rls_enabled_no_policy` × 10 테이블)
 - [ ] Dashboard에서 **Database → Roles**: `aic_app`에 `BYPASSRLS` 유지 확인 (마이그레이션에 포함됨)
@@ -39,14 +39,14 @@
 Advisor 재실행:
 
 ```text
-Supabase MCP get_advisors(project_id=cjlapwteqeiweznomnez, type=security)
+Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 ```
 
 ---
 
 ## 3. Vercel Environment Variables
 
-팀: `chunghyos-projects` · 프로젝트: `aicseoul-site` (`prj_lfAeUSCT1UWS4akw2fwEguTgkxjF`)
+팀: `chunghyos-projects` · 프로젝트: `aicseoul-site` (Vercel project id는 대시보드에서만 확인)
 
 ### 3.1 Production — 키 존재 (2026-07-29 CLI)
 
@@ -54,10 +54,10 @@ Supabase MCP get_advisors(project_id=cjlapwteqeiweznomnez, type=security)
 |---|---|---|
 | `DATABASE_URL` | ✅ | aic-seoul pooler인지 대시보드에서 재확인 (타 프로젝트 `POSTGRES_*` 혼입 금지) |
 | `AUTH_SECRET` | ✅ | 유지 |
-| `AUTH_URL` | ✅ | 실제 접속 URL과 일치하는지 확인 (`aickr.vercel.app` / `aicseoul-site.vercel.app`) |
+| `AUTH_URL` | ✅ | 실제 접속 URL과 일치하는지 확인 (Production / Preview 호스트) |
 | `SUPERADMIN_EMAILS` | ✅ | 실운영 메일 ≤3 |
 | `SUPERADMIN_SEED_PASSWORD` | ⚠️ **잔류 (유지)** | 사용자 지시로 **삭제하지 않음**. 시드·운영 절차에서 강한 값·비번 변경은 별도 판단 |
-| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | `cjlapwteqeiweznomnez` 인지 확인 |
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | `DATABASE_URL`과 동일 프로젝트인지 확인 |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | ✅ | |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | publishable와 중복 가능 — 문서상 정리 권장 |
 | `SUPABASE_URL` / `SUPABASE_ANON_KEY` / `SUPABASE_PUBLISHABLE_KEY` | ✅ 존재 | 서버 전용 복제본. **불필요하면 제거**해 혼선 방지 |

@@ -5,9 +5,14 @@
 
 저장소: [saewookkangboy/aicseoul_site](https://github.com/saewookkangboy/aicseoul_site)
 
+| 역할 | 담당 |
+|---|---|
+| 기획 | 이중대 대표, 이정임 대표 |
+| 개발 및 구현 | 박충효 ([chunghyo@troe.kr](mailto:chunghyo@troe.kr)) |
+
 ---
 
-## 현재 진행 상태 (2026-07-29)
+## 현재 진행 상태 (2026-07-30)
 
 | Phase | 내용 | 상태 |
 |---|---|---|
@@ -16,54 +21,50 @@
 | **P2** | 퍼블릭 5페이지 (Home / Meetups / People / Insights / Contact) | ✅ 구현·검수 승인 |
 | **P3** | Admin CMS (People·Meetups·Insights·Contact·Settings·Users) | ✅ 구현·검수 승인 |
 | **P4** | Cloudinary · Resend · SEO · CSV · a11y | ✅ 구현·검수 승인 |
-| **P5** | MVP 출시 (Vercel · Tier A 자료 · 도메인) | 🔄 Vercel env 준비 완료 · **Tier A 수집 대기** |
+| **P5** | MVP 출시 (Vercel · Tier A · Cloudinary · Resend) | 🔄 Vercel/보안 준비 완료 · **운영자 Track 대기** |
 
 게이트 문서: `docs/gates/` · 프로세스: `docs/PROCESS.md` · 제품 요구: `PRD.md`
 
 ---
 
-## 최신 업데이트 (2026-07-29)
+## 최신 업데이트 (2026-07-30)
 
 | 영역 | 내용 |
 |---|---|
-| **SEO / Meta** | `pageMetadata`·canonical/OG, 루트 metadata, sitemap·AI 친화 robots, Admin `noindex`, Insights Article metadata |
-| **JSON-LD** | Organization / WebSite / BreadcrumbList / Article 빌더 + `JsonLd` 컴포넌트 |
-| **GEO** | `/llms.txt`, `/llms-full.txt` 라우트 (AI 크롤러용 사이트 요약) |
-| **브랜드·URL** | `getSiteUrl`, brand 상수, OG PNG, `NEXT_PUBLIC_SITE_URL` 문서화 |
-| **SuperAdmin UI** | Users에서 SuperAdmin 승격·강등 (최대 3명), 결정 로직·단위 테스트·안내 UI |
-| **P5 문서** | 출시 계획·콘텐츠 가이드·Vercel 셋업·Tier A 체크리스트 (`docs/gates/P5-*`) |
-| **프로세스** | Superpowers×Gates 오버레이 (`docs/superpowers/`) |
+| **KR/EN i18n** | `[locale]` 라우팅, CMS 필드 Gemini 자동 번역 + DB 캐시, 키 없으면 원문 폴백 |
+| **번역 모델** | 기본 `gemini-3.5-flash` (`gemini-2.0-flash` 종료 대응) |
+| **보안 (P5)** | 분산 rate limit(Postgres), CSP 강화, 업로드 검증, prod signup/업로드 fail-closed, 초대 코드 |
+| **Auth** | JWT 권한 갱신, Admin signup 초대 코드, loading UI |
+| **LinkedIn** | 챕터 LinkedIn Footer/Home CTA 상시 노출(URL 폴백) |
+| **인프라** | Supabase Postgres-only · Data API RLS 잠금 · Auth.js-only · `DIRECT_URL` 마이그레이션 |
+| **품질** | `/en` 풀/번역 안정화, 퍼포먼스 감사 리포트(`reports/`), CI·sanitize·error boundary |
+| **SEO/GEO** | canonical/OG · JSON-LD · sitemap/robots · `llms.txt` · Admin `noindex` |
 
 ---
 
 ## 구현된 기능
 
 ### 퍼블릭 사이트
-- **Home** — 다크 히어로(KR/EN), 글로벌 통계, Why/What, People·Partner 티저, Final CTA
-- **Meetups** — 월간 모임 5단계 스토리, 원데이 클래스 기록, 아카이브 사진벽
-- **People** — 운영진 그리드(4/2열), `sortOrder` 반영, LinkedIn/웹사이트 선택 노출
-- **Insights** — Featured + 카드 목록, TipTap HTML(기존 마크다운도 렌더), 썸네일 폴백
-- **Contact** — 유형별 문의 폼 → DB 저장, honeypot, SiteSetting 기반 SLA/이메일 안내
-- 공통 GNB(sticky) · Footer · Reveal 모션(`motion/react`) · 페이지 metadata · JSON-LD · breadcrumbs
+- **로케일** — `/ko`, `/en` (기본 KR), 공개 CMS 텍스트 한↔영 번역 캐시
+- **Home** — 다크 히어로, 줄 단위 카피·한글 `word-break`, 글로벌 통계, Why/What, People·Partner 티저, Final CTA(+ LinkedIn)
+- **Meetups** — 월간 모임 스토리, 원데이 클래스, 아카이브 사진벽
+- **People** — 운영진 그리드, `sortOrder`, LinkedIn/웹사이트 선택 노출
+- **Insights** — Featured + 목록, TipTap HTML(마크다운 호환), 썸네일 폴백
+- **Contact** — 문의 폼 → DB, honeypot, rate limit, SiteSetting SLA/이메일
+- 공통 GNB · Footer(챕터 LinkedIn) · Reveal 모션 · metadata · JSON-LD · breadcrumbs
 
 ### Admin (`/admin`)
-- **Auth** — 이메일/비밀번호 회원가입·로그인(Auth.js Credentials), pending 대기 화면
-- **권한** — SuperAdmin 최대 3명(env 화이트리스트 + UI 승격/강등), 모듈별 플래그(People/Meetups/Insights/Contact/Settings)
-- **Users** — 승인·비활성·권한 편집 · SuperAdmin 승격/강등 (SuperAdmin)
-- **People** — CRUD + DnD 순서 변경
-- **Meetups** — CTA/클래스 CRUD, 아카이브 다중 업로드
-- **Insights** — CMS(초안/발행), Featured 유일, TipTap 위지윅 본문
-- **Contact Inbox** — 필터·상태(new/seen/done)·메모·CSV 내보내기
-- **Settings** — 통계 수치·문의 이메일 등 key-value
-- **미디어** — 로컬 디스크 업로드 + sharp→WebP; Cloudinary 어댑터(env 있으면 원격)
-- **연동·품질 (P4)** — `sitemap`/`robots`/OG, Resend 문의 알림 헬퍼
-- **SEO/GEO** — Admin 전체 noindex, 공개 페이지 structured data, `llms.txt`
+- **Auth** — Credentials 가입·로그인, pending, **초대 코드**(프로덕션 필수), JWT 권한 갱신
+- **권한** — SuperAdmin 최대 3명(env + UI 승격/강등), 모듈 플래그
+- **Users / People / Meetups / Insights / Contact / Settings** — CRUD·DnD·CSV·TipTap 등
+- **미디어** — Cloudinary(프로덕션 권장/필수) · 로컬은 개발용
+- **보안** — rate limit, CSP, 업로드 MIME/크기 검증, Admin noindex
 
 ### 데이터·인프라
-- Prisma 스키마: User, Member, Meetup(+Photo), ArchivePhoto, InsightPost, ContactSubmission, SiteSetting, MediaAsset
-- Docker Compose Postgres (호스트 포트 **5433**) · 프로덕션 DB는 Supabase Postgres (`aic-seoul`, Data API RLS 잠금)
-- Auth.js + Prisma only (Supabase Auth/Storage 미사용) · CLI 마이그레이션은 `supabase/migrations`
-- 시드: SuperAdmin + 샘플 Member/Meetup/Archive/Insights
+- Prisma: User, Member, Meetup(+Photo), ArchivePhoto, InsightPost, ContactSubmission, SiteSetting, MediaAsset, TranslationCache, RateLimit
+- 로컬 Docker Postgres(포트 **5433**) · 호스팅은 Supabase Postgres (Data API 잠금, Auth.js 전용)
+- 빌드: `prisma generate` → `migrate deploy` → `next build` (`DIRECT_URL`로 migrate)
+- 시드: `pnpm db:seed` · `pnpm db:seed:prod`
 
 ---
 
@@ -72,12 +73,13 @@
 | 영역 | 선택 |
 |---|---|
 | 프레임워크 | Next.js 16 (App Router) · React 19 · TypeScript |
-| 스타일 | Tailwind CSS v4 · PRD 디자인 토큰 (Gothic A1 + Space Grotesk) |
-| DB / ORM | PostgreSQL · Prisma |
+| 스타일 | Tailwind CSS v4 · Gothic A1 + Space Grotesk |
+| DB / ORM | PostgreSQL · Prisma 6 · Supabase(호스팅 Postgres) |
 | Auth | Auth.js (NextAuth v5) Credentials + bcrypt |
-| UI | Phosphor Icons · motion · @dnd-kit · TipTap · react-markdown |
+| i18n | locale 라우팅 · Gemini 번역 캐시 |
+| UI | Phosphor · motion · @dnd-kit · TipTap · react-markdown |
 | 패키지 | pnpm |
-| 배포 | Vercel (P5 · Preview/Production) |
+| 배포 | Vercel (`icn1`, Preview/Production) · Web Analytics |
 
 ---
 
@@ -85,7 +87,7 @@
 
 - Node 20+
 - pnpm 9+
-- Docker (로컬 Postgres)
+- Docker(로컬 Postgres) 또는 원격 `DATABASE_URL` / `DIRECT_URL`
 
 ---
 
@@ -103,12 +105,11 @@ pnpm dev
 | 항목 | URL / 값 |
 |---|---|
 | 사이트 | http://localhost:3000 |
-| Admin 로그인 | http://localhost:3000/admin/login |
-| SuperAdmin (시드) | `.env`의 `SUPERADMIN_EMAILS` + `SUPERADMIN_SEED_PASSWORD` |
-| 기본 시드 예시 | `admin1@aic-seoul.example` / `ChangeMeNow!1` |
-| SEO 점검 | `/sitemap.xml` · `/robots.txt` · `/llms.txt` |
+| Admin | http://localhost:3000/admin/login |
+| SuperAdmin | `.env`의 `SUPERADMIN_EMAILS` + `SUPERADMIN_SEED_PASSWORD` (시드 후 비밀번호 변경 권장) |
+| SEO / GEO | `/sitemap.xml` · `/robots.txt` · `/llms.txt` |
 
-기타 스크립트: `pnpm db:migrate` · `pnpm db:studio` · `pnpm build`
+기타: `pnpm db:migrate` · `pnpm db:studio` · `pnpm db:seed:prod` · `pnpm build` · `pnpm test`
 
 ---
 
@@ -116,48 +117,51 @@ pnpm dev
 
 ```
 src/
-  app/(public)/     # Home, Meetups, People, Insights, Contact
-  app/admin/        # Auth + Console CMS
-  app/api/          # Auth route, 업로드 API
-  components/       # 퍼블릭·Admin UI
-  lib/              # auth, db, permissions, actions, queries, media, seo
-prisma/             # schema, migrations, seed
-docs/gates/         # 단계별 계획·검수·승인 기록 (P0~P5)
-docs/superpowers/   # Superpowers 스펙·플랜 오버레이
-supabase/           # Supabase CLI 로컬/원격 Postgres 설정
-public/placeholders # 시드용 플레이스홀더 이미지
+  app/[locale]/(public)/  # Home, Meetups, People, Insights, Contact
+  app/admin/              # Auth + Console CMS
+  app/api/                # Auth, 업로드 API
+  components/             # 퍼블릭·Admin UI
+  lib/                    # auth, db, i18n, security, seo, media, …
+  proxy.ts                # Admin 보호 등
+prisma/                   # schema, migrations, seed
+scripts/                  # vercel-build, DATABASE_URL 폴백
+supabase/                 # CLI · remote schema
+docs/gates/               # P0~P5 게이트
+docs/superpowers/         # 스펙·플랜
+reports/                  # 감사 리포트
+public/placeholders
 ```
 
 ---
 
 ## 환경 변수
 
-`.env.example` 참고. 프로덕션은 `.env.vercel.example` · `docs/gates/P5-vercel-setup.md` 참고.
+로컬: `.env.example` · 배포: `.env.vercel.example` · 상세: `docs/gates/P5-vercel-setup.md`  
+**시크릿·프로젝트 ref·실계정 키는 README/커밋에 넣지 마세요.** Vercel·Supabase 대시보드에서만 관리합니다.
 
 | 변수 | 용도 |
 |---|---|
-| `DATABASE_URL` | Postgres (로컬 `localhost:5433`, 프로덕션 Supabase pooler) |
+| `DATABASE_URL` | Prisma 런타임 (로컬 5433 / 프로덕션 pooler) |
+| `DIRECT_URL` | 마이그레이션용 직접 연결(세션/5432) |
 | `AUTH_SECRET` / `AUTH_URL` | Auth.js |
-| `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | (선택) 향후 Storage 등. Auth는 Auth.js — Data API는 RLS로 잠금 |
-| `NEXT_PUBLIC_SITE_URL` | SEO canonical/OG 절대 URL (로컬 `http://localhost:3000`, 프로덕션 `https://aickorea.com`) |
-| `SUPERADMIN_EMAILS` | SuperAdmin 이메일 (최대 3, 쉼표 구분) |
-| `SUPERADMIN_SEED_PASSWORD` | 시드 SuperAdmin 비밀번호 |
-| `CONTACT_EMAIL_PLACEHOLDER` | 문의 이메일 시드값 |
-| `CLOUDINARY_*` | 있으면 원격 업로드 (미설정 시 로컬) |
-| `RESEND_API_KEY` / `RESEND_FROM` | Contact 알림 메일 |
-| `NOTIFY_EMAILS` | 알림 수신 (비우면 SiteSetting contact.email) |
-| `GEMINI_API_KEY` | 공개 페이지 CMS 한↔영 자동 번역 (없으면 원문 폴백) |
-| `GEMINI_TRANSLATE_MODEL` | 번역 모델 (기본 `gemini-3.5-flash`) |
+| `NEXT_PUBLIC_SITE_URL` | canonical/OG 절대 URL |
+| `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | (선택) 호스팅 메타 — Auth는 Auth.js |
+| `SUPERADMIN_EMAILS` | SuperAdmin (최대 3) |
+| `SUPERADMIN_SEED_PASSWORD` | 시드용 임시 비밀번호(프로덕션은 강한 값, 시드 후 교체) |
+| `ADMIN_SIGNUP_INVITE_CODE` | Admin 가입 초대 코드(프로덕션 미설정 시 signup 비활성) |
+| `CLOUDINARY_*` | 원격 업로드(프로덕션 권장/필수) |
+| `RESEND_API_KEY` / `RESEND_FROM` / `NOTIFY_EMAILS` | 문의 알림 |
+| `GEMINI_API_KEY` / `GEMINI_TRANSLATE_MODEL` | CMS 자동 번역(없으면 원문 폴백) |
 
-`.env`는 커밋하지 않습니다.
+`.env` / `.env.local`은 커밋하지 않습니다.
 
 ---
 
 ## 다음 단계 (P5 / G6)
 
-1. **Tier A 자료 수집** — [`docs/gates/P5-tier-a-checklist.md`](./docs/gates/P5-tier-a-checklist.md) 전부 체크
-2. 채팅에 **「Tier A 준비 완료」** → Production 배포 + 시드/적재 → G6b 검수
-3. (도메인 확정 시) Vercel Domain + DNS → `AUTH_URL`·Resend 도메인 인증
+1. 운영자 런북 — [`docs/gates/P5-tier-a-cloudinary-resend-runbook.md`](./docs/gates/P5-tier-a-cloudinary-resend-runbook.md) (Cloudinary · Resend · Tier A)
+2. 채팅 **「Tier A 준비 완료」** → Production 배포·시드·스모크 → G6b 검수
+3. 도메인 확정 시 DNS + `AUTH_URL` · Resend 도메인 인증
 
 의도적 보류: Hero 장문 CMS, Insights 카테고리 필터 UI, 멤버 게시판, 결제/티켓팅.
 
@@ -167,7 +171,10 @@ public/placeholders # 시드용 플레이스홀더 이미지
 
 - [`PRD.md`](./PRD.md) — 제품 요구사항
 - [`docs/PROCESS.md`](./docs/PROCESS.md) — 개발 프로세스
-- [`docs/gates/`](./docs/gates/) — P0~P5 게이트 (결정·계획·검수)
+- [`docs/gates/`](./docs/gates/) — P0~P5 게이트
 - [`docs/gates/P5-vercel-setup.md`](./docs/gates/P5-vercel-setup.md) — Vercel env·빌드
+- [`docs/gates/P5-tier-a-checklist.md`](./docs/gates/P5-tier-a-checklist.md) — Tier A 체크리스트
+- [`docs/gates/P5-security-ops-checklist.md`](./docs/gates/P5-security-ops-checklist.md) — 보안 운영 체크리스트
 - [`docs/superpowers/`](./docs/superpowers/) — Superpowers×Gates 오버레이
+- [`reports/`](./reports/) — 퍼포먼스 감사 등
 - `AIC_Seoul_웹사이트_목업_최종_이정임.html` — 기획 목업 원본
