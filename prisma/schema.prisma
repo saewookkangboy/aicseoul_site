@@ -151,3 +151,18 @@ model MediaAsset {
   alt       String?
   createdAt DateTime @default(now())
 }
+
+model TranslationCache {
+  id              String   @id @default(cuid())
+  sourceHash      String
+  sourceLang      String   @default("ko")
+  targetLang      String
+  sourceText      String
+  translatedText  String
+  provider        String   @default("gemini")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([sourceHash, targetLang])
+  @@index([targetLang])
+}

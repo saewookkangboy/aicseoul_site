@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
-import { formatDateKo } from "@/lib/content/copy";
+import type { Locale } from "@/lib/i18n/config";
+import { formatDate } from "@/lib/i18n/format-date";
+import { localizedPath } from "@/lib/i18n/path";
 
 type Post = {
   id: string;
@@ -31,10 +33,19 @@ export function ThumbnailFallback({
   );
 }
 
-export function FeaturedPost({ post }: { post: Post }) {
+export function FeaturedPost({
+  locale,
+  post,
+}: {
+  locale: Locale;
+  post: Post;
+}) {
   return (
     <Reveal>
-      <Link href={`/insights/${post.id}`} className="group block">
+      <Link
+        href={localizedPath(locale, `/insights/${post.id}`)}
+        className="group block"
+      >
         <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
           Featured
         </p>
@@ -62,7 +73,7 @@ export function FeaturedPost({ post }: { post: Post }) {
             </h2>
             <p className="mt-4 text-[var(--color-ink-muted)]">{post.summary}</p>
             <p className="mt-4 font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
-              {formatDateKo(post.publishedAt)} · {post.author}
+              {formatDate(locale, post.publishedAt)} · {post.author}
             </p>
           </div>
         </div>
@@ -71,9 +82,12 @@ export function FeaturedPost({ post }: { post: Post }) {
   );
 }
 
-export function PostCard({ post }: { post: Post }) {
+export function PostCard({ locale, post }: { locale: Locale; post: Post }) {
   return (
-    <Link href={`/insights/${post.id}`} className="group block">
+    <Link
+      href={localizedPath(locale, `/insights/${post.id}`)}
+      className="group block"
+    >
       <div className="relative aspect-[16/10] overflow-hidden rounded-[var(--radius)] bg-[var(--color-border)]">
         {post.thumbnailUrl ? (
           <Image
@@ -95,7 +109,7 @@ export function PostCard({ post }: { post: Post }) {
         {post.summary}
       </p>
       <p className="mt-3 font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
-        {formatDateKo(post.publishedAt)}
+        {formatDate(locale, post.publishedAt)}
       </p>
     </Link>
   );

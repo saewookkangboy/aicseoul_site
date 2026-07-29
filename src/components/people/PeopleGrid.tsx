@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { LinkedinLogo, Globe } from "@phosphor-icons/react/ssr";
 import { Reveal } from "@/components/motion/Reveal";
+import type { Locale } from "@/lib/i18n/config";
+import type { Messages } from "@/lib/i18n/messages";
 
 type Member = {
   id: string;
@@ -34,7 +36,15 @@ function ProfileLink({
   );
 }
 
-export function PeopleGrid({ members }: { members: Member[] }) {
+export function PeopleGrid({
+  locale,
+  t,
+  members,
+}: {
+  locale: Locale;
+  t: Messages["people"];
+  members: Member[];
+}) {
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
       <Reveal>
@@ -42,16 +52,17 @@ export function PeopleGrid({ members }: { members: Member[] }) {
           People
         </p>
         <h1 className="mt-3 text-4xl font-medium tracking-tight md:text-5xl">
-          함께 만드는 사람들
+          {t.title}
         </h1>
-        <p className="mt-5 max-w-[55ch] text-[var(--color-ink-muted)]">
-          AIC 서울 챕터의 운영진은 가장 먼저 움직이는 멤버입니다. 역할 라벨 없이,
-          사람 그 자체로 소개합니다.
-        </p>
+        <p className="mt-5 max-w-[55ch] text-[var(--color-ink-muted)]">{t.lead}</p>
       </Reveal>
 
       <div className="mt-14 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6 md:gap-y-14">
         {members.map((m, i) => {
+          const displayName =
+            locale === "en" && m.nameEn ? m.nameEn : m.nameKr;
+          const secondaryName =
+            locale === "en" ? m.nameKr : m.nameEn;
           const hasLinks = Boolean(m.linkedinUrl || m.websiteUrl);
           return (
             <Reveal key={m.id} delay={(i % 4) * 0.04}>
@@ -60,17 +71,19 @@ export function PeopleGrid({ members }: { members: Member[] }) {
                   {m.photoUrl ? (
                     <Image
                       src={m.photoUrl}
-                      alt={`${m.nameKr} 프로필`}
+                      alt={displayName}
                       fill
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                       sizes="(max-width:768px) 50vw, 25vw"
                     />
                   ) : null}
                 </div>
-                <h2 className="mt-4 text-lg font-medium">{m.nameKr}</h2>
-                <p className="font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
-                  {m.nameEn}
-                </p>
+                <h2 className="mt-4 text-lg font-medium">{displayName}</h2>
+                {secondaryName ? (
+                  <p className="font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
+                    {secondaryName}
+                  </p>
+                ) : null}
                 <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
                   {m.bio}
                 </p>
@@ -79,7 +92,7 @@ export function PeopleGrid({ members }: { members: Member[] }) {
                     {m.linkedinUrl ? (
                       <ProfileLink
                         href={m.linkedinUrl}
-                        label={`${m.nameKr} LinkedIn`}
+                        label={`${displayName} LinkedIn`}
                       >
                         <LinkedinLogo size={18} weight="fill" />
                       </ProfileLink>
@@ -87,7 +100,7 @@ export function PeopleGrid({ members }: { members: Member[] }) {
                     {m.websiteUrl ? (
                       <ProfileLink
                         href={m.websiteUrl}
-                        label={`${m.nameKr} 웹사이트`}
+                        label={`${displayName} website`}
                       >
                         <Globe size={18} weight="regular" />
                       </ProfileLink>

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Reveal } from "@/components/motion/Reveal";
-import { homeCopy } from "@/lib/content/copy";
+import type { Locale } from "@/lib/i18n/config";
+import type { Messages } from "@/lib/i18n/messages";
+import { localizedPath } from "@/lib/i18n/path";
 
 type NowrapAt = "md" | "lg" | "xl" | false;
 
@@ -52,7 +54,9 @@ function HomeLines({
   );
 }
 
-export function HomeHero() {
+type HomeProps = { locale: Locale; t: Messages["home"] };
+
+export function HomeHero({ locale, t }: HomeProps) {
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-dark)] text-[var(--color-cream)]">
       <div
@@ -68,7 +72,7 @@ export function HomeHero() {
             nowrap="md"
             className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.22em] text-[var(--color-gold)]"
           >
-            {homeCopy.kicker}
+            {t.kicker}
           </HomeLine>
         </Reveal>
         <Reveal delay={0.08}>
@@ -77,7 +81,7 @@ export function HomeHero() {
             nowrap="lg"
             className="mt-6 text-4xl font-medium leading-[1.12] tracking-tight md:text-5xl lg:text-6xl"
           >
-            {homeCopy.headline}
+            {t.headline}
           </HomeLine>
         </Reveal>
         <Reveal delay={0.14}>
@@ -85,18 +89,18 @@ export function HomeHero() {
             nowrap="lg"
             className="mt-5 font-[family-name:var(--font-space-grotesk)] text-base text-[color-mix(in_srgb,var(--color-cream)_72%,transparent)] md:text-lg"
           >
-            {homeCopy.headlineEn}
+            {t.subheadline}
           </HomeLine>
         </Reveal>
         <Reveal delay={0.2}>
           <HomeLines
-            lines={homeCopy.body}
+            lines={t.body}
             nowrap="xl"
             className="mt-8 space-y-2"
             itemClassName="text-base leading-relaxed text-[color-mix(in_srgb,var(--color-cream)_78%,transparent)] md:text-lg"
           />
           <HomeLines
-            lines={homeCopy.aux}
+            lines={t.aux}
             nowrap="lg"
             className="mt-4 space-y-1"
             itemClassName="text-sm text-[color-mix(in_srgb,var(--color-cream)_55%,transparent)]"
@@ -105,16 +109,16 @@ export function HomeHero() {
         <Reveal delay={0.28}>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href="/meetups"
+              href={localizedPath(locale, "/meetups")}
               className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
             >
-              다음 모임 보기
+              {t.ctaMeetups}
             </Link>
             <Link
-              href="/contact"
+              href={localizedPath(locale, "/contact")}
               className="rounded-full border border-[color-mix(in_srgb,var(--color-cream)_28%,transparent)] px-6 py-3 text-sm text-[var(--color-cream)]"
             >
-              문의하기
+              {t.ctaContact}
             </Link>
           </div>
         </Reveal>
@@ -124,18 +128,17 @@ export function HomeHero() {
 }
 
 export function HomeStats({
+  locale: _locale,
+  t,
   members,
   cities,
   countries,
-}: {
-  members: string;
-  cities: string;
-  countries: string;
-}) {
+}: HomeProps & { members: string; cities: string; countries: string }) {
+  void _locale;
   const stats = [
-    { value: members, label: "멤버" },
-    { value: cities, label: "도시" },
-    { value: countries, label: "개국" },
+    { value: members, label: t.stats.members },
+    { value: cities, label: t.stats.cities },
+    { value: countries, label: t.stats.countries },
   ];
 
   return (
@@ -146,10 +149,10 @@ export function HomeStats({
           nowrap="md"
           className="text-3xl font-medium tracking-tight md:text-4xl"
         >
-          {homeCopy.globalTitle}
+          {t.globalTitle}
         </HomeLine>
         <HomeLines
-          lines={homeCopy.globalBody}
+          lines={t.globalBody}
           nowrap="xl"
           className="mt-5 space-y-2"
           itemClassName="text-base leading-relaxed text-[var(--color-ink-muted)]"
@@ -173,7 +176,8 @@ export function HomeStats({
   );
 }
 
-export function HomeReasons() {
+export function HomeReasons({ locale: _locale, t }: HomeProps) {
+  void _locale;
   return (
     <section className="border-y border-[var(--color-border)] bg-[var(--color-surface)]">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
@@ -182,30 +186,30 @@ export function HomeReasons() {
             nowrap="md"
             className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]"
           >
-            {homeCopy.whyEyebrow}
+            {t.whyEyebrow}
           </HomeLine>
           <HomeLine
             as="h2"
             nowrap="md"
             className="mt-3 text-3xl font-medium tracking-tight md:text-4xl"
           >
-            {homeCopy.whyTitle}
+            {t.whyTitle}
           </HomeLine>
           <HomeLines
-            lines={homeCopy.whyLead}
+            lines={t.whyLead}
             nowrap="xl"
             className="mt-5 space-y-1"
             itemClassName="text-[var(--color-ink-muted)]"
           />
           <HomeLines
-            lines={homeCopy.whyBody}
+            lines={t.whyBody}
             nowrap="xl"
             className="mt-3 space-y-1"
             itemClassName="text-[var(--color-ink-muted)]"
           />
         </Reveal>
         <div className="mt-12 grid gap-10 md:grid-cols-3">
-          {homeCopy.reasons.map((r, i) => (
+          {t.reasons.map((r, i) => (
             <Reveal key={r.title} delay={0.06 * i}>
               <div className="border-t border-[var(--color-gold)] pt-5 text-left">
                 <HomeLine
@@ -230,7 +234,7 @@ export function HomeReasons() {
   );
 }
 
-export function HomeActivities() {
+export function HomeActivities({ locale, t }: HomeProps) {
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <Reveal>
@@ -238,34 +242,30 @@ export function HomeActivities() {
           nowrap="md"
           className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]"
         >
-          {homeCopy.whatEyebrow}
+          {t.whatEyebrow}
         </HomeLine>
         <HomeLine
           as="h2"
           nowrap="lg"
           className="mt-3 text-3xl font-medium tracking-tight md:text-4xl"
         >
-          {homeCopy.whatTitle}
+          {t.whatTitle}
         </HomeLine>
         <HomeLines
-          lines={homeCopy.whatLead}
+          lines={t.whatLead}
           nowrap="xl"
           className="mt-5 space-y-1"
           itemClassName="text-[var(--color-ink-muted)]"
         />
       </Reveal>
       <div className="mt-12 grid gap-8 md:grid-cols-3">
-        {homeCopy.activities.map((a, i) => (
+        {t.activities.map((a, i) => (
           <Reveal key={a.title} delay={0.06 * i}>
             <article className="flex h-full flex-col border-t border-[var(--color-border)] pt-6 text-left">
               <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--color-ink-muted)]">
                 {a.tag}
               </p>
-              <HomeLine
-                as="h3"
-                nowrap="md"
-                className="mt-3 text-xl font-medium"
-              >
+              <HomeLine as="h3" nowrap="md" className="mt-3 text-xl font-medium">
                 {a.title}
               </HomeLine>
               <HomeLines
@@ -275,7 +275,7 @@ export function HomeActivities() {
                 itemClassName="text-sm leading-relaxed text-[var(--color-ink-muted)]"
               />
               <Link
-                href={a.href}
+                href={localizedPath(locale, a.href)}
                 className="mt-6 text-sm text-[var(--color-cta)]"
               >
                 {a.cta}
@@ -288,7 +288,7 @@ export function HomeActivities() {
   );
 }
 
-export function HomePeopleTeaser() {
+export function HomePeopleTeaser({ locale, t }: HomeProps) {
   return (
     <section className="border-y border-[var(--color-border)] bg-[var(--color-cream)]/40">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
@@ -298,19 +298,19 @@ export function HomePeopleTeaser() {
             nowrap="lg"
             className="text-3xl font-medium tracking-tight md:text-4xl"
           >
-            {homeCopy.peopleTitle}
+            {t.peopleTitle}
           </HomeLine>
           <HomeLines
-            lines={homeCopy.peopleBody}
+            lines={t.peopleBody}
             nowrap="xl"
             className="mt-6 space-y-2"
             itemClassName="leading-relaxed text-[var(--color-ink-muted)]"
           />
           <Link
-            href="/people"
+            href={localizedPath(locale, "/people")}
             className="mt-8 inline-block text-sm text-[var(--color-cta)]"
           >
-            운영진 만나보기 →
+            {t.peopleCta}
           </Link>
         </Reveal>
       </div>
@@ -318,7 +318,7 @@ export function HomePeopleTeaser() {
   );
 }
 
-export function HomePartner() {
+export function HomePartner({ locale, t }: HomeProps) {
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
       <Reveal>
@@ -326,33 +326,37 @@ export function HomePartner() {
           nowrap="md"
           className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]"
         >
-          {homeCopy.partnerEyebrow}
+          {t.partnerEyebrow}
         </HomeLine>
         <HomeLine
           as="h2"
           nowrap="md"
           className="mt-3 text-3xl font-medium tracking-tight md:text-4xl"
         >
-          {homeCopy.partnerTitle}
+          {t.partnerTitle}
         </HomeLine>
         <HomeLines
-          lines={homeCopy.partnerBody}
+          lines={t.partnerBody}
           nowrap="xl"
           className="mt-5 space-y-2"
           itemClassName="text-[var(--color-ink-muted)]"
         />
         <Link
-          href="/contact"
+          href={localizedPath(locale, "/contact")}
           className="mt-8 inline-flex rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
         >
-          파트너십 문의하기
+          {t.partnerCta}
         </Link>
       </Reveal>
     </section>
   );
 }
 
-export function HomeFinalCta({ linkedin }: { linkedin?: string }) {
+export function HomeFinalCta({
+  locale,
+  t,
+  linkedin,
+}: HomeProps & { linkedin?: string }) {
   return (
     <section className="border-t border-[var(--color-border)] bg-[var(--color-dark)] text-[var(--color-cream)]">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
@@ -362,20 +366,20 @@ export function HomeFinalCta({ linkedin }: { linkedin?: string }) {
             nowrap="lg"
             className="text-3xl font-medium tracking-tight md:text-4xl"
           >
-            {homeCopy.finalTitle}
+            {t.finalTitle}
           </HomeLine>
           <HomeLines
-            lines={homeCopy.finalBody}
+            lines={t.finalBody}
             nowrap="lg"
             className="mt-5 space-y-1"
             itemClassName="text-[color-mix(in_srgb,var(--color-cream)_70%,transparent)]"
           />
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/meetups"
+              href={localizedPath(locale, "/meetups")}
               className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
             >
-              다음 모임 보기
+              {t.ctaMeetups}
             </Link>
             {linkedin ? (
               <a
@@ -384,7 +388,7 @@ export function HomeFinalCta({ linkedin }: { linkedin?: string }) {
                 rel="noreferrer"
                 className="rounded-full border border-[color-mix(in_srgb,var(--color-cream)_28%,transparent)] px-6 py-3 text-sm"
               >
-                링크드인 팔로우
+                {t.ctaLinkedin}
               </a>
             ) : null}
           </div>
