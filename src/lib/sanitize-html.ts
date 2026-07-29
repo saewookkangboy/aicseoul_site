@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
 const ALLOWED_TAGS = [
   "p",
@@ -19,14 +19,23 @@ const ALLOWED_TAGS = [
   "pre",
 ];
 
-const ALLOWED_ATTR = ["href", "target", "rel", "class"];
+const ALLOWED_ATTR: Record<string, string[]> = {
+  a: ["href", "target", "rel", "class"],
+  "*": ["class"],
+};
 
-/** TipTap / HTML 본문 살균 */
+/** TipTap / HTML 본문 살균 — jsdom 없이 Node에서 동작 (서버리스 안전) */
 export function sanitizeInsightHtml(dirty: string): string {
-  return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: false,
+  return sanitizeHtml(dirty, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: ALLOWED_ATTR,
+    allowProtocolRelative: false,
+    transformTags: {
+      a: sanitizeHtml.simpleTransform("a", {
+        rel: "noopener noreferrer",
+        target: "_blank",
+      }),
+    },
   });
 }
 

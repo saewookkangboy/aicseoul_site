@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 import {
   LOCALE_COOKIE,
   LOCALE_HEADER,
@@ -8,10 +9,11 @@ import {
 } from "@/lib/i18n/config";
 
 /**
- * Admin gate via Auth.js + public locale redirect.
- * Supabase is hosted Postgres only (Prisma); Auth.js owns sessions.
+ * Locale redirect for public routes + JWT gate for /admin.
+ * Intentionally avoids importing `@/lib/auth` (and Prisma) so Edge middleware
+ * does not open DB connections on every public request.
  */
-export default auth((req) => {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isAuthPage =
@@ -22,19 +24,24 @@ export default auth((req) => {
   if (pathname.startsWith("/admin")) {
     if (isAuthPage) return NextResponse.next();
 
-    if (!req.auth) {
+    const token = await getToken({
+      req,
+      secret: process.env.AUTH_SECRET,
+    });
+
+    if (!token?.email) {
       const url = new URL("/admin/login", req.nextUrl.origin);
       url.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(url);
     }
 
-    if (req.auth.user.status === "pending") {
+    const status = String(token.status ?? "");
+    if (status === "pending") {
       return NextResponse.redirect(
         new URL("/admin/pending", req.nextUrl.origin),
       );
     }
-
-    if (req.auth.user.status !== "active") {
+    if (status !== "active") {
       return NextResponse.redirect(
         new URL("/admin/login", req.nextUrl.origin),
       );
@@ -66,10 +73,8 @@ export default auth((req) => {
     sameSite: "lax",
   });
   return res;
-});
+}
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api|.*\\..*).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api|.*\\..*).*)"],
 };

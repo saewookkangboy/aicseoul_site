@@ -4,12 +4,30 @@ import { sourceHash } from "./hash";
 
 const TIMEOUT_MS = 8_000;
 const SOURCE_TEXT_MAX = 4_000;
+/** Cap concurrent Gemini+DB translation work to protect Supabase session pool. */
+const TRANSLATE_CONCURRENCY = 2;
 
 type TranslateOptions = {
   html?: boolean;
   /** Request-scoped memo map to dedupe identical strings. */
   memo?: Map<string, Promise<string>>;
 };
+
+let active = 0;
+const waitQueue: Array<() => void> = [];
+
+async function withTranslateSlot<T>(fn: () => Promise<T>): Promise<T> {
+  if (active >= TRANSLATE_CONCURRENCY) {
+    await new Promise<void>((resolve) => waitQueue.push(resolve));
+  }
+  active += 1;
+  try {
+    return await fn();
+  } finally {
+    active -= 1;
+    waitQueue.shift()?.();
+  }
+}
 
 function getModel() {
   return process.env.GEMINI_TRANSLATE_MODEL?.trim() || "gemini-2.0-flash";
@@ -29,7 +47,7 @@ async function callGemini(
   if (!apiKey) return null;
 
   const model = getModel();
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
   const targetName = targetLang === "en" ? "English" : "Korean";
   const htmlHint = html
     ? " Preserve all HTML tags and attributes exactly; only translate human-readable text nodes."
@@ -56,7 +74,11 @@ async function callGemini(
       signal: controller.signal,
     });
     if (!res.ok) {
-      console.error("[i18n] Gemini HTTP", res.status, await res.text().catch(() => ""));
+      console.error(
+        "[i18n] Gemini HTTP",
+        res.status,
+        await res.text().catch(() => ""),
+      );
       return null;
     }
     const data = (await res.json()) as {
@@ -94,7 +116,7 @@ export async function translateCached(
     return opts.memo.get(memoKey)!;
   }
 
-  const run = (async () => {
+  const run = withTranslateSlot(async () => {
     try {
       const cached = await prisma.translationCache.findUnique({
         where: {
@@ -133,7 +155,7 @@ export async function translateCached(
     }
 
     return translated;
-  })();
+  });
 
   opts.memo?.set(memoKey, run);
   return run;
