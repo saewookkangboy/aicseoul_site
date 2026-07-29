@@ -112,6 +112,11 @@ Admin
 - [ ] `/admin` 미로그인 리다이렉트  
 - [ ] pending 유저 콘솔 접근 불가  
 - [ ] 시드 비밀번호 프로덕션 잔류 여부 확인  
+- [ ] Contact honeypot + rate limit (반복 제출 시 제한 메시지)
+- [ ] Admin 로그인 rate limit
+- [ ] 응답 보안 헤더 (`X-Frame-Options`, `CSP` 등) — `curl -sI`
+- [ ] 업로드 mime/size 거절
+- [ ] (다음 단계) Turnstile/BotID, Redis rate limit, 커스텀 도메인 HSTS, CSP nonce, 플랫폼 대시보드 점검
 
 ---
 

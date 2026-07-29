@@ -2,11 +2,15 @@
 
 import { hash } from "bcryptjs";
 import { AuthError } from "next-auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { signIn, signOut } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseSuperAdminEmails } from "@/lib/permissions";
+import { getClientIpFromHeaders } from "@/lib/security/client-ip";
+import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
+import { checkRateLimit } from "@/lib/security/rate-limit";
 
 const signupSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -37,6 +41,15 @@ export async function signupAction(
   if (!parsed.success) {
     return { error: "입력값을 확인해 주세요. 비밀번호는 8자 이상입니다." };
   }
+
+  const h = await headers();
+  const ip = getClientIpFromHeaders(h);
+  const signupLimited = checkRateLimit(
+    `signup:${ip}`,
+    RATE.signup.limit,
+    RATE.signup.windowMs,
+  );
+  if (!signupLimited.ok) return { error: RATE_LIMIT_MESSAGE };
 
   const email = parsed.data.email.toLowerCase();
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -95,9 +108,19 @@ export async function loginAction(
     return { error: "이메일과 비밀번호를 확인해 주세요." };
   }
 
+  const h = await headers();
+  const ip = getClientIpFromHeaders(h);
+  const email = parsed.data.email.toLowerCase();
+  const loginLimited = checkRateLimit(
+    `login:${ip}:${email}`,
+    RATE.login.limit,
+    RATE.login.windowMs,
+  );
+  if (!loginLimited.ok) return { error: RATE_LIMIT_MESSAGE };
+
   try {
     await signIn("credentials", {
-      email: parsed.data.email.toLowerCase(),
+      email,
       password: parsed.data.password,
       redirect: false,
     });
@@ -109,7 +132,7 @@ export async function loginAction(
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: parsed.data.email.toLowerCase() },
+    where: { email },
   });
 
   if (!user || user.status === "disabled") {

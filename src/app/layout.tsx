@@ -12,7 +12,10 @@ import {
   THEME_COLOR,
   getSiteUrl,
 } from "@/lib/seo/site";
+import { warnIfWeakSeedPasswordInProduction } from "@/lib/security/weak-seed";
 import "./globals.css";
+
+warnIfWeakSeedPasswordInProduction();
 
 const gothicA1 = Gothic_A1({
   subsets: ["latin"],
