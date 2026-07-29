@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Gothic_A1, Space_Grotesk } from "next/font/google";
+import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { LOCALE_HEADER, defaultLocale, isLocale } from "@/lib/i18n/config";
 import { organizationJsonLd } from "@/lib/seo/json-ld";
 import {
   DEFAULT_DESCRIPTION,
@@ -70,13 +72,17 @@ export const viewport: Viewport = {
   themeColor: THEME_COLOR,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+  const raw = headerList.get(LOCALE_HEADER);
+  const lang = isLocale(raw) ? raw : defaultLocale;
+
   return (
-    <html lang="ko">
+    <html lang={lang}>
       <body className={`${gothicA1.variable} ${spaceGrotesk.variable} antialiased`}>
         <JsonLd data={organizationJsonLd()} />
         {children}

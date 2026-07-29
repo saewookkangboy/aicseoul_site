@@ -16,6 +16,7 @@ export type PageMetadataInput = {
   absoluteTitle?: boolean;
   publishedTime?: string;
   robots?: Metadata["robots"];
+  openGraphLocale?: string;
 };
 
 function absolutePath(path: string): string {
@@ -40,7 +41,7 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
     robots: input.robots,
     openGraph: {
       type,
-      locale: "ko_KR",
+      locale: input.openGraphLocale ?? "ko_KR",
       siteName: SITE_NAME,
       title: input.title,
       description: desc,
