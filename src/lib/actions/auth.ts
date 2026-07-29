@@ -13,6 +13,7 @@ import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { getAdminSignupInviteCode } from "@/lib/admin-signup";
 import { isProd } from "@/lib/env";
+import { safeAdminCallbackUrl } from "@/lib/security/callback-url";
 
 const signupSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -159,7 +160,7 @@ export async function loginAction(
     redirect("/admin/pending");
   }
 
-  redirect("/admin");
+  redirect(safeAdminCallbackUrl(formData.get("callbackUrl")));
 }
 
 export async function logoutAction() {
