@@ -49,7 +49,8 @@ vercel link --yes --scope chunghyos-projects
 
 | Key | Example / 생성 | Notes |
 |---|---|---|
-| `DATABASE_URL` | Supabase `aic-seoul` **Transaction** pooler (`…pooler…:6543`, `pgbouncer=true`, `connection_limit=1`, `sslmode=require`) | Prisma SoT. Session(`:5432`)는 서버리스에서 EMAXCONNSESSION 위험 |
+| `DATABASE_URL` | Supabase `aic-seoul` **Transaction** pooler (`…pooler…:6543`, `pgbouncer=true`, `connection_limit=1`, `sslmode=require`) | Prisma Client 런타임. Session(`:5432`)는 서버리스에서 EMAXCONNSESSION 위험 |
+| `DIRECT_URL` | 동일 프로젝트 **Session** pooler 또는 `db.*:5432` (`sslmode=require`, **pgbouncer 없음**) | `prisma migrate` 전용. Transaction(6543)으로 migrate 시 `prepared statement already exists` |
 | `AUTH_SECRET` | `openssl rand -base64 32` | 필수 |
 | `AUTH_URL` | `https://<project>.vercel.app` | 커스텀 도메인 확정 시 교체 |
 | `SUPERADMIN_EMAILS` | `a@…,b@…,c@…` | 최대 3, 실운영 메일 |

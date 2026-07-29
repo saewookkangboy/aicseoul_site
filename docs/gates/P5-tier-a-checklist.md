@@ -45,14 +45,16 @@
 
 - [ ] SuperAdmin 실이메일 최대 3
 - [ ] 호스팅 Postgres `DATABASE_URL` (Supabase/Neon 등)
-- [ ] Cloudinary 계정 (강력 권장)
-- [ ] Resend 키 + `NOTIFY_EMAILS` (선택)
+- [ ] Cloudinary — [런북 Track C](./P5-tier-a-cloudinary-resend-runbook.md#track-c--cloudinary)
+- [ ] Resend — [런북 Track R](./P5-tier-a-cloudinary-resend-runbook.md#track-r--resend)
 
 ---
 
 ## 완료 시
 
+통합 실행 순서·스모크는 **[P5-tier-a-cloudinary-resend-runbook.md](./P5-tier-a-cloudinary-resend-runbook.md)** 를 따른다.
+
 채팅에 **「Tier A 준비 완료」** 라고 보내 주세요.  
-→ Vercel Production 배포 + 데모 콘텐츠 유지 + Admin 적재 가이드로 진행합니다.
+→ G6b: Production 배포 + 시드(필요 시) + 스모크 검수.
 
 > Insights 본문은 TipTap 위지윅(HTML)입니다. 기존 마크다운 본문은 공개 페이지에서 계속 렌더됩니다.

@@ -3,8 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Migrate/introspect must bypass transaction pooler (6543) — avoids
+  // "prepared statement already exists" with Supabase Supavisor/PgBouncer.
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserRole {

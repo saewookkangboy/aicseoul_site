@@ -25,15 +25,15 @@
 
 ## 현재 위치
 
-**G6 / P5 — Vercel 환경 준비 완료 · Tier A 수집 대기**
+**G6 / P5 — Vercel 환경 준비 완료 · Tier A · Cloudinary · Resend 대기**
 
 | 문서 | 내용 |
 |---|---|
-| [P5-plan.md](./P5-plan.md) | 출시 계획 (`approved`) |
+| [P5-tier-a-cloudinary-resend-runbook.md](./P5-tier-a-cloudinary-resend-runbook.md) | **진행 런북 (Tier A + Cloudinary + Resend)** |
+| [P5-tier-a-checklist.md](./P5-tier-a-checklist.md) | 자료 수집 체크리스트 |
 | [P5-content-guide.md](./P5-content-guide.md) | DB 적재 스펙 |
 | [P5-vercel-setup.md](./P5-vercel-setup.md) | GitHub→Vercel env·빌드 |
-| [P5-tier-a-checklist.md](./P5-tier-a-checklist.md) | **자료 수집 체크리스트** |
+| [P5-plan.md](./P5-plan.md) | 출시 계획 (`approved`) |
+| [P5-tier-a-verification-status.md](./P5-tier-a-verification-status.md) | 에이전트 검증 상태 |
 
-다음 트리거: 사용자 **「Tier A 준비 완료」** → Production 배포 + 시드 + 적재 → G6b 검수.
-
-검증 상태(에이전트): [P5-tier-a-verification-status.md](./P5-tier-a-verification-status.md)
+다음 트리거: 런북 완료 후 사용자 **「Tier A 준비 완료」** → Production 배포·시드·스모크 → G6b 검수.
