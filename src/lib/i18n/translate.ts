@@ -30,7 +30,7 @@ async function withTranslateSlot<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 function getModel() {
-  return process.env.GEMINI_TRANSLATE_MODEL?.trim() || "gemini-2.0-flash";
+  return process.env.GEMINI_TRANSLATE_MODEL?.trim() || "gemini-3.5-flash";
 }
 
 function truncateSource(text: string) {

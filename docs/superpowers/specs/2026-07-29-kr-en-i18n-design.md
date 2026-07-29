@@ -65,14 +65,14 @@
 - **서버 전용** (클라이언트에 키 노출 금지)
 - 페이지 내 다수 필드: `Promise.all` + 요청 스코프 메모이제이션으로 동일 문장 중복 호출 방지
 - HTML 본문(Insights): 태그·속성 보존 지시 (프롬프트). TipTap HTML 입력 가정
-- 기본 모델: `gemini-2.0-flash` (`GEMINI_TRANSLATE_MODEL`로 오버라이드)
+- 기본 모델: `gemini-3.5-flash` (`GEMINI_TRANSLATE_MODEL`로 오버라이드; `gemini-2.0-flash`는 2026-06-01 종료)
 
 ### 4.3 환경 변수
 
 | 변수 | 용도 |
 |---|---|
 | `GEMINI_API_KEY` | Gemini API 키. 없으면 원문 폴백 |
-| `GEMINI_TRANSLATE_MODEL` | 선택. 기본 `gemini-2.0-flash` |
+| `GEMINI_TRANSLATE_MODEL` | 선택. 기본 `gemini-3.5-flash` |
 
 로컬: `.env` / `.env.local` (gitignore).  
 템플릿: `.env.example`, `.env.vercel.example`.  

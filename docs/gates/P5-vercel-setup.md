@@ -78,7 +78,7 @@ Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`
 | `RESEND_FROM` | 도메인 전: `AIC Seoul <onboarding@resend.dev>` |
 | `NOTIFY_EMAILS` | 수신 운영진 (비우면 Settings `contact.email`) |
 | `GEMINI_API_KEY` | 공개 KR/EN CMS 자동 번역 (없으면 EN도 원문 폴백) |
-| `GEMINI_TRANSLATE_MODEL` | 선택. 기본 `gemini-2.0-flash` |
+| `GEMINI_TRANSLATE_MODEL` | 선택. 기본 `gemini-3.5-flash` |
 
 ### 선택 (시드 시)
 
