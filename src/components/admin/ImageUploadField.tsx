@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fieldClass, labelHintClass } from "@/components/admin/ui";
 
 type Props = {
   module: "people" | "meetups" | "insights" | "settings";
@@ -44,21 +45,25 @@ export function ImageUploadField({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm text-[var(--color-ink-muted)]">{label}</span>
+      <span className={`text-sm ${labelHintClass}`}>{label}</span>
       {value ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={value}
           alt=""
-          className="h-40 w-auto max-w-xs rounded-[var(--radius)] border border-[var(--color-border)] object-cover"
+          className="h-40 w-auto max-w-xs rounded-[var(--radius)] border border-[var(--color-border)] object-cover shadow-[var(--shadow-soft)]"
         />
-      ) : null}
+      ) : (
+        <div className="flex h-40 max-w-xs items-center justify-center rounded-[var(--radius)] border border-dashed border-[var(--color-border)] bg-[var(--color-cream)]/40 text-xs text-[var(--color-ink-muted)]">
+          미리보기 없음
+        </div>
+      )}
       <input
         type="file"
         accept="image/jpeg,image/png,image/webp,image/gif"
         onChange={onChange}
         disabled={pending}
-        className="text-sm"
+        className={`${fieldClass} cursor-pointer file:mr-3 file:rounded-full file:border-0 file:bg-[var(--color-cream)] file:px-3 file:py-1.5 file:text-xs file:font-medium`}
       />
       {pending ? (
         <p className="text-xs text-[var(--color-ink-muted)]">업로드 중…</p>
