@@ -61,7 +61,8 @@
 
 ### 데이터·인프라
 - Prisma 스키마: User, Member, Meetup(+Photo), ArchivePhoto, InsightPost, ContactSubmission, SiteSetting, MediaAsset
-- Docker Compose Postgres (호스트 포트 **5433**) · Supabase CLI 설정(`supabase/`) 선택 사용
+- Docker Compose Postgres (호스트 포트 **5433**) · 프로덕션 DB는 Supabase Postgres (`aic-seoul`, Data API RLS 잠금)
+- Auth.js + Prisma only (Supabase Auth/Storage 미사용) · CLI 마이그레이션은 `supabase/migrations`
 - 시드: SuperAdmin + 샘플 Member/Meetup/Archive/Insights
 
 ---
@@ -135,9 +136,10 @@ public/placeholders # 시드용 플레이스홀더 이미지
 
 | 변수 | 용도 |
 |---|---|
-| `DATABASE_URL` | Postgres (로컬 기본 `localhost:5433`) |
+| `DATABASE_URL` | Postgres (로컬 `localhost:5433`, 프로덕션 Supabase pooler) |
 | `AUTH_SECRET` / `AUTH_URL` | Auth.js |
-| `NEXT_PUBLIC_SITE_URL` | SEO canonical/OG 절대 URL (로컬 `http://localhost:3000`, 프로덕션 `https://aic.kr`) |
+| `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | (선택) 향후 Storage 등. Auth는 Auth.js — Data API는 RLS로 잠금 |
+| `NEXT_PUBLIC_SITE_URL` | SEO canonical/OG 절대 URL (로컬 `http://localhost:3000`, 프로덕션 `https://aickorea.com`) |
 | `SUPERADMIN_EMAILS` | SuperAdmin 이메일 (최대 3, 쉼표 구분) |
 | `SUPERADMIN_SEED_PASSWORD` | 시드 SuperAdmin 비밀번호 |
 | `CONTACT_EMAIL_PLACEHOLDER` | 문의 이메일 시드값 |
