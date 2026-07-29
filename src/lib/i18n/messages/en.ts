@@ -3,7 +3,7 @@ import type { Messages } from "./ko";
 export const en: Messages = {
   home: {
     kicker: "The AI Collective · Seoul Chapter",
-    headline: "In the AI era, better questions come from conversation.",
+    headline: "In the AI era,\nbetter questions come from conversation.",
     subheadline: "AI 시대, 좋은 질문은 대화에서 나옵니다.",
     body: [
       "The AI Collective Seoul Chapter is a community where you don’t have to chase AI alone.",

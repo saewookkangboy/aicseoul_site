@@ -18,15 +18,20 @@ function HomeLine({
   className = "",
   as: Tag = "p",
   nowrap = "lg",
+  keepAll = true,
 }: {
   children: ReactNode;
   className?: string;
   as?: "p" | "h1" | "h2" | "h3";
   nowrap?: NowrapAt;
+  keepAll?: boolean;
 }) {
   const nowrapClass = nowrap ? nowrapClassName[nowrap] : "";
+  const breakClass = keepAll ? "break-keep" : "break-normal";
   return (
-    <Tag className={`text-left break-keep ${nowrapClass} ${className}`.trim()}>
+    <Tag
+      className={`text-left ${breakClass} ${nowrapClass} ${className}`.trim()}
+    >
       {children}
     </Tag>
   );
@@ -57,6 +62,8 @@ function HomeLines({
 type HomeProps = { locale: Locale; t: Messages["home"] };
 
 export function HomeHero({ locale, t }: HomeProps) {
+  const isEn = locale === "en";
+
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-dark)] text-[var(--color-cream)]">
       <div
@@ -78,8 +85,13 @@ export function HomeHero({ locale, t }: HomeProps) {
         <Reveal delay={0.08}>
           <HomeLine
             as="h1"
-            nowrap="lg"
-            className="mt-6 text-4xl font-medium leading-[1.12] tracking-tight md:text-5xl lg:text-6xl"
+            nowrap={isEn ? false : "lg"}
+            keepAll={!isEn}
+            className={
+              isEn
+                ? "mt-6 whitespace-pre-line text-4xl font-medium leading-[1.12] tracking-tight md:text-5xl lg:text-6xl"
+                : "mt-6 text-4xl font-medium leading-[1.12] tracking-tight md:text-5xl lg:text-6xl"
+            }
           >
             {t.headline}
           </HomeLine>

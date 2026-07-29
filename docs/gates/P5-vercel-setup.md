@@ -49,7 +49,7 @@ vercel link --yes --scope chunghyos-projects
 
 | Key | Example / 생성 | Notes |
 |---|---|---|
-| `DATABASE_URL` | Supabase `aic-seoul` pooler (`aic_app.…@…pooler…:5432`, `sslmode=require`) | Prisma SoT. **다른 프로젝트의 `POSTGRES_*`를 넣지 말 것** |
+| `DATABASE_URL` | Supabase `aic-seoul` **Transaction** pooler (`…pooler…:6543`, `pgbouncer=true`, `connection_limit=1`, `sslmode=require`) | Prisma SoT. Session(`:5432`)는 서버리스에서 EMAXCONNSESSION 위험 |
 | `AUTH_SECRET` | `openssl rand -base64 32` | 필수 |
 | `AUTH_URL` | `https://<project>.vercel.app` | 커스텀 도메인 확정 시 교체 |
 | `SUPERADMIN_EMAILS` | `a@…,b@…,c@…` | 최대 3, 실운영 메일 |
@@ -96,6 +96,8 @@ Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`
 
 1. 프로젝트: `cjlapwteqeiweznomnez` (ap-northeast-2)
 2. Session pooler connection → Vercel `DATABASE_URL` (`aic_app` 권장)
+   - **서버리스(Vercel)는 Transaction pooler (`:6543` + `pgbouncer=true` + `connection_limit=1`) 권장**
+   - Session pooler(`:5432`)는 동시 연결 한도(EMAXCONNSESSION)로 공개 페이지 500이 날 수 있음
 3. 스키마 변경 SoT: **Prisma migrate**. RLS/권한만 `supabase/migrations`
 4. DDL(인덱스 등)이 `aic_app`에서 owner 오류면 Dashboard SQL / MCP로 적용 후 `prisma migrate resolve --applied`
 5. 로컬 시드:
