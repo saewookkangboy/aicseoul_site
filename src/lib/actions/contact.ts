@@ -1,8 +1,12 @@
 "use server";
 
+import { headers } from "next/headers";
 import { z } from "zod";
 import { notifyNewContact } from "@/lib/email/notify";
 import { prisma } from "@/lib/db";
+import { getClientIpFromHeaders } from "@/lib/security/client-ip";
+import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
+import { checkRateLimit } from "@/lib/security/rate-limit";
 
 const schema = z.object({
   type: z.enum(["partnership", "education", "community", "other"]),
@@ -22,6 +26,17 @@ export async function submitContactAction(
   _prev: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
+  const h = await headers();
+  const ip = getClientIpFromHeaders(h);
+  const limited = checkRateLimit(
+    `contact:${ip}`,
+    RATE.contact.limit,
+    RATE.contact.windowMs,
+  );
+  if (!limited.ok) {
+    return { error: RATE_LIMIT_MESSAGE };
+  }
+
   const website = String(formData.get("website") ?? "");
   if (website) {
     return { ok: true };

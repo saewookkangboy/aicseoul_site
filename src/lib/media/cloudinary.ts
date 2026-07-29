@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import type { MediaUploader, UploadedMedia } from "@/lib/media/index";
+import { assertImageUpload } from "@/lib/security/upload";
 
 function configured() {
   return Boolean(
@@ -18,6 +19,8 @@ export const cloudinaryUploader: MediaUploader = {
     if (!configured()) {
       throw new Error("Cloudinary is not configured");
     }
+
+    assertImageUpload(file);
 
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { PrismaClient, UserRole, UserStatus } from "@prisma/client";
 import { hash } from "bcryptjs";
+import { assertStrongSeedPassword } from "../src/lib/security/weak-seed";
 
 /**
  * Production seed: SuperAdmin + SiteSettings only.
@@ -41,9 +42,10 @@ async function main() {
   }
 
   const defaultPassword = process.env.SUPERADMIN_SEED_PASSWORD;
-  if (!defaultPassword || defaultPassword.length < 10) {
-    throw new Error("SUPERADMIN_SEED_PASSWORD (min 10 chars) is required");
+  if (!defaultPassword) {
+    throw new Error("SUPERADMIN_SEED_PASSWORD is required");
   }
+  assertStrongSeedPassword(defaultPassword);
 
   const passwordHash = await hash(defaultPassword, 12);
 

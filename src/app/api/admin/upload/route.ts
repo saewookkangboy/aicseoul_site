@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { getMediaUploader } from "@/lib/media/uploader";
 import { canAccessModule, type PermissionModule } from "@/lib/permissions";
+import { getClientIpFromHeaders } from "@/lib/security/client-ip";
+import { RATE } from "@/lib/security/limits";
+import { checkRateLimit } from "@/lib/security/rate-limit";
 
 const MODULES = new Set<PermissionModule>([
   "people",
@@ -14,6 +17,22 @@ export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user || session.user.status !== "active") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const ip = getClientIpFromHeaders(req.headers);
+  const limited = checkRateLimit(
+    `upload:${ip}:${session.user.id}`,
+    RATE.upload.limit,
+    RATE.upload.windowMs,
+  );
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "잠시 후 다시 시도해 주세요." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(limited.retryAfterSec) },
+      },
+    );
   }
 
   const form = await req.formData();
