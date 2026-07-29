@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { LinkedinLogo } from "@phosphor-icons/react/ssr";
 import { Reveal } from "@/components/motion/Reveal";
 import type { Locale } from "@/lib/i18n/config";
 import type { Messages } from "@/lib/i18n/messages";
@@ -398,8 +399,9 @@ export function HomeFinalCta({
                 href={linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full border border-[color-mix(in_srgb,var(--color-cream)_28%,transparent)] px-6 py-3 text-sm"
+                className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-cream)_28%,transparent)] px-6 py-3 text-sm"
               >
+                <LinkedinLogo size={18} weight="fill" aria-hidden />
                 {t.ctaLinkedin}
               </a>
             ) : null}
