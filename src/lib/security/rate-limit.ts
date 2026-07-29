@@ -64,15 +64,22 @@ async function checkRateLimitInDb(
   limit: number,
   windowMs: number,
 ): Promise<RateLimitResult> {
-  const expiresAt = new Date(Date.now() + windowMs);
-
-  // Increment-then-read: allow up to `limit` (block when count exceeds it).
+  // Compute expiresAt in SQL (now() + window) so cold-start / queue delay
+  // between JS Date.now() and query execution cannot shrink the window.
   const rows = await prisma.$queryRaw<{ count: number; expiresAt: Date }[]>`
     INSERT INTO "RateLimit" ("key", "count", "expiresAt")
-    VALUES (${key}, 1, ${expiresAt})
+    VALUES (
+      ${key},
+      1,
+      now() + (${windowMs}::bigint * interval '1 millisecond')
+    )
     ON CONFLICT ("key") DO UPDATE SET
       "count"     = CASE WHEN "RateLimit"."expiresAt" < now() THEN 1 ELSE "RateLimit"."count" + 1 END,
-      "expiresAt" = CASE WHEN "RateLimit"."expiresAt" < now() THEN ${expiresAt} ELSE "RateLimit"."expiresAt" END
+      "expiresAt" = CASE
+        WHEN "RateLimit"."expiresAt" < now()
+        THEN now() + (${windowMs}::bigint * interval '1 millisecond')
+        ELSE "RateLimit"."expiresAt"
+      END
     RETURNING "count", "expiresAt"
   `;
 
