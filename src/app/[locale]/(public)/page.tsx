@@ -15,6 +15,7 @@ import { getSiteSettingsMap } from "@/lib/queries/content";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/json-ld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { SITE_NAME } from "@/lib/seo/site";
+import { resolveChapterLinkedinUrl } from "@/lib/social/linkedin";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +42,7 @@ export default async function HomePage({ params }: Props) {
   const locale = raw;
   const t = getMessages(locale);
   const settings = await getSiteSettingsMap();
-  const linkedin = settings["social.linkedin"];
+  const linkedin = resolveChapterLinkedinUrl(settings["social.linkedin"]);
 
   return (
     <>
@@ -49,7 +50,7 @@ export default async function HomePage({ params }: Props) {
         data={[
           websiteJsonLd(),
           organizationJsonLd({
-            sameAs: linkedin ? [linkedin] : [],
+            sameAs: [linkedin],
           }),
         ]}
       />
@@ -65,11 +66,7 @@ export default async function HomePage({ params }: Props) {
       <HomeActivities locale={locale} t={t.home} />
       <HomePeopleTeaser locale={locale} t={t.home} />
       <HomePartner locale={locale} t={t.home} />
-      <HomeFinalCta
-        locale={locale}
-        t={t.home}
-        linkedin={settings["social.linkedin"]}
-      />
+      <HomeFinalCta locale={locale} t={t.home} linkedin={linkedin} />
     </>
   );
 }

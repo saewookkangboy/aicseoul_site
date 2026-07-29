@@ -7,11 +7,18 @@ type Props = {
   action: (prev: AuthFormState, formData: FormData) => Promise<AuthFormState>;
   submitLabel: string;
   includeName?: boolean;
+  /** When true, show required invite code field (ADMIN_SIGNUP_INVITE_CODE set). */
+  requireInvite?: boolean;
 };
 
 const initial: AuthFormState = {};
 
-export function AuthForm({ action, submitLabel, includeName }: Props) {
+export function AuthForm({
+  action,
+  submitLabel,
+  includeName,
+  requireInvite,
+}: Props) {
   const [state, formAction, pending] = useActionState(action, initial);
 
   return (
@@ -22,6 +29,17 @@ export function AuthForm({ action, submitLabel, includeName }: Props) {
           <input
             name="name"
             required
+            className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-[var(--color-ink)] outline-none focus:border-[var(--color-gold)]"
+          />
+        </label>
+      ) : null}
+      {requireInvite ? (
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="text-[var(--color-ink-muted)]">초대 코드</span>
+          <input
+            name="inviteCode"
+            required
+            autoComplete="off"
             className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-[var(--color-ink)] outline-none focus:border-[var(--color-gold)]"
           />
         </label>
