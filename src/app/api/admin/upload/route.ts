@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getMediaUploader } from "@/lib/media/uploader";
+import {
+  getMediaUploader,
+  MediaStoreUnconfiguredError,
+} from "@/lib/media/uploader";
 import { canAccessModule, type PermissionModule } from "@/lib/permissions";
 import { getClientIpFromHeaders } from "@/lib/security/client-ip";
 import { RATE } from "@/lib/security/limits";
@@ -52,6 +55,11 @@ export async function POST(req: Request) {
     const uploaded = await uploader.upload(file, { folder });
     return NextResponse.json(uploaded);
   } catch (e) {
+    // Misconfiguration (no durable store in prod) is a server-side 503, not a
+    // client 400 — surface it distinctly so the admin knows it's not their file.
+    if (e instanceof MediaStoreUnconfiguredError) {
+      return NextResponse.json({ error: e.message }, { status: 503 });
+    }
     const message = e instanceof Error ? e.message : "Upload failed";
     return NextResponse.json({ error: message }, { status: 400 });
   }
