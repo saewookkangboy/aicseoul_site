@@ -2,6 +2,10 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { z } from "zod";
+import {
+  sessionFieldsFromUser,
+  shouldRefreshJwtPerms,
+} from "@/lib/auth-token-refresh";
 import { prisma } from "@/lib/db";
 import { parseSuperAdminEmails, toSessionUser } from "@/lib/permissions";
 import type { SessionUser } from "@/lib/permissions";
@@ -79,18 +83,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const u = user as SessionUser;
-        token.id = u.id;
-        token.email = u.email;
-        token.name = u.name;
-        token.role = u.role;
-        token.status = u.status;
-        token.permPeople = u.permPeople;
-        token.permMeetups = u.permMeetups;
-        token.permInsights = u.permInsights;
-        token.permContact = u.permContact;
-        token.permSettings = u.permSettings;
+        Object.assign(token, sessionFieldsFromUser(user as SessionUser));
+        return token;
       }
+
+      const userId = token.id ? String(token.id) : "";
+      if (!userId || !shouldRefreshJwtPerms(token)) {
+        return token;
+      }
+
+      const dbUser = await prisma.user.findUnique({ where: { id: userId } });
+      if (!dbUser || dbUser.status === "disabled") {
+        token.status = "disabled";
+        token.permsCheckedAt = Date.now();
+        return token;
+      }
+
+      Object.assign(token, sessionFieldsFromUser(toSessionUser(dbUser)));
       return token;
     },
     async session({ session, token }) {

@@ -1,18 +1,21 @@
 # P5 — Tier A / 인프라 검증 상태 (에이전트)
 
 - 작성일: 2026-07-30
-- 상태: **blocked_on_operator** (콘텐츠·Cloudinary/Resend 계정은 운영자 액션 필요)
-- 선행: 보안 하드닝 [PR #10](https://github.com/saewookkangboy/aicseoul_site/pull/10) merged
+- 상태: **blocked_on_operator** (Tier A 콘텐츠·Cloudinary/Resend는 보류 — 운영자 액션)
+- 선행: 보안 하드닝 [PR #10](https://github.com/saewookkangboy/aicseoul_site/pull/10) · CI [PR #11](https://github.com/saewookkangboy/aicseoul_site/pull/11)
 
-## 에이전트가 확인한 것
+## 에이전트가 확인·구현한 것
 
 | 항목 | 결과 |
 |---|---|
 | 앱 rate limit / CSP / upload 검증 코드 | ✅ `main` (PR #10) |
+| CI + `pnpm test` | ✅ (PR #11) |
+| Insights 저장 시 sanitize · error/not-found | ✅ (PR #11) |
+| JWT 권한 주기 갱신 · signup 초대 코드(env) · loading UI | ✅ (후속 PR) |
 | `DATABASE_URL` / Auth / SuperAdmin env (문서상) | ✅ P5-security-ops-checklist 2026-07-29 기준 존재 |
-| Cloudinary Production env | ❌ 미설정 (문서) |
-| Resend / NOTIFY | ❌ 미설정 (문서) |
-| Tier A 체크리스트 | ❌ 전 항목 미체크 (`P5-tier-a-checklist.md`) |
+| Cloudinary Production env | ⏸ 보류 (사용자 지시) |
+| Resend / NOTIFY | ⏸ 보류 (사용자 지시 / 계정 필요) |
+| Tier A 체크리스트 | ⏸ 보류 (사용자 지시) |
 
 ## 운영자 필수 (에이전트 불가)
 

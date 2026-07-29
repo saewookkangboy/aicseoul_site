@@ -19,7 +19,12 @@ async function main() {
     { key: "stats.countries", value: process.env.SEED_STATS_COUNTRIES ?? "50+" },
     { key: "contact.email", value: PLACEHOLDER_EMAIL },
     { key: "contact.sla", value: process.env.SEED_CONTACT_SLA ?? "3~5일" },
-    { key: "social.linkedin", value: process.env.SEED_LINKEDIN_URL ?? "" },
+    {
+      key: "social.linkedin",
+      value:
+        process.env.SEED_LINKEDIN_URL ??
+        "https://www.linkedin.com/company/117154975",
+    },
     { key: "meetup.ctaUrl", value: process.env.SEED_MEETUP_CTA ?? "/contact" },
   ];
 

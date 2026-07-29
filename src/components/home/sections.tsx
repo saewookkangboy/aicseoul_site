@@ -5,6 +5,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import type { Locale } from "@/lib/i18n/config";
 import type { Messages } from "@/lib/i18n/messages";
 import { localizedPath } from "@/lib/i18n/path";
+import { CHAPTER_LINKEDIN_URL } from "@/lib/social/linkedin";
 
 type NowrapAt = "md" | "lg" | "xl" | false;
 
@@ -394,17 +395,15 @@ export function HomeFinalCta({
             >
               {t.ctaMeetups}
             </Link>
-            {linkedin ? (
-              <a
-                href={linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-cream)_28%,transparent)] px-6 py-3 text-sm"
-              >
-                <LinkedinLogo size={18} weight="fill" aria-hidden />
-                {t.ctaLinkedin}
-              </a>
-            ) : null}
+            <a
+              href={linkedin || CHAPTER_LINKEDIN_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-cream)_28%,transparent)] px-6 py-3 text-sm"
+            >
+              <LinkedinLogo size={18} weight="fill" aria-hidden />
+              {t.ctaLinkedin}
+            </a>
           </div>
         </Reveal>
       </div>

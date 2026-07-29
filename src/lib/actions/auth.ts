@@ -16,7 +16,14 @@ const signupSchema = z.object({
   name: z.string().trim().min(1).max(80),
   email: z.string().trim().email().max(200),
   password: z.string().min(8).max(128),
+  inviteCode: z.string().trim().max(120).optional(),
 });
+
+/** When set, signup requires matching invite code (anti open-registration). */
+export function getAdminSignupInviteCode(): string | undefined {
+  const raw = process.env.ADMIN_SIGNUP_INVITE_CODE?.trim();
+  return raw || undefined;
+}
 
 const loginSchema = z.object({
   email: z.string().trim().email(),
@@ -36,10 +43,18 @@ export async function signupAction(
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
+    inviteCode: formData.get("inviteCode") || undefined,
   });
 
   if (!parsed.success) {
     return { error: "입력값을 확인해 주세요. 비밀번호는 8자 이상입니다." };
+  }
+
+  const requiredInvite = getAdminSignupInviteCode();
+  if (requiredInvite) {
+    if (parsed.data.inviteCode !== requiredInvite) {
+      return { error: "초대 코드가 올바르지 않습니다." };
+    }
   }
 
   const h = await headers();
