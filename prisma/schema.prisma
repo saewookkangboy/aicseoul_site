@@ -155,6 +155,17 @@ model MediaAsset {
   createdAt DateTime @default(now())
 }
 
+// Distributed rate-limit counter (fixed window). Shared across serverless
+// isolates so limits survive multi-instance / cold-start bypass, unlike the
+// in-memory fallback in src/lib/security/rate-limit.ts.
+model RateLimit {
+  key       String   @id
+  count     Int      @default(0)
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
 model TranslationCache {
   id              String   @id @default(cuid())
   sourceHash      String

@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
 import { describe, it, beforeEach } from "node:test";
 import {
-  checkRateLimit,
+  checkRateLimitInMemory,
   getRateLimitStoreSizeForTests,
   resetRateLimitStoreForTests,
 } from "./rate-limit";
+
+// The public checkRateLimit() selects Postgres when DATABASE_URL is set; that
+// path is verified against a real pooler DB on Preview (see PR checklist).
+// These unit tests cover the in-memory limiter (fallback + no-DB/dev path).
+const checkRateLimit = checkRateLimitInMemory;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

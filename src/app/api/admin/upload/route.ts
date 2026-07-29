@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   }
 
   const ip = getClientIpFromHeaders(req.headers);
-  const limited = checkRateLimit(
+  const limited = await checkRateLimit(
     `upload:${ip}:${session.user.id}`,
     RATE.upload.limit,
     RATE.upload.windowMs,

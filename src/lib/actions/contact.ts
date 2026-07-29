@@ -28,7 +28,7 @@ export async function submitContactAction(
 ): Promise<ContactFormState> {
   const h = await headers();
   const ip = getClientIpFromHeaders(h);
-  const limited = checkRateLimit(
+  const limited = await checkRateLimit(
     `contact:${ip}`,
     RATE.contact.limit,
     RATE.contact.windowMs,

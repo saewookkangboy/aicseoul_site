@@ -60,7 +60,7 @@ export async function signupAction(
 
   const h = await headers();
   const ip = getClientIpFromHeaders(h);
-  const signupLimited = checkRateLimit(
+  const signupLimited = await checkRateLimit(
     `signup:${ip}`,
     RATE.signup.limit,
     RATE.signup.windowMs,
@@ -127,7 +127,7 @@ export async function loginAction(
   const h = await headers();
   const ip = getClientIpFromHeaders(h);
   const email = parsed.data.email.toLowerCase();
-  const loginLimited = checkRateLimit(
+  const loginLimited = await checkRateLimit(
     `login:${ip}:${email}`,
     RATE.login.limit,
     RATE.login.windowMs,
