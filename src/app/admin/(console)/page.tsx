@@ -2,7 +2,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { canAccessModule, isSuperAdmin } from "@/lib/permissions";
 import { prisma } from "@/lib/db";
-import { formatDateKo } from "@/lib/content/copy";
+import { formatDateKo } from "@/lib/format-date";
 
 export default async function AdminDashboardPage() {
   const session = await auth();

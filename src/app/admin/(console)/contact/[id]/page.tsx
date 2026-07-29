@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { updateContactStatusAction } from "@/lib/actions/insights-contact";
 import { requireModule } from "@/lib/admin";
-import { formatDateKo } from "@/lib/content/copy";
+import { formatDateKo } from "@/lib/format-date";
 import { prisma } from "@/lib/db";
 
 type Props = { params: Promise<{ id: string }> };

@@ -35,3 +35,5 @@
 | [P5-tier-a-checklist.md](./P5-tier-a-checklist.md) | **자료 수집 체크리스트** |
 
 다음 트리거: 사용자 **「Tier A 준비 완료」** → Production 배포 + 시드 + 적재 → G6b 검수.
+
+검증 상태(에이전트): [P5-tier-a-verification-status.md](./P5-tier-a-verification-status.md)

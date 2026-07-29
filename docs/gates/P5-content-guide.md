@@ -10,9 +10,9 @@
 
 | 콘텐츠 | 저장 위치 | 출시 시 작업 |
 |---|---|---|
-| Home Hero·Why·What·People티저·Partner 카피 | **코드** `src/lib/content/copy.ts` | 목업 문안 유지(이미 반영). 수정 시 배포 필요 |
-| 정기 모임 5단계 라벨 | **코드** `meetupsCopy.steps` | 고정 포맷 — DB 불필요 |
-| Contact 유형 안내 카피 | **코드** `contactCopy` | 고정 |
+| Home Hero·Why·What·People티저·Partner 카피 | **코드** `src/lib/i18n/messages/ko.ts` · `en.ts` | 배포 필요. (구 `copy.ts`는 제거됨) |
+| 정기 모임 5단계 라벨 | **코드** i18n messages (meetups) | 고정 포맷 — DB 불필요 |
+| Contact 유형 안내 카피 | **코드** i18n messages (contact) | 고정 |
 | 글로벌 통계 3종 | **DB** `SiteSetting` | Admin → 설정 |
 | 문의 이메일·SLA·LinkedIn·모임 CTA | **DB** `SiteSetting` | Admin → 설정 |
 | 운영진 People | **DB** `Member` | Admin → People |

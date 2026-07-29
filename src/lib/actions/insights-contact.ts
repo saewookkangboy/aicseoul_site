@@ -5,10 +5,15 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireModule } from "@/lib/admin";
 import { prisma } from "@/lib/db";
+import { looksLikeHtml, sanitizeInsightHtml } from "@/lib/sanitize-html";
 
 function emptyToUndef(v: FormDataEntryValue | null) {
   const s = String(v ?? "").trim();
   return s || undefined;
+}
+
+function normalizeInsightBody(body: string): string {
+  return looksLikeHtml(body) ? sanitizeInsightHtml(body) : body;
 }
 
 const insightSchema = z.object({
@@ -50,7 +55,7 @@ export async function createInsightAction(formData: FormData) {
       title: parsed.data.title,
       category: parsed.data.category,
       summary: parsed.data.summary,
-      body: parsed.data.body,
+      body: normalizeInsightBody(parsed.data.body),
       thumbnailUrl: parsed.data.thumbnailUrl,
       author: parsed.data.author,
       publishedAt: parsed.data.publishedAt
@@ -95,7 +100,7 @@ export async function updateInsightAction(id: string, formData: FormData) {
       title: parsed.data.title,
       category: parsed.data.category,
       summary: parsed.data.summary,
-      body: parsed.data.body,
+      body: normalizeInsightBody(parsed.data.body),
       thumbnailUrl: parsed.data.thumbnailUrl,
       author: parsed.data.author,
       publishedAt: parsed.data.publishedAt

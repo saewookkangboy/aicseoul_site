@@ -20,7 +20,7 @@
 | Production 필수 env | ⚠️ 시드 비번 잔류(유지) | `SUPERADMIN_SEED_PASSWORD` 삭제 **미실시** (사용자 지시) |
 | Cloudinary / Resend | ⬜ 미설정 | 강력 권장, P0 블로커는 아님 |
 | 로컬 `pnpm build` | ⬜ 미실행 | Docker daemon 미기동 (`localhost:5433` 도달 불가). Vercel READY로 대체 검증 |
-| 앱 보안 하드닝 PR | ⬜ 미머지 | `feat/p5-security-hardening` worktree에만 존재 (`45cf340`) |
+| 앱 보안 하드닝 PR | ✅ MERGED | [PR #10](https://github.com/saewookkangboy/aicseoul_site/pull/10) (`feat/p5-security-hardening-v2`, 2026-07-30) |
 
 ---
 
