@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import {
   CHAPTER_LINKEDIN_URL,
   resolveChapterLinkedinUrl,
-} from "./linkedin.ts";
+} from "./linkedin";
 
 describe("resolveChapterLinkedinUrl", () => {
   it("falls back when empty or placeholder", () => {
