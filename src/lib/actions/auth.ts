@@ -12,6 +12,7 @@ import { getClientIpFromHeaders } from "@/lib/security/client-ip";
 import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
 import { checkRateLimit } from "@/lib/security/rate-limit";
 import { getAdminSignupInviteCode } from "@/lib/admin-signup";
+import { isProd } from "@/lib/env";
 
 const signupSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -46,10 +47,15 @@ export async function signupAction(
   }
 
   const requiredInvite = getAdminSignupInviteCode();
-  if (requiredInvite) {
-    if (parsed.data.inviteCode !== requiredInvite) {
-      return { error: "초대 코드가 올바르지 않습니다." };
-    }
+  // Fail-closed: in production, an unset invite code must NOT fall through to
+  // open registration. Require the code to be configured before allowing signup.
+  if (isProd && !requiredInvite) {
+    return {
+      error: "회원가입이 비활성화되어 있습니다. 관리자에게 문의하세요.",
+    };
+  }
+  if (requiredInvite && parsed.data.inviteCode !== requiredInvite) {
+    return { error: "초대 코드가 올바르지 않습니다." };
   }
 
   const h = await headers();
