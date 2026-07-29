@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireModule } from "@/lib/admin";
-import { formatDateKo } from "@/lib/content/copy";
+import { formatDateKo } from "@/lib/format-date";
 import { prisma } from "@/lib/db";
 
 type Props = {

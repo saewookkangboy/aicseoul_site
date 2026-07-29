@@ -3,7 +3,7 @@ import { updateMeetupCtaAction, deleteClassAction } from "@/lib/actions/meetups"
 import { requireModule } from "@/lib/admin";
 import { prisma } from "@/lib/db";
 import { getSiteSettingsMap } from "@/lib/queries/content";
-import { formatDateKo } from "@/lib/content/copy";
+import { formatDateKo } from "@/lib/format-date";
 
 export default async function AdminMeetupsPage() {
   await requireModule("meetups");
