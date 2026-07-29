@@ -10,6 +10,8 @@ type Props = {
   includeName?: boolean;
   /** When true, show required invite code field (ADMIN_SIGNUP_INVITE_CODE set). */
   requireInvite?: boolean;
+  /** Post-login relative path (validated server-side). */
+  callbackUrl?: string;
 };
 
 const initial: AuthFormState = {};
@@ -19,11 +21,15 @@ export function AuthForm({
   submitLabel,
   includeName,
   requireInvite,
+  callbackUrl,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, initial);
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
+      {callbackUrl ? (
+        <input type="hidden" name="callbackUrl" value={callbackUrl} />
+      ) : null}
       {includeName ? (
         <label className={labelClass}>
           <span className={labelHintClass}>이름</span>
