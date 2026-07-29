@@ -77,6 +77,8 @@ Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`
 | `RESEND_API_KEY` | 없으면 문의 알림 스킵 |
 | `RESEND_FROM` | 도메인 전: `AIC Seoul <onboarding@resend.dev>` |
 | `NOTIFY_EMAILS` | 수신 운영진 (비우면 Settings `contact.email`) |
+| `GEMINI_API_KEY` | 공개 KR/EN CMS 자동 번역 (없으면 EN도 원문 폴백) |
+| `GEMINI_TRANSLATE_MODEL` | 선택. 기본 `gemini-2.0-flash` |
 
 ### 선택 (시드 시)
 
@@ -116,7 +118,8 @@ DATABASE_URL="<prod>" pnpm db:seed:prod
 Tier A가 모이면 G6b로 배포·스모크를 진행합니다.
 
 체크리스트: [P5-tier-a-checklist.md](./P5-tier-a-checklist.md)  
-콘텐츠 스펙: [P5-content-guide.md](./P5-content-guide.md)
+콘텐츠 스펙: [P5-content-guide.md](./P5-content-guide.md)  
+보안 운영(P0): [P5-security-ops-checklist.md](./P5-security-ops-checklist.md)
 
 ---
 

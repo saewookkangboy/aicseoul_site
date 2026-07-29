@@ -146,6 +146,8 @@ public/placeholders # 시드용 플레이스홀더 이미지
 | `CLOUDINARY_*` | 있으면 원격 업로드 (미설정 시 로컬) |
 | `RESEND_API_KEY` / `RESEND_FROM` | Contact 알림 메일 |
 | `NOTIFY_EMAILS` | 알림 수신 (비우면 SiteSetting contact.email) |
+| `GEMINI_API_KEY` | 공개 페이지 CMS 한↔영 자동 번역 (없으면 원문 폴백) |
+| `GEMINI_TRANSLATE_MODEL` | 번역 모델 (기본 `gemini-2.0-flash`) |
 
 `.env`는 커밋하지 않습니다.
 

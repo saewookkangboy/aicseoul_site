@@ -31,6 +31,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-gothic-a1), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
 }
 
 a {

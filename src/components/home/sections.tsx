@@ -1,6 +1,56 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { homeCopy } from "@/lib/content/copy";
+
+type NowrapAt = "md" | "lg" | "xl" | false;
+
+const nowrapClassName: Record<Exclude<NowrapAt, false>, string> = {
+  md: "md:whitespace-nowrap",
+  lg: "lg:whitespace-nowrap",
+  xl: "xl:whitespace-nowrap",
+};
+
+function HomeLine({
+  children,
+  className = "",
+  as: Tag = "p",
+  nowrap = "lg",
+}: {
+  children: ReactNode;
+  className?: string;
+  as?: "p" | "h1" | "h2" | "h3";
+  nowrap?: NowrapAt;
+}) {
+  const nowrapClass = nowrap ? nowrapClassName[nowrap] : "";
+  return (
+    <Tag className={`text-left break-keep ${nowrapClass} ${className}`.trim()}>
+      {children}
+    </Tag>
+  );
+}
+
+function HomeLines({
+  lines,
+  className = "",
+  itemClassName = "",
+  nowrap = "lg",
+}: {
+  lines: readonly string[];
+  className?: string;
+  itemClassName?: string;
+  nowrap?: NowrapAt;
+}) {
+  return (
+    <div className={className}>
+      {lines.map((line) => (
+        <HomeLine key={line} className={itemClassName} nowrap={nowrap}>
+          {line}
+        </HomeLine>
+      ))}
+    </div>
+  );
+}
 
 export function HomeHero() {
   return (
@@ -14,27 +64,43 @@ export function HomeHero() {
       />
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col justify-center px-5 py-24 md:px-8 md:py-32">
         <Reveal>
-          <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.22em] text-[var(--color-gold)]">
+          <HomeLine
+            nowrap="md"
+            className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.22em] text-[var(--color-gold)]"
+          >
             {homeCopy.kicker}
-          </p>
+          </HomeLine>
         </Reveal>
         <Reveal delay={0.08}>
-          <h1 className="mt-6 max-w-[16ch] text-4xl font-medium leading-[1.12] tracking-tight md:text-6xl lg:text-7xl">
+          <HomeLine
+            as="h1"
+            nowrap="lg"
+            className="mt-6 text-4xl font-medium leading-[1.12] tracking-tight md:text-5xl lg:text-6xl"
+          >
             {homeCopy.headline}
-          </h1>
+          </HomeLine>
         </Reveal>
         <Reveal delay={0.14}>
-          <p className="mt-5 max-w-[40ch] font-[family-name:var(--font-space-grotesk)] text-base text-[color-mix(in_srgb,var(--color-cream)_72%,transparent)] md:text-lg">
+          <HomeLine
+            nowrap="lg"
+            className="mt-5 font-[family-name:var(--font-space-grotesk)] text-base text-[color-mix(in_srgb,var(--color-cream)_72%,transparent)] md:text-lg"
+          >
             {homeCopy.headlineEn}
-          </p>
+          </HomeLine>
         </Reveal>
         <Reveal delay={0.2}>
-          <p className="mt-8 max-w-[58ch] text-base leading-relaxed text-[color-mix(in_srgb,var(--color-cream)_78%,transparent)] md:text-lg">
-            {homeCopy.body}
-          </p>
-          <p className="mt-4 max-w-[50ch] text-sm text-[color-mix(in_srgb,var(--color-cream)_55%,transparent)]">
-            {homeCopy.aux}
-          </p>
+          <HomeLines
+            lines={homeCopy.body}
+            nowrap="xl"
+            className="mt-8 space-y-2"
+            itemClassName="text-base leading-relaxed text-[color-mix(in_srgb,var(--color-cream)_78%,transparent)] md:text-lg"
+          />
+          <HomeLines
+            lines={homeCopy.aux}
+            nowrap="lg"
+            className="mt-4 space-y-1"
+            itemClassName="text-sm text-[color-mix(in_srgb,var(--color-cream)_55%,transparent)]"
+          />
         </Reveal>
         <Reveal delay={0.28}>
           <div className="mt-10 flex flex-wrap gap-3">
@@ -75,17 +141,24 @@ export function HomeStats({
   return (
     <section className="mx-auto grid max-w-[1400px] gap-10 px-5 py-20 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-28">
       <Reveal>
-        <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
+        <HomeLine
+          as="h2"
+          nowrap="md"
+          className="text-3xl font-medium tracking-tight md:text-4xl"
+        >
           {homeCopy.globalTitle}
-        </h2>
-        <p className="mt-5 max-w-[55ch] text-base leading-relaxed text-[var(--color-ink-muted)]">
-          {homeCopy.globalBody}
-        </p>
+        </HomeLine>
+        <HomeLines
+          lines={homeCopy.globalBody}
+          nowrap="xl"
+          className="mt-5 space-y-2"
+          itemClassName="text-base leading-relaxed text-[var(--color-ink-muted)]"
+        />
       </Reveal>
       <Reveal delay={0.1}>
         <div className="grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-6 md:border-t-0 md:border-l md:pl-8 md:pt-0">
           {stats.map((s) => (
-            <div key={s.label}>
+            <div key={s.label} className="text-left">
               <p className="font-[family-name:var(--font-space-grotesk)] text-2xl font-medium md:text-3xl">
                 {s.value}
               </p>
@@ -105,29 +178,49 @@ export function HomeReasons() {
     <section className="border-y border-[var(--color-border)] bg-[var(--color-surface)]">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
         <Reveal>
-          <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
+          <HomeLine
+            nowrap="md"
+            className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]"
+          >
             {homeCopy.whyEyebrow}
-          </p>
-          <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">
+          </HomeLine>
+          <HomeLine
+            as="h2"
+            nowrap="md"
+            className="mt-3 text-3xl font-medium tracking-tight md:text-4xl"
+          >
             {homeCopy.whyTitle}
-          </h2>
-          <p className="mt-5 max-w-[60ch] text-[var(--color-ink-muted)]">
-            {homeCopy.whyLead}
-          </p>
-          <p className="mt-3 max-w-[60ch] text-[var(--color-ink-muted)]">
-            {homeCopy.whyBody}
-          </p>
+          </HomeLine>
+          <HomeLines
+            lines={homeCopy.whyLead}
+            nowrap="xl"
+            className="mt-5 space-y-1"
+            itemClassName="text-[var(--color-ink-muted)]"
+          />
+          <HomeLines
+            lines={homeCopy.whyBody}
+            nowrap="xl"
+            className="mt-3 space-y-1"
+            itemClassName="text-[var(--color-ink-muted)]"
+          />
         </Reveal>
         <div className="mt-12 grid gap-10 md:grid-cols-3">
           {homeCopy.reasons.map((r, i) => (
             <Reveal key={r.title} delay={0.06 * i}>
-              <div className="border-t border-[var(--color-gold)] pt-5">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-lg tracking-wide">
+              <div className="border-t border-[var(--color-gold)] pt-5 text-left">
+                <HomeLine
+                  as="h3"
+                  nowrap="md"
+                  className="font-[family-name:var(--font-space-grotesk)] text-lg tracking-wide"
+                >
                   {r.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                  {r.body}
-                </p>
+                </HomeLine>
+                <HomeLines
+                  lines={r.body}
+                  nowrap={false}
+                  className="mt-3 space-y-2"
+                  itemClassName="text-sm leading-relaxed text-[var(--color-ink-muted)]"
+                />
               </div>
             </Reveal>
           ))}
@@ -141,27 +234,46 @@ export function HomeActivities() {
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <Reveal>
-        <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
+        <HomeLine
+          nowrap="md"
+          className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]"
+        >
           {homeCopy.whatEyebrow}
-        </p>
-        <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">
+        </HomeLine>
+        <HomeLine
+          as="h2"
+          nowrap="lg"
+          className="mt-3 text-3xl font-medium tracking-tight md:text-4xl"
+        >
           {homeCopy.whatTitle}
-        </h2>
-        <p className="mt-5 max-w-[60ch] text-[var(--color-ink-muted)]">
-          {homeCopy.whatLead}
-        </p>
+        </HomeLine>
+        <HomeLines
+          lines={homeCopy.whatLead}
+          nowrap="xl"
+          className="mt-5 space-y-1"
+          itemClassName="text-[var(--color-ink-muted)]"
+        />
       </Reveal>
       <div className="mt-12 grid gap-8 md:grid-cols-3">
         {homeCopy.activities.map((a, i) => (
           <Reveal key={a.title} delay={0.06 * i}>
-            <article className="flex h-full flex-col border-t border-[var(--color-border)] pt-6">
+            <article className="flex h-full flex-col border-t border-[var(--color-border)] pt-6 text-left">
               <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-wide text-[var(--color-ink-muted)]">
                 {a.tag}
               </p>
-              <h3 className="mt-3 text-xl font-medium">{a.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                {a.body}
-              </p>
+              <HomeLine
+                as="h3"
+                nowrap="md"
+                className="mt-3 text-xl font-medium"
+              >
+                {a.title}
+              </HomeLine>
+              <HomeLines
+                lines={a.body}
+                nowrap={false}
+                className="mt-3 flex-1 space-y-2"
+                itemClassName="text-sm leading-relaxed text-[var(--color-ink-muted)]"
+              />
               <Link
                 href={a.href}
                 className="mt-6 text-sm text-[var(--color-cta)]"
@@ -181,12 +293,19 @@ export function HomePeopleTeaser() {
     <section className="border-y border-[var(--color-border)] bg-[var(--color-cream)]/40">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
         <Reveal>
-          <h2 className="max-w-[20ch] text-3xl font-medium tracking-tight md:text-4xl">
+          <HomeLine
+            as="h2"
+            nowrap="lg"
+            className="text-3xl font-medium tracking-tight md:text-4xl"
+          >
             {homeCopy.peopleTitle}
-          </h2>
-          <p className="mt-6 max-w-[62ch] leading-relaxed text-[var(--color-ink-muted)]">
-            {homeCopy.peopleBody}
-          </p>
+          </HomeLine>
+          <HomeLines
+            lines={homeCopy.peopleBody}
+            nowrap="xl"
+            className="mt-6 space-y-2"
+            itemClassName="leading-relaxed text-[var(--color-ink-muted)]"
+          />
           <Link
             href="/people"
             className="mt-8 inline-block text-sm text-[var(--color-cta)]"
@@ -203,15 +322,25 @@ export function HomePartner() {
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
       <Reveal>
-        <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
+        <HomeLine
+          nowrap="md"
+          className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]"
+        >
           {homeCopy.partnerEyebrow}
-        </p>
-        <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">
+        </HomeLine>
+        <HomeLine
+          as="h2"
+          nowrap="md"
+          className="mt-3 text-3xl font-medium tracking-tight md:text-4xl"
+        >
           {homeCopy.partnerTitle}
-        </h2>
-        <p className="mt-5 max-w-[60ch] text-[var(--color-ink-muted)]">
-          {homeCopy.partnerBody}
-        </p>
+        </HomeLine>
+        <HomeLines
+          lines={homeCopy.partnerBody}
+          nowrap="xl"
+          className="mt-5 space-y-2"
+          itemClassName="text-[var(--color-ink-muted)]"
+        />
         <Link
           href="/contact"
           className="mt-8 inline-flex rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
@@ -228,12 +357,19 @@ export function HomeFinalCta({ linkedin }: { linkedin?: string }) {
     <section className="border-t border-[var(--color-border)] bg-[var(--color-dark)] text-[var(--color-cream)]">
       <div className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-24">
         <Reveal>
-          <h2 className="max-w-[18ch] text-3xl font-medium tracking-tight md:text-4xl">
+          <HomeLine
+            as="h2"
+            nowrap="lg"
+            className="text-3xl font-medium tracking-tight md:text-4xl"
+          >
             {homeCopy.finalTitle}
-          </h2>
-          <p className="mt-5 max-w-[50ch] text-[color-mix(in_srgb,var(--color-cream)_70%,transparent)]">
-            {homeCopy.finalBody}
-          </p>
+          </HomeLine>
+          <HomeLines
+            lines={homeCopy.finalBody}
+            nowrap="lg"
+            className="mt-5 space-y-1"
+            itemClassName="text-[color-mix(in_srgb,var(--color-cream)_70%,transparent)]"
+          />
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/meetups"
