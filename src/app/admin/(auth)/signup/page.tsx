@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AuthForm } from "@/components/admin/AuthForm";
-import { getAdminSignupInviteCode, signupAction } from "@/lib/actions/auth";
+import { getAdminSignupInviteCode } from "@/lib/admin-signup";
+import { signupAction } from "@/lib/actions/auth";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 

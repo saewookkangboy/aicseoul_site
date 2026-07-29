@@ -11,6 +11,7 @@ import { parseSuperAdminEmails } from "@/lib/permissions";
 import { getClientIpFromHeaders } from "@/lib/security/client-ip";
 import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
 import { checkRateLimit } from "@/lib/security/rate-limit";
+import { getAdminSignupInviteCode } from "@/lib/admin-signup";
 
 const signupSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -18,12 +19,6 @@ const signupSchema = z.object({
   password: z.string().min(8).max(128),
   inviteCode: z.string().trim().max(120).optional(),
 });
-
-/** When set, signup requires matching invite code (anti open-registration). */
-export function getAdminSignupInviteCode(): string | undefined {
-  const raw = process.env.ADMIN_SIGNUP_INVITE_CODE?.trim();
-  return raw || undefined;
-}
 
 const loginSchema = z.object({
   email: z.string().trim().email(),

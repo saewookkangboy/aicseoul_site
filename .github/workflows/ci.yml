@@ -24,3 +24,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm test
+      # Full `pnpm build` runs migrate deploy (needs live DB). CI checks compile + types only.
+      - name: Production compile
+        run: pnpm exec prisma generate && pnpm exec next build
+        env:
+          DATABASE_URL: postgresql://ci:ci@127.0.0.1:5432/ci?schema=public
+          AUTH_SECRET: ci-build-auth-secret-min-32-chars!!
+          AUTH_URL: http://localhost:3000
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+          SUPERADMIN_EMAILS: ci@example.com

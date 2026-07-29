@@ -88,7 +88,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       const userId = token.id ? String(token.id) : "";
-      if (!userId || !shouldRefreshJwtPerms(token)) {
+      if (
+        !userId ||
+        !shouldRefreshJwtPerms({ permsCheckedAt: token.permsCheckedAt })
+      ) {
         return token;
       }
 
