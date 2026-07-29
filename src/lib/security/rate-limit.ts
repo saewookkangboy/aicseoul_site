@@ -50,7 +50,9 @@ export function checkRateLimitInMemory(
 // self-resets once `expiresAt` passes.
 
 // Keys such as `login:${ip}:${email}` have unbounded cardinality, so the upsert
-// alone never reclaims old rows. Sweep expired rows on ~1% of checks.
+// alone never reclaims old rows. Sweep expired rows on ~1% of checks. Awaited
+// (not fire-and-forget) because serverless isolates may freeze after the
+// response, dropping un-awaited work. TODO: move to a scheduled cron sweep.
 async function sweepExpired(): Promise<void> {
   try {
     await prisma.$executeRaw`DELETE FROM "RateLimit" WHERE "expiresAt" < now()`;
@@ -83,7 +85,7 @@ async function checkRateLimitInDb(
     RETURNING "count", "expiresAt"
   `;
 
-  if (Math.random() < 0.01) void sweepExpired();
+  if (Math.random() < 0.01) await sweepExpired();
 
   const row = rows[0];
   if (!row) return { ok: true };
