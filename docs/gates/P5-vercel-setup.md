@@ -49,11 +49,22 @@ vercel link --yes --scope chunghyos-projects
 
 | Key | Example / 생성 | Notes |
 |---|---|---|
-| `DATABASE_URL` | Neon/Vercel Postgres connection string | `sslmode=require` |
+| `DATABASE_URL` | Supabase `aic-seoul` pooler (`aic_app.…@…pooler…:5432`, `sslmode=require`) | Prisma SoT. **다른 프로젝트의 `POSTGRES_*`를 넣지 말 것** |
 | `AUTH_SECRET` | `openssl rand -base64 32` | 필수 |
 | `AUTH_URL` | `https://<project>.vercel.app` | 커스텀 도메인 확정 시 교체 |
 | `SUPERADMIN_EMAILS` | `a@…,b@…,c@…` | 최대 3, 실운영 메일 |
 | `SUPERADMIN_SEED_PASSWORD` | 강한 임시 비번 | 시드 후 즉시 변경 |
+
+### Supabase (Postgres 호스트 only)
+
+Auth.js + Prisma 스택. Supabase Auth/Storage는 사용하지 않음. Data API는 RLS로 잠김.
+
+| Key | Notes |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://cjlapwteqeiweznomnez.supabase.co` (`aic-seoul`) |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Dashboard publishable key (동일 프로젝트) |
+
+Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`가 `DATABASE_URL` 폴백을 오염시킬 수 있음 → Integration 해제 또는 해당 변수 삭제.
 
 ### 강력 권장 (프로덕션 이미지·알림)
 
@@ -79,16 +90,19 @@ vercel link --yes --scope chunghyos-projects
 
 ---
 
-## 4. 호스팅 DB (권장 Neon)
+## 4. 호스팅 DB (Supabase `aic-seoul`)
 
-1. Neon 프로젝트 생성 (region 가까운 곳)
-2. Connection string → Vercel `DATABASE_URL`
-3. 첫 배포로 `migrate deploy` 적용
-4. 로컬에서:
+1. 프로젝트: `cjlapwteqeiweznomnez` (ap-northeast-2)
+2. Session pooler connection → Vercel `DATABASE_URL` (`aic_app` 권장)
+3. 스키마 변경 SoT: **Prisma migrate**. RLS/권한만 `supabase/migrations`
+4. DDL(인덱스 등)이 `aic_app`에서 owner 오류면 Dashboard SQL / MCP로 적용 후 `prisma migrate resolve --applied`
+5. 로컬 시드:
 
 ```bash
 DATABASE_URL="<prod>" pnpm db:seed:prod
 ```
+
+> 예전 문서의 Neon 예시는 동일하게 `DATABASE_URL`만 맞으면 동작합니다. 현재 운영 SoT는 Supabase입니다.
 
 ---
 
