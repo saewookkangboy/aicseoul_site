@@ -6,7 +6,6 @@ import {
   labelClass,
   labelHintClass,
 } from "@/components/admin/ui";
-import { CldImageSample } from "@/components/media/CldImageSample";
 import { updateSettingsAction } from "@/lib/actions/cms";
 import { requireModule } from "@/lib/admin";
 import { getSiteSettingsMap } from "@/lib/queries/content";
@@ -14,7 +13,6 @@ import { getSiteSettingsMap } from "@/lib/queries/content";
 export default async function SettingsPage() {
   await requireModule("settings");
   const s = await getSiteSettingsMap();
-  const cloudinaryReady = Boolean(process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
 
   const fields = [
     { key: "stats.members", label: "글로벌 멤버 수" },
@@ -48,25 +46,6 @@ export default async function SettingsPage() {
             저장
           </button>
         </form>
-      </AdminPanel>
-
-      <AdminPanel>
-        <div className="flex flex-col gap-3">
-          <div>
-            <h2 className="text-base font-semibold">Cloudinary 미리보기</h2>
-            <p className="mt-1 text-sm opacity-70">
-              next-cloudinary <code>CldImage</code> 스모크.{" "}
-              {cloudinaryReady
-                ? `cloud: ${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`
-                : "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME 이 없습니다. .env.local을 확인하세요."}
-            </p>
-          </div>
-          {cloudinaryReady ? (
-            <div className="max-w-[500px] overflow-hidden">
-              <CldImageSample />
-            </div>
-          ) : null}
-        </div>
       </AdminPanel>
     </div>
   );
