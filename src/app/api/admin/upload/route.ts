@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 import {
   getMediaUploader,
   MediaStoreUnconfiguredError,
@@ -46,17 +47,40 @@ export async function POST(req: Request) {
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "file required" }, { status: 400 });
   }
-  if (!MODULES.has(permissionModule) || !canAccessModule(session.user, permissionModule)) {
+  if (
+    !MODULES.has(permissionModule) ||
+    !canAccessModule(session.user, permissionModule)
+  ) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   try {
     const uploader = getMediaUploader();
     const uploaded = await uploader.upload(file, { folder });
-    return NextResponse.json(uploaded);
+    const asset = await prisma.mediaAsset.create({
+      data: {
+        url: uploaded.url,
+        publicId: uploaded.publicId ?? null,
+        width: uploaded.width ?? null,
+        height: uploaded.height ?? null,
+        module: permissionModule,
+        folder,
+        mimeType: file.type || null,
+        byteSize: file.size,
+        uploadedById: session.user.id,
+      },
+    });
+
+    return NextResponse.json({
+      url: uploaded.url,
+      assetId: asset.id,
+      publicId: uploaded.publicId,
+      width: uploaded.width,
+      height: uploaded.height,
+      mimeType: file.type,
+      byteSize: file.size,
+    });
   } catch (e) {
-    // Misconfiguration (no durable store in prod) is a server-side 503, not a
-    // client 400 — surface it distinctly so the admin knows it's not their file.
     if (e instanceof MediaStoreUnconfiguredError) {
       return NextResponse.json({ error: e.message }, { status: 503 });
     }

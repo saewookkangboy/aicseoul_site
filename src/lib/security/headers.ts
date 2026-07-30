@@ -11,8 +11,10 @@ const scriptSrc = [
   "script-src",
   "'self'",
   "'unsafe-inline'",
+  "'wasm-unsafe-eval'",
   ...(isProd ? [] : ["'unsafe-eval'"]),
   "https://va.vercel-scripts.com",
+  "https://cdn.jsdelivr.net",
 ].join(" ");
 
 const CSP = [
@@ -21,7 +23,8 @@ const CSP = [
   scriptSrc,
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com https://cdn.jsdelivr.net https://storage.googleapis.com",
+  "worker-src 'self' blob:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
