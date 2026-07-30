@@ -13,9 +13,9 @@ export const labelHintClass = "text-[var(--color-ink-muted)]";
 const btnFocusClass =
   "outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-gold)_28%,transparent)]";
 
-export const btnPrimaryClass = `inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-cta)] px-5 py-2.5 text-sm font-medium text-white transition-[transform,opacity,background-color] duration-200 hover:opacity-95 active:scale-[0.98] motion-reduce:transform-none disabled:pointer-events-none disabled:opacity-55 ${btnFocusClass}`;
+export const btnPrimaryClass = `inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-cta)] px-5 py-2.5 text-sm font-medium text-white transition-[transform,opacity,background-color] duration-200 hover:opacity-95 active:scale-[0.96] motion-reduce:transform-none disabled:pointer-events-none disabled:opacity-55 ${btnFocusClass}`;
 
-export const btnSecondaryClass = `inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm font-medium text-[var(--color-ink)] transition-[transform,border-color,background-color] duration-200 hover:border-[var(--color-gold)] hover:bg-[var(--color-cream)] active:scale-[0.98] motion-reduce:transform-none ${btnFocusClass}`;
+export const btnSecondaryClass = `inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm font-medium text-[var(--color-ink)] transition-[transform,border-color,background-color] duration-200 hover:border-[var(--color-gold)] hover:bg-[var(--color-cream)] active:scale-[0.96] motion-reduce:transform-none ${btnFocusClass}`;
 
 export const btnGhostClass = `inline-flex items-center justify-center gap-1.5 text-sm text-[var(--color-ink-muted)] transition-colors duration-200 hover:text-[var(--color-ink)] ${btnFocusClass}`;
 

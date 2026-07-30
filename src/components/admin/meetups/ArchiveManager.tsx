@@ -76,7 +76,7 @@ export function ArchiveManager({ photos }: { photos: Photo[] }) {
               />
               <button
                 type="button"
-                className="absolute right-2 top-2 rounded-full bg-[var(--color-dark)]/70 px-3 py-1 text-xs text-white transition-[transform,opacity] hover:opacity-90 active:scale-[0.98]"
+                className="absolute right-2 top-2 rounded-full bg-[var(--color-dark)]/70 px-3 py-1 text-xs text-white transition-[transform,opacity] hover:opacity-90 active:scale-[0.96] motion-reduce:transform-none"
                 onClick={() => start(() => deleteArchivePhotoAction(p.id))}
               >
                 삭제

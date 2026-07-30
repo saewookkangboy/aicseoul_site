@@ -7,7 +7,7 @@ const TONE: Record<Tone, string> = {
     "bg-[color-mix(in_srgb,var(--color-cta)_12%,transparent)] text-[var(--color-cta)] ring-[color-mix(in_srgb,var(--color-cta)_28%,transparent)]",
   gold: "bg-[color-mix(in_srgb,var(--color-gold)_18%,transparent)] text-[color-mix(in_srgb,var(--color-ink)_70%,var(--color-gold))] ring-[color-mix(in_srgb,var(--color-gold)_40%,transparent)]",
   success:
-    "bg-[color-mix(in_srgb,#3d7a5a_12%,transparent)] text-[#2f5f45] ring-[color-mix(in_srgb,#3d7a5a_28%,transparent)]",
+    "bg-[color-mix(in_srgb,var(--color-success)_12%,transparent)] text-[var(--color-success-fg)] ring-[color-mix(in_srgb,var(--color-success)_28%,transparent)]",
   warn: "bg-[color-mix(in_srgb,var(--color-gold)_22%,transparent)] text-[var(--color-ink)] ring-[var(--color-gold)]",
 };
 
