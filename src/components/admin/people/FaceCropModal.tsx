@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Cropper, { type Area, type Point } from "react-easy-crop";
-import { FaceDetector, FilesetResolver } from "@mediapipe/tasks-vision";
+import type { FaceDetector } from "@mediapipe/tasks-vision";
 import { getCroppedImageBlob } from "@/lib/media/crop-image";
 import { computeFaceCenteredCrop } from "@/lib/media/face-crop";
 import {
@@ -11,10 +11,42 @@ import {
   errorTextClass,
 } from "@/components/admin/ui";
 
+const MEDIAPIPE_ESM =
+  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.0/+esm";
 const WASM_CDN =
   "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.0/wasm";
 const FACE_MODEL =
   "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite";
+
+type VisionApi = {
+  FaceDetector: {
+    createFromOptions: (
+      fileset: unknown,
+      options: {
+        baseOptions: {
+          modelAssetPath: string;
+          delegate: "GPU" | "CPU";
+        };
+        runningMode: "IMAGE";
+      },
+    ) => Promise<FaceDetector>;
+  };
+  FilesetResolver: {
+    forVisionTasks: (path: string) => Promise<unknown>;
+  };
+};
+
+/**
+ * Load MediaPipe via CDN with an opaque dynamic import so Turbopack/webpack
+ * do not analyze the package's internal `import(url)` (build would fail with
+ * "Module not found: Can't resolve <dynamic>").
+ */
+function loadVisionApi(): Promise<VisionApi> {
+  const run = new Function(
+    `return import(${JSON.stringify(MEDIAPIPE_ESM)})`,
+  ) as () => Promise<VisionApi>;
+  return run();
+}
 
 type Props = {
   file: File;
@@ -28,6 +60,7 @@ let detectorPromise: Promise<FaceDetector> | null = null;
 function getFaceDetector() {
   if (!detectorPromise) {
     detectorPromise = (async () => {
+      const { FaceDetector, FilesetResolver } = await loadVisionApi();
       const vision = await FilesetResolver.forVisionTasks(WASM_CDN);
       try {
         return await FaceDetector.createFromOptions(vision, {
