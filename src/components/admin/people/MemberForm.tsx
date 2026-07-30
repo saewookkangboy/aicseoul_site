@@ -17,6 +17,7 @@ type Props = {
     nameEn?: string;
     bio?: string;
     photoUrl?: string | null;
+    photoAssetId?: string | null;
     linkedinUrl?: string | null;
     websiteUrl?: string | null;
     isVisible?: boolean;
@@ -27,17 +28,24 @@ type Props = {
 
 export function MemberForm({ action, initial, submitLabel }: Props) {
   const [photoUrl, setPhotoUrl] = useState(initial?.photoUrl ?? "");
+  const [photoAssetId, setPhotoAssetId] = useState(initial?.photoAssetId ?? "");
 
   return (
     <AdminPanel>
       <form action={action} className="flex max-w-xl flex-col gap-4">
         <input type="hidden" name="photoUrl" value={photoUrl} />
+        <input type="hidden" name="photoAssetId" value={photoAssetId} />
         <ImageUploadField
           module="people"
           folder="people"
           value={photoUrl}
+          cropMode="face-3x4"
           onUploaded={setPhotoUrl}
-          label="사진 (3:4 권장, 크롭 강제 없음)"
+          onUploadedMeta={(meta) => {
+            setPhotoUrl(meta.url);
+            setPhotoAssetId(meta.assetId);
+          }}
+          label="사진 (3:4, 얼굴 중앙 자동 정렬)"
         />
         <label className={labelClass}>
           <span className={labelHintClass}>한글명</span>

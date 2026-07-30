@@ -68,21 +68,24 @@ model User {
   lastLoginAt  DateTime?
   invitesSent     AdminInvite[] @relation("InvitesSent")
   inviteAccepted  AdminInvite[] @relation("InviteAccepted")
+  mediaAssets     MediaAsset[]
 }
 
 model Member {
-  id          String   @id @default(cuid())
-  nameKr      String
-  nameEn      String
-  bio         String
-  photoUrl    String?
-  linkedinUrl String?
-  websiteUrl  String?
-  sortOrder   Int      @default(0)
-  isFounder   Boolean  @default(false)
-  isVisible   Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String      @id @default(cuid())
+  nameKr       String
+  nameEn       String
+  bio          String
+  photoUrl     String?
+  photoAssetId String?
+  photoAsset   MediaAsset? @relation(fields: [photoAssetId], references: [id], onDelete: SetNull)
+  linkedinUrl  String?
+  websiteUrl   String?
+  sortOrder    Int         @default(0)
+  isFounder    Boolean     @default(false)
+  isVisible    Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 model Meetup {
@@ -155,13 +158,22 @@ model SiteSetting {
 }
 
 model MediaAsset {
-  id        String   @id @default(cuid())
-  url       String
-  publicId  String?
-  width     Int?
-  height    Int?
-  alt       String?
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  url          String
+  publicId     String?
+  width        Int?
+  height       Int?
+  alt          String?
+  module       String?
+  folder       String?
+  mimeType     String?
+  byteSize     Int?
+  uploadedById String?
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+  members      Member[]
+
+  @@index([module, createdAt])
 }
 
 // Distributed rate-limit counter (fixed window). Shared across serverless
