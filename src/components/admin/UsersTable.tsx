@@ -313,7 +313,7 @@ export function UsersTable({
                         초대 권한으로 승인
                       </button>
                     ) : null}
-                    {user.status === "pending" ? (
+                    {user.status === "pending" && !user.invitePerms ? (
                       <button
                         type="button"
                         disabled={pending || isSelf}
