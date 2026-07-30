@@ -11,6 +11,8 @@ import { parseSuperAdminEmails } from "@/lib/permissions";
 import { getClientIpFromHeaders } from "@/lib/security/client-ip";
 import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
 import { checkRateLimit } from "@/lib/security/rate-limit";
+import { planAcceptInvite, planExpireInvite } from "@/lib/admin-invite-plan";
+import { hashInviteToken } from "@/lib/admin-invite-token";
 import { getAdminSignupInviteCode } from "@/lib/admin-signup";
 import { isProd } from "@/lib/env";
 import { safeAdminCallbackUrl } from "@/lib/security/callback-url";
@@ -20,6 +22,7 @@ const signupSchema = z.object({
   email: z.string().trim().email().max(200),
   password: z.string().min(8).max(128),
   inviteCode: z.string().trim().max(120).optional(),
+  inviteToken: z.string().trim().min(1).max(200).optional(),
 });
 
 const loginSchema = z.object({
@@ -41,22 +44,11 @@ export async function signupAction(
     email: formData.get("email"),
     password: formData.get("password"),
     inviteCode: formData.get("inviteCode") || undefined,
+    inviteToken: formData.get("inviteToken") || undefined,
   });
 
   if (!parsed.success) {
     return { error: "입력값을 확인해 주세요. 비밀번호는 8자 이상입니다." };
-  }
-
-  const requiredInvite = getAdminSignupInviteCode();
-  // Fail-closed: in production, an unset invite code must NOT fall through to
-  // open registration. Require the code to be configured before allowing signup.
-  if (isProd && !requiredInvite) {
-    return {
-      error: "회원가입이 비활성화되어 있습니다. 관리자에게 문의하세요.",
-    };
-  }
-  if (requiredInvite && parsed.data.inviteCode !== requiredInvite) {
-    return { error: "초대 코드가 올바르지 않습니다." };
   }
 
   const h = await headers();
@@ -74,9 +66,94 @@ export async function signupAction(
     return { error: "이미 등록된 이메일입니다." };
   }
 
+  const passwordHash = await hash(parsed.data.password, 12);
+
+  if (parsed.data.inviteToken) {
+    const tokenHash = hashInviteToken(parsed.data.inviteToken);
+    const invite = await prisma.adminInvite.findUnique({ where: { tokenHash } });
+    if (!invite) {
+      return { error: "유효하지 않은 초대입니다." };
+    }
+
+    const now = new Date();
+    if (planExpireInvite(invite.status, invite.expiresAt, now).expire) {
+      await prisma.adminInvite.update({
+        where: { id: invite.id },
+        data: { status: "expired" },
+      });
+      return { error: "초대가 만료되었습니다." };
+    }
+
+    const planned = planAcceptInvite({
+      inviteStatus: invite.status,
+      inviteEmail: invite.email,
+      inviteRole: invite.role,
+      expiresAt: invite.expiresAt,
+      now,
+      signupEmail: email,
+      permsOnInvite: {
+        permPeople: invite.permPeople,
+        permMeetups: invite.permMeetups,
+        permInsights: invite.permInsights,
+        permContact: invite.permContact,
+        permSettings: invite.permSettings,
+      },
+    });
+    if (!planned.ok) {
+      return { error: planned.error };
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        name: parsed.data.name,
+        passwordHash,
+        ...planned.user,
+      },
+    });
+
+    await prisma.adminInvite.update({
+      where: { id: invite.id },
+      data: {
+        status: "accepted",
+        acceptedUserId: user.id,
+        acceptedAt: now,
+      },
+    });
+
+    if (planned.user.role === "superadmin") {
+      try {
+        await signIn("credentials", {
+          email,
+          password: parsed.data.password,
+          redirect: false,
+        });
+      } catch (error) {
+        if (error instanceof AuthError) {
+          return { error: "가입은 됐지만 로그인에 실패했습니다. 다시 로그인해 주세요." };
+        }
+        throw error;
+      }
+      redirect("/admin");
+    }
+
+    redirect("/admin/pending");
+  }
+
+  const requiredInvite = getAdminSignupInviteCode();
+  // Fail-closed: in production, an unset invite code must NOT fall through to
+  // open registration. Require the code to be configured before allowing signup.
+  if (isProd && !requiredInvite) {
+    return {
+      error: "회원가입이 비활성화되어 있습니다. 관리자에게 문의하세요.",
+    };
+  }
+  if (requiredInvite && parsed.data.inviteCode !== requiredInvite) {
+    return { error: "초대 코드가 올바르지 않습니다." };
+  }
+
   const superEmails = parseSuperAdminEmails(process.env.SUPERADMIN_EMAILS);
   const isListedSuper = superEmails.includes(email);
-  const passwordHash = await hash(parsed.data.password, 12);
 
   await prisma.user.create({
     data: {

@@ -16,6 +16,10 @@ type Props = {
   includeName?: boolean;
   /** When true, show required invite code field (ADMIN_SIGNUP_INVITE_CODE set). */
   requireInvite?: boolean;
+  /** Email invite token from `/admin/signup?token=…`. */
+  inviteToken?: string;
+  /** Locks signup email to the invited address. */
+  lockedEmail?: string;
   /** Post-login relative path (validated server-side). */
   callbackUrl?: string;
 };
@@ -27,6 +31,8 @@ export function AuthForm({
   submitLabel,
   includeName,
   requireInvite,
+  inviteToken,
+  lockedEmail,
   callbackUrl,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, initial);
@@ -44,7 +50,10 @@ export function AuthForm({
           <input name="name" required className={fieldClass} />
         </label>
       ) : null}
-      {requireInvite ? (
+      {inviteToken ? (
+        <input type="hidden" name="inviteToken" value={inviteToken} />
+      ) : null}
+      {requireInvite && !inviteToken ? (
         <label className={labelClass}>
           <span className={labelHintClass}>초대 코드</span>
           <input
@@ -61,6 +70,8 @@ export function AuthForm({
           name="email"
           type="email"
           required
+          readOnly={Boolean(lockedEmail)}
+          defaultValue={lockedEmail}
           autoComplete="email"
           className={fieldClass}
           aria-invalid={invalid || undefined}
