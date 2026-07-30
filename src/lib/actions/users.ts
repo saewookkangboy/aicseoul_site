@@ -89,3 +89,32 @@ export async function updateUserPermissions(
 
   revalidatePath("/admin/users");
 }
+
+export async function approveUserWithInvitePermissions(userId: string) {
+  const session = await auth();
+  if (!session?.user || !isSuperAdmin(session.user)) {
+    throw new Error("Forbidden");
+  }
+
+  const invite = await prisma.adminInvite.findFirst({
+    where: { acceptedUserId: userId, status: "accepted" },
+    orderBy: { acceptedAt: "desc" },
+  });
+  if (!invite) {
+    throw new Error("초대 권한 정보가 없습니다");
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      status: "active",
+      permPeople: invite.permPeople,
+      permMeetups: invite.permMeetups,
+      permInsights: invite.permInsights,
+      permContact: invite.permContact,
+      permSettings: invite.permSettings,
+    },
+  });
+
+  revalidatePath("/admin/users");
+}

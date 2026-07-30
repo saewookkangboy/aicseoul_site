@@ -3,13 +3,20 @@
 import { useState, useTransition } from "react";
 import {
   approveUser,
+  approveUserWithInvitePermissions,
   disableUser,
   updateUserPermissions,
 } from "@/lib/actions/users";
 import {
+  applyPermissionPreset,
+  type PermissionPresetId,
+} from "@/lib/permission-presets";
+import type { ModulePerms } from "@/lib/user-permission-update";
+import {
   AdminBadge,
   btnDangerGhostClass,
   btnGhostClass,
+  btnSecondaryClass,
   errorTextClass,
   tableClass,
   tableWrapClass,
@@ -28,6 +35,7 @@ type UserRow = {
   permInsights: boolean;
   permContact: boolean;
   permSettings: boolean;
+  invitePerms?: ModulePerms | null;
 };
 
 const MODULE_FIELDS = [
@@ -36,10 +44,28 @@ const MODULE_FIELDS = [
   ["permInsights", "인사이트"],
   ["permContact", "문의"],
   ["permSettings", "설정"],
-] as const;
+] as const satisfies ReadonlyArray<[keyof ModulePerms, string]>;
+
+const PRESET_BUTTONS = [
+  { id: "content" as const, label: "콘텐츠만" },
+  { id: "fullOps" as const, label: "전체 운영" },
+  { id: "contactSettings" as const, label: "문의·설정" },
+] satisfies ReadonlyArray<{ id: PermissionPresetId; label: string }>;
 
 const actionBtnClass =
   "inline-flex min-h-10 items-center justify-start rounded-lg px-2 text-left text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-gold)_28%,transparent)]";
+
+const presetBtnClass = `${btnSecondaryClass} min-h-8 px-3 py-1.5 text-xs`;
+
+function userModulePerms(user: UserRow): ModulePerms {
+  return {
+    permPeople: user.permPeople,
+    permMeetups: user.permMeetups,
+    permInsights: user.permInsights,
+    permContact: user.permContact,
+    permSettings: user.permSettings,
+  };
+}
 
 function statusTone(status: string) {
   switch (status) {
@@ -91,6 +117,21 @@ export function UsersTable({
   const [superById, setSuperById] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(users.map((u) => [u.id, u.role === "superadmin"])),
   );
+  const [permsById, setPermsById] = useState<Record<string, ModulePerms>>(() =>
+    Object.fromEntries(users.map((u) => [u.id, userModulePerms(u)])),
+  );
+
+  const clearRowError = (userId: string) => {
+    setErrorById((prev) => {
+      const next = { ...prev };
+      delete next[userId];
+      return next;
+    });
+  };
+
+  const setRowError = (userId: string, message: string) => {
+    setErrorById((prev) => ({ ...prev, [userId]: message }));
+  };
 
   return (
     <div className={tableWrapClass}>
@@ -109,6 +150,7 @@ export function UsersTable({
             const isSuper = superById[user.id] ?? user.role === "superadmin";
             const rowError = errorById[user.id];
             const confirmingDisable = confirmDisableId === user.id;
+            const rowPerms = permsById[user.id] ?? userModulePerms(user);
 
             return (
               <tr key={user.id} className="align-top">
@@ -141,11 +183,7 @@ export function UsersTable({
                       className="flex flex-col gap-2"
                       action={(fd) => {
                         start(async () => {
-                          setErrorById((prev) => {
-                            const next = { ...prev };
-                            delete next[user.id];
-                            return next;
-                          });
+                          clearRowError(user.id);
                           const wantSuper = fd.get("isSuperadmin") === "on";
                           try {
                             await updateUserPermissions(user.id, {
@@ -169,10 +207,7 @@ export function UsersTable({
                               err instanceof Error
                                 ? err.message
                                 : "저장에 실패했습니다. 다시 시도해 주세요.";
-                            setErrorById((prev) => ({
-                              ...prev,
-                              [user.id]: message,
-                            }));
+                            setRowError(user.id, message);
                           }
                         });
                       }}
@@ -192,10 +227,27 @@ export function UsersTable({
                         />
                         슈퍼관리자
                       </label>
-                      <div
-                        key={`${user.id}-${isSuper}`}
-                        className="flex flex-col gap-1"
-                      >
+                      {!isSuper ? (
+                        <div className="flex flex-wrap gap-1">
+                          {PRESET_BUTTONS.map(({ id, label }) => (
+                            <button
+                              key={id}
+                              type="button"
+                              disabled={pending}
+                              className={presetBtnClass}
+                              onClick={() =>
+                                setPermsById((prev) => ({
+                                  ...prev,
+                                  [user.id]: applyPermissionPreset(id),
+                                }))
+                              }
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
+                      <div className="flex flex-col gap-1">
                         {MODULE_FIELDS.map(([name, label]) => (
                           <label
                             key={name}
@@ -204,8 +256,17 @@ export function UsersTable({
                             <input
                               type="checkbox"
                               name={name}
-                              defaultChecked={isSuper ? true : user[name]}
+                              checked={isSuper ? true : rowPerms[name]}
                               disabled={isSuper}
+                              onChange={(e) =>
+                                setPermsById((prev) => ({
+                                  ...prev,
+                                  [user.id]: {
+                                    ...rowPerms,
+                                    [name]: e.target.checked,
+                                  },
+                                }))
+                              }
                               className="size-4 accent-[var(--color-cta)]"
                             />
                             {label}
@@ -229,12 +290,48 @@ export function UsersTable({
                 </td>
                 <td className={tdClass}>
                   <div className="flex flex-col gap-1">
+                    {user.status === "pending" && user.invitePerms ? (
+                      <button
+                        type="button"
+                        disabled={pending || isSelf}
+                        className={`${actionBtnClass} text-[var(--color-cta)]`}
+                        onClick={() =>
+                          start(async () => {
+                            clearRowError(user.id);
+                            try {
+                              await approveUserWithInvitePermissions(user.id);
+                            } catch (err) {
+                              const message =
+                                err instanceof Error
+                                  ? err.message
+                                  : "승인에 실패했습니다. 다시 시도해 주세요.";
+                              setRowError(user.id, message);
+                            }
+                          })
+                        }
+                      >
+                        초대 권한으로 승인
+                      </button>
+                    ) : null}
                     {user.status === "pending" ? (
                       <button
                         type="button"
                         disabled={pending || isSelf}
                         className={`${actionBtnClass} text-[var(--color-cta)]`}
-                        onClick={() => start(() => approveUser(user.id))}
+                        onClick={() =>
+                          start(async () => {
+                            clearRowError(user.id);
+                            try {
+                              await approveUser(user.id);
+                            } catch (err) {
+                              const message =
+                                err instanceof Error
+                                  ? err.message
+                                  : "승인에 실패했습니다. 다시 시도해 주세요.";
+                              setRowError(user.id, message);
+                            }
+                          })
+                        }
                       >
                         승인
                       </button>
