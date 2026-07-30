@@ -2,7 +2,7 @@
 
 - 작성일: 2026-07-30
 - 상태: **approved** (2026-07-30 사용자 설계 승인)
-- 플랜: (writing-plans 후 연결)
+- 플랜: `docs/superpowers/plans/2026-07-30-member-photo-upload.md`
 - 관련: `Member.photoUrl`, `MediaAsset`, `/api/admin/upload`, Cloudinary, P4/P5 미디어, PRD People 3:4
 
 ## 1. 문제
