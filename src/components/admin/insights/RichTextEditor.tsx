@@ -31,7 +31,7 @@ function ToolbarButton({
       onClick={onClick}
       className={`rounded px-2 py-1 text-xs transition-colors ${
         active
-          ? "bg-[var(--color-ink)] text-[var(--color-surface)]"
+          ? "bg-[var(--color-ink)] text-white"
           : "text-[var(--color-ink-muted)] hover:bg-[var(--color-border)] hover:text-[var(--color-ink)]"
       }`}
     >
