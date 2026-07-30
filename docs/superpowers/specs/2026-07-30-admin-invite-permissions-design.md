@@ -1,7 +1,8 @@
 # Admin 이메일 초대 + 권한 UX — Design Spec
 
 - 작성일: 2026-07-30
-- 상태: **approved** (설계 대화 확정, 스펙 파일 사용자 검토 대기)
+- 상태: **approved** (2026-07-30 사용자 스펙 검토 승인)
+- 플랜: `docs/superpowers/plans/2026-07-30-admin-invite-permissions.md`
 - 관련: P0 Admin 권한 모델, `/admin/users`, `ADMIN_SIGNUP_INVITE_CODE`, Resend, SuperAdmin max 3
 
 ## 1. 문제
