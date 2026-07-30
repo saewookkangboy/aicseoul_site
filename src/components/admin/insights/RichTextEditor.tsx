@@ -5,6 +5,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import { isInsightBodyEmpty } from "@/lib/insights/body-empty";
 
 type Props = {
   name: string;
@@ -40,11 +41,6 @@ function ToolbarButton({
   );
 }
 
-function isEditorEmpty(html: string) {
-  const normalized = html.replace(/\s/g, "");
-  return !normalized || normalized === "<p></p>" || normalized === "<p><br></p>";
-}
-
 export function RichTextEditor({ name, initialHtml = "", required }: Props) {
   const [html, setHtml] = useState(initialHtml || "");
 
@@ -77,7 +73,7 @@ export function RichTextEditor({ name, initialHtml = "", required }: Props) {
     },
   });
 
-  const isEmpty = isEditorEmpty(html);
+  const isEmpty = isInsightBodyEmpty(html);
 
   const setLink = () => {
     if (!editor) return;
