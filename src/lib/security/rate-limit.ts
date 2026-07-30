@@ -88,7 +88,12 @@ async function checkRateLimitInDb(
   if (Math.random() < 0.01) await sweepExpired();
 
   const row = rows[0];
-  if (!row) return { ok: true };
+  // Empty RETURNING is anomalous (upsert should always return a row). Do not
+  // fail-open here — that would bypass the distributed limit entirely.
+  if (!row) {
+    console.error("[rate-limit] upsert RETURNING empty; denying request");
+    return { ok: false, retryAfterSec: Math.max(1, Math.ceil(windowMs / 1000)) };
+  }
 
   const count = Number(row.count);
   if (count > limit) {

@@ -7,6 +7,10 @@ import {
   defaultLocale,
   isLocale,
 } from "@/lib/i18n/config";
+import {
+  authJwtGetTokenOptions,
+  requestIsHttps,
+} from "@/lib/security/auth-jwt-edge";
 
 /**
  * Locale redirect for public routes + JWT gate for /admin.
@@ -26,7 +30,10 @@ export async function middleware(req: NextRequest) {
 
     const token = await getToken({
       req,
-      secret: process.env.AUTH_SECRET,
+      ...authJwtGetTokenOptions({
+        secret: process.env.AUTH_SECRET,
+        isHttps: requestIsHttps(req),
+      }),
     });
 
     if (!token?.email) {
