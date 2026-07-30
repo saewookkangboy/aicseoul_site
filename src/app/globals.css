@@ -42,6 +42,28 @@ a {
   text-decoration: none;
 }
 
+/*
+ * Admin dark sidebar: beat global `a { color: inherit }` (body ink)
+ * so nav labels stay white even if utilities are overridden.
+ */
+.admin-sidebar,
+.admin-sidebar a,
+.admin-sidebar button {
+  color: #ffffff !important;
+}
+.admin-sidebar .admin-sidebar-muted {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+.admin-sidebar .admin-sidebar-gold {
+  color: var(--color-gold) !important;
+}
+.admin-sidebar svg {
+  color: #ffffff !important;
+}
+.admin-sidebar .admin-sidebar-gold svg {
+  color: var(--color-gold) !important;
+}
+
 /* TipTap (Insights CMS) */
 .ProseMirror p.is-editor-empty:first-child::before {
   color: var(--color-ink-muted);

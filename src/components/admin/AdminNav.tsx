@@ -22,6 +22,7 @@ import {
   useRef,
   useState,
   type ComponentType,
+  type CSSProperties,
 } from "react";
 import { logoutAction } from "@/lib/actions/auth";
 import {
@@ -66,6 +67,8 @@ const NAV: NavItem[] = [
 
 const focusRing =
   "outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-gold)_40%,transparent)]";
+
+const whiteStyle: CSSProperties = { color: "#ffffff" };
 
 function isActive(pathname: string, href: string) {
   if (href === "/admin") return pathname === "/admin";
@@ -155,17 +158,21 @@ export function AdminNav({ user }: { user: SessionUser }) {
   const navBody = (
     <>
       <div className="flex items-center justify-between gap-3 px-5 pt-5 pb-4">
-        <Link href="/admin" className={`group min-w-0 ${focusRing}`}>
-          <p className="font-display text-[11px] tracking-[0.16em] text-[var(--color-gold)]">
+        <Link href="/admin" className={`group min-w-0 ${focusRing}`} style={whiteStyle}>
+          <p className="admin-sidebar-gold font-display text-[11px] tracking-[0.16em]">
             AIC SEOUL
           </p>
-          <p className="mt-1 truncate text-sm font-medium text-white">
+          <p
+            className="mt-1 truncate text-sm font-medium"
+            style={whiteStyle}
+          >
             Admin Console
           </p>
         </Link>
         <button
           type="button"
-          className={`rounded-lg p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white lg:hidden ${focusRing}`}
+          className={`rounded-lg p-2 hover:bg-white/10 lg:hidden ${focusRing}`}
+          style={whiteStyle}
           aria-label="메뉴 닫기"
           onClick={() => setOpen(false)}
         >
@@ -184,18 +191,18 @@ export function AdminNav({ user }: { user: SessionUser }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white transition-[background-color,color,transform,opacity] duration-200 active:scale-[0.96] motion-reduce:transform-none ${focusRing} ${
-                active
-                  ? "bg-white/12"
-                  : "opacity-80 hover:bg-white/6 hover:opacity-100"
+              style={whiteStyle}
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-[background-color,transform] duration-200 active:scale-[0.96] motion-reduce:transform-none ${focusRing} ${
+                active ? "bg-white/12" : "hover:bg-white/6"
               }`}
             >
               <Icon
-                className="size-[1.15rem] shrink-0 text-white"
+                className="size-[1.15rem] shrink-0"
                 weight={active ? "fill" : "regular"}
                 aria-hidden
+                style={whiteStyle}
               />
-              <span>{item.label}</span>
+              <span style={whiteStyle}>{item.label}</span>
             </Link>
           );
         })}
@@ -204,14 +211,14 @@ export function AdminNav({ user }: { user: SessionUser }) {
       <div className="mt-auto border-t border-white/10 px-4 py-4">
         <div className="flex items-start gap-2.5 px-1">
           <House
-            className="mt-0.5 size-4 shrink-0 text-[var(--color-gold)]"
+            className="admin-sidebar-gold mt-0.5 size-4 shrink-0"
             aria-hidden
           />
           <div className="min-w-0">
-            <p className="truncate text-xs text-white">
+            <p className="truncate text-xs" style={whiteStyle}>
               {user.name ?? user.email}
             </p>
-            <p className="mt-0.5 truncate text-[11px] text-white/70">
+            <p className="admin-sidebar-muted mt-0.5 truncate text-[11px]">
               {user.role === "superadmin" ? "슈퍼관리자" : "운영자"}
             </p>
           </div>
@@ -219,18 +226,20 @@ export function AdminNav({ user }: { user: SessionUser }) {
         <div className="mt-3 flex flex-col gap-1">
           <Link
             href="/"
-            className={`flex items-center gap-2 rounded-lg px-2 py-2 text-xs text-white/80 transition-colors hover:bg-white/6 hover:text-white ${focusRing}`}
+            style={whiteStyle}
+            className={`flex items-center gap-2 rounded-lg px-2 py-2 text-xs hover:bg-white/6 ${focusRing}`}
           >
-            <ArrowSquareOut className="size-3.5 text-white" aria-hidden />
-            공개 사이트
+            <ArrowSquareOut className="size-3.5" aria-hidden style={whiteStyle} />
+            <span style={whiteStyle}>공개 사이트</span>
           </Link>
           <form action={logoutAction}>
             <button
               type="submit"
-              className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-white/80 transition-colors hover:bg-white/6 hover:text-white ${focusRing}`}
+              style={whiteStyle}
+              className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs hover:bg-white/6 ${focusRing}`}
             >
-              <SignOut className="size-3.5 text-white" aria-hidden />
-              로그아웃
+              <SignOut className="size-3.5" aria-hidden style={whiteStyle} />
+              <span style={whiteStyle}>로그아웃</span>
             </button>
           </form>
         </div>
@@ -254,7 +263,7 @@ export function AdminNav({ user }: { user: SessionUser }) {
         </button>
         <Link
           href="/admin"
-          className={`font-display text-sm font-medium ${focusRing}`}
+          className={`font-display text-sm font-medium text-[var(--color-ink)] ${focusRing}`}
         >
           AIC Admin
         </Link>
@@ -275,7 +284,8 @@ export function AdminNav({ user }: { user: SessionUser }) {
         id={titleId}
         aria-hidden={mobileDrawerInactive ? true : undefined}
         {...(mobileDrawerInactive ? { inert: true } : {})}
-        className={`fixed inset-y-0 left-0 z-50 flex w-[17.5rem] flex-col bg-[var(--color-dark)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none motion-reduce:transform-none lg:static lg:z-auto lg:translate-x-0 lg:shrink-0 ${
+        style={whiteStyle}
+        className={`admin-sidebar fixed inset-y-0 left-0 z-50 flex w-[17.5rem] flex-col bg-[var(--color-dark)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none motion-reduce:transform-none lg:static lg:z-auto lg:translate-x-0 lg:shrink-0 ${
           open
             ? "translate-x-0"
             : "-translate-x-full max-lg:pointer-events-none max-lg:invisible lg:translate-x-0"
