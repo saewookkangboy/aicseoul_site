@@ -40,12 +40,13 @@ export default async function AdminDashboardPage() {
     ]);
 
   const greeting = user.name ? `${user.name}님` : user.email;
+  const roleLabel = user.role === "superadmin" ? "슈퍼관리자" : "운영자";
 
   return (
     <div className="flex flex-col gap-8">
       <AdminPageHeader
         title="대시보드"
-        description={`${greeting} · ${user.role}`}
+        description={`${greeting} · ${roleLabel}`}
         actions={
           <Link href="/" className={btnGhostClass}>
             공개 사이트 보기

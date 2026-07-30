@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { fieldClass, labelHintClass } from "@/components/admin/ui";
+import { useId, useState } from "react";
+import {
+  errorTextClass,
+  fieldClass,
+  labelHintClass,
+} from "@/components/admin/ui";
 
 type Props = {
   module: "people" | "meetups" | "insights" | "settings";
@@ -18,6 +22,8 @@ export function ImageUploadField({
   onUploaded,
   label = "이미지 업로드",
 }: Props) {
+  const inputId = useId();
+  const errorId = useId();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,7 +51,9 @@ export function ImageUploadField({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className={`text-sm ${labelHintClass}`}>{label}</span>
+      <label htmlFor={inputId} className={`text-sm ${labelHintClass}`}>
+        {label}
+      </label>
       {value ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -59,17 +67,23 @@ export function ImageUploadField({
         </div>
       )}
       <input
+        id={inputId}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/gif"
         onChange={onChange}
         disabled={pending}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : undefined}
+        aria-busy={pending}
         className={`${fieldClass} cursor-pointer file:mr-3 file:rounded-full file:border-0 file:bg-[var(--color-cream)] file:px-3 file:py-1.5 file:text-xs file:font-medium`}
       />
       {pending ? (
-        <p className="text-xs text-[var(--color-ink-muted)]">업로드 중…</p>
+        <p className="text-xs text-[var(--color-ink-muted)]" role="status">
+          업로드 중…
+        </p>
       ) : null}
       {error ? (
-        <p className="text-xs text-[var(--color-cta)]" role="alert">
+        <p id={errorId} className={`text-xs ${errorTextClass}`} role="alert">
           {error}
         </p>
       ) : null}

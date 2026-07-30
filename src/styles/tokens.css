@@ -8,6 +8,8 @@
   --color-cream: #eee9df;
   --color-cta: #ff640d;
   --color-dark: #0f0c0a;
+  /* Semantic: errors / destructive text — not CTA orange */
+  --color-danger: #b42318;
 
   --color-ink-muted: color-mix(in srgb, var(--color-ink) 62%, transparent);
   --radius: 1rem;

@@ -17,4 +17,5 @@ export {
   tableClass,
   thClass,
   tdClass,
+  errorTextClass,
 } from "./classes";
