@@ -35,7 +35,11 @@ import {
 type NavItem = {
   href: string;
   label: string;
-  icon: ComponentType<{ className?: string; weight?: "regular" | "fill" }>;
+  icon: ComponentType<{
+    className?: string;
+    weight?: "regular" | "fill";
+    "aria-hidden"?: boolean | "true" | "false";
+  }>;
   module?: PermissionModule;
   superOnly?: boolean;
 };
@@ -200,7 +204,6 @@ export function AdminNav({ user }: { user: SessionUser }) {
                 className="size-[1.15rem] shrink-0"
                 weight={active ? "fill" : "regular"}
                 aria-hidden
-                style={whiteStyle}
               />
               <span style={whiteStyle}>{item.label}</span>
             </Link>
@@ -229,7 +232,7 @@ export function AdminNav({ user }: { user: SessionUser }) {
             style={whiteStyle}
             className={`flex items-center gap-2 rounded-lg px-2 py-2 text-xs hover:bg-white/6 ${focusRing}`}
           >
-            <ArrowSquareOut className="size-3.5" aria-hidden style={whiteStyle} />
+            <ArrowSquareOut className="size-3.5" aria-hidden />
             <span style={whiteStyle}>공개 사이트</span>
           </Link>
           <form action={logoutAction}>
@@ -238,7 +241,7 @@ export function AdminNav({ user }: { user: SessionUser }) {
               style={whiteStyle}
               className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs hover:bg-white/6 ${focusRing}`}
             >
-              <SignOut className="size-3.5" aria-hidden style={whiteStyle} />
+              <SignOut className="size-3.5" aria-hidden />
               <span style={whiteStyle}>로그아웃</span>
             </button>
           </form>
