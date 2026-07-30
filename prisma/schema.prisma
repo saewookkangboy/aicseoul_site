@@ -44,6 +44,13 @@ enum ContactStatus {
   done
 }
 
+enum AdminInviteStatus {
+  pending
+  accepted
+  cancelled
+  expired
+}
+
 model User {
   id           String     @id @default(cuid())
   email        String     @unique
@@ -59,6 +66,8 @@ model User {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   lastLoginAt  DateTime?
+  invitesSent     AdminInvite[] @relation("InvitesSent")
+  inviteAccepted  AdminInvite[] @relation("InviteAccepted")
 }
 
 model Member {
@@ -179,4 +188,31 @@ model TranslationCache {
 
   @@unique([sourceHash, targetLang])
   @@index([targetLang])
+}
+
+model AdminInvite {
+  id             String            @id @default(cuid())
+  email          String
+  role           UserRole
+  permPeople     Boolean           @default(false)
+  permMeetups    Boolean           @default(false)
+  permInsights   Boolean           @default(false)
+  permContact    Boolean           @default(false)
+  permSettings   Boolean           @default(false)
+  tokenHash      String            @unique
+  status         AdminInviteStatus @default(pending)
+  expiresAt      DateTime
+  invitedById    String
+  invitedBy      User              @relation("InvitesSent", fields: [invitedById], references: [id], onDelete: Cascade)
+  acceptedUserId String?
+  acceptedUser   User?             @relation("InviteAccepted", fields: [acceptedUserId], references: [id], onDelete: SetNull)
+  acceptedAt     DateTime?
+  cancelledAt    DateTime?
+  lastSentAt     DateTime
+  sendCount      Int               @default(1)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([email, status])
+  @@index([status, expiresAt])
 }
