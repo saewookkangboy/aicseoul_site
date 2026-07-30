@@ -4,8 +4,22 @@ import {
   canCreateSuperadminInvite,
   planExpireInvite,
   planAcceptInvite,
+  planSuperadminSeatOnAccept,
 } from "./admin-invite-plan";
 import { hashInviteToken } from "./admin-invite-token";
+
+describe("planSuperadminSeatOnAccept", () => {
+  it("allows when fewer than 3 superadmin users", () => {
+    assert.equal(planSuperadminSeatOnAccept(2).ok, true);
+  });
+  it("blocks at 3 superadmin users", () => {
+    const r = planSuperadminSeatOnAccept(3);
+    assert.equal(r.ok, false);
+    if (!r.ok) {
+      assert.equal(r.error, "SuperAdmin은 최대 3명입니다.");
+    }
+  });
+});
 
 describe("canCreateSuperadminInvite", () => {
   it("allows when users+pending < 3", () => {

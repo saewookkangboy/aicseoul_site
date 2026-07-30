@@ -36,6 +36,7 @@ export type InviteRow = {
   expiresAt: string;
   sendCount: number;
   lastSentAt: string;
+  acceptedUserId: string | null;
 };
 
 const MODULE_FIELDS = [
@@ -197,7 +198,7 @@ export function InvitePanel({ invites }: { invites: InviteRow[] }) {
     <div className="flex flex-col gap-6">
       <AdminPanel
         title="이메일 초대"
-        description="역할과(운영자) 모듈 권한을 지정해 가입 링크를 발송합니다. Resend 키가 없으면 링크를 복사해 전달하세요."
+        description="역할과(운영자) 모듈 권한을 지정해 가입 링크를 발송합니다. 메일 발송 키가 없으면 링크를 복사해 전달하세요."
       >
         <div className="flex flex-col gap-4">
           <label className={labelClass}>
@@ -341,9 +342,20 @@ export function InvitePanel({ invites }: { invites: InviteRow[] }) {
                         </AdminBadge>
                       </td>
                       <td className={tdClass}>
-                        <AdminBadge tone={statusTone(invite.status)}>
-                          {statusLabel(invite.status)}
-                        </AdminBadge>
+                        <div className="flex flex-col gap-1">
+                          <AdminBadge tone={statusTone(invite.status)}>
+                            {statusLabel(invite.status)}
+                          </AdminBadge>
+                          {invite.status === "accepted" &&
+                          invite.acceptedUserId ? (
+                            <a
+                              href={`#user-${invite.acceptedUserId}`}
+                              className="text-xs text-[var(--color-cta)] underline-offset-2 hover:underline"
+                            >
+                              사용자 보기
+                            </a>
+                          ) : null}
+                        </div>
                       </td>
                       <td className={tdClass}>
                         <span className="text-[var(--color-ink-muted)]">

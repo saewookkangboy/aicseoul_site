@@ -16,7 +16,7 @@ export async function sendAdminInviteEmail(args: {
   const roleLabel = args.role === "superadmin" ? "SuperAdmin" : "운영진";
   try {
     const resend = new Resend(apiKey);
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from,
       to: args.to,
       subject: `[AIC Seoul] Admin 초대 · ${roleLabel}`,
@@ -30,6 +30,10 @@ export async function sendAdminInviteEmail(args: {
         "본인이 요청하지 않았다면 이 메일을 무시하세요.",
       ].join("\n"),
     });
+    if (result.error) {
+      console.error("[invite] Resend error", result.error);
+      return { sent: false };
+    }
     return { sent: true };
   } catch (err) {
     console.error("[invite] Resend failed", err);

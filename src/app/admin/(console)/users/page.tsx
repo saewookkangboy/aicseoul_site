@@ -33,6 +33,7 @@ export default async function UsersPage() {
       expiresAt: true,
       sendCount: true,
       lastSentAt: true,
+      acceptedUserId: true,
     },
   });
 

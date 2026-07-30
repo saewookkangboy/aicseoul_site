@@ -11,7 +11,11 @@ import { parseSuperAdminEmails } from "@/lib/permissions";
 import { getClientIpFromHeaders } from "@/lib/security/client-ip";
 import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
 import { checkRateLimit } from "@/lib/security/rate-limit";
-import { planAcceptInvite, planExpireInvite } from "@/lib/admin-invite-plan";
+import {
+  planAcceptInvite,
+  planExpireInvite,
+  planSuperadminSeatOnAccept,
+} from "@/lib/admin-invite-plan";
 import { hashInviteToken } from "@/lib/admin-invite-token";
 import { getAdminSignupInviteCode } from "@/lib/admin-signup";
 import { isProd } from "@/lib/env";
@@ -103,22 +107,33 @@ export async function signupAction(
       return { error: planned.error };
     }
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name: parsed.data.name,
-        passwordHash,
-        ...planned.user,
-      },
-    });
+    if (planned.user.role === "superadmin") {
+      const superCount = await prisma.user.count({
+        where: { role: "superadmin" },
+      });
+      const seatCheck = planSuperadminSeatOnAccept(superCount);
+      if (!seatCheck.ok) {
+        return { error: seatCheck.error };
+      }
+    }
 
-    await prisma.adminInvite.update({
-      where: { id: invite.id },
-      data: {
-        status: "accepted",
-        acceptedUserId: user.id,
-        acceptedAt: now,
-      },
+    await prisma.$transaction(async (tx) => {
+      const created = await tx.user.create({
+        data: {
+          email,
+          name: parsed.data.name,
+          passwordHash,
+          ...planned.user,
+        },
+      });
+      await tx.adminInvite.update({
+        where: { id: invite.id },
+        data: {
+          status: "accepted",
+          acceptedUserId: created.id,
+          acceptedAt: now,
+        },
+      });
     });
 
     if (planned.user.role === "superadmin") {

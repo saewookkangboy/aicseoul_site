@@ -10,6 +10,16 @@ export function canCreateSuperadminInvite(
   return superadminUsers + pendingSuperInvites < 3;
 }
 
+/** Seat check when consuming a pending superadmin invite (pending drops by one). */
+export function planSuperadminSeatOnAccept(superadminUsers: number):
+  | { ok: true }
+  | { ok: false; error: string } {
+  if (!canCreateSuperadminInvite(superadminUsers, 0)) {
+    return { ok: false, error: "SuperAdmin은 최대 3명입니다." };
+  }
+  return { ok: true };
+}
+
 export function planExpireInvite(
   status: InviteStatus,
   expiresAt: Date,

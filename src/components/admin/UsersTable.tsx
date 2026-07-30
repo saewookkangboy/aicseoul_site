@@ -153,7 +153,7 @@ export function UsersTable({
             const rowPerms = permsById[user.id] ?? userModulePerms(user);
 
             return (
-              <tr key={user.id} className="align-top">
+              <tr id={`user-${user.id}`} key={user.id} className="align-top">
                 <td className={tdClass}>
                   <div className="font-medium text-[var(--color-ink)]">
                     {user.name ?? "이름 없음"}
