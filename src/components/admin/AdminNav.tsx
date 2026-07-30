@@ -159,13 +159,13 @@ export function AdminNav({ user }: { user: SessionUser }) {
           <p className="font-display text-[11px] tracking-[0.16em] text-[var(--color-gold)]">
             AIC SEOUL
           </p>
-          <p className="mt-1 truncate text-sm font-medium text-[var(--color-surface)] transition-colors group-hover:text-white">
+          <p className="mt-1 truncate text-sm font-medium text-white">
             Admin Console
           </p>
         </Link>
         <button
           type="button"
-          className={`rounded-lg p-2 text-[var(--color-surface)]/70 transition-colors hover:bg-white/10 hover:text-white lg:hidden ${focusRing}`}
+          className={`rounded-lg p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white lg:hidden ${focusRing}`}
           aria-label="메뉴 닫기"
           onClick={() => setOpen(false)}
         >
@@ -184,14 +184,14 @@ export function AdminNav({ user }: { user: SessionUser }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-[background-color,color,transform] duration-200 active:scale-[0.96] motion-reduce:transform-none ${focusRing} ${
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white transition-[background-color,color,transform,opacity] duration-200 active:scale-[0.96] motion-reduce:transform-none ${focusRing} ${
                 active
-                  ? "bg-white/12 text-white"
-                  : "text-[var(--color-surface)]/65 hover:bg-white/6 hover:text-[var(--color-surface)]"
+                  ? "bg-white/12"
+                  : "opacity-80 hover:bg-white/6 hover:opacity-100"
               }`}
             >
               <Icon
-                className="size-[1.15rem] shrink-0"
+                className="size-[1.15rem] shrink-0 text-white"
                 weight={active ? "fill" : "regular"}
                 aria-hidden
               />
@@ -208,10 +208,10 @@ export function AdminNav({ user }: { user: SessionUser }) {
             aria-hidden
           />
           <div className="min-w-0">
-            <p className="truncate text-xs text-[var(--color-surface)]/90">
+            <p className="truncate text-xs text-white">
               {user.name ?? user.email}
             </p>
-            <p className="mt-0.5 truncate text-[11px] text-[var(--color-surface)]/45">
+            <p className="mt-0.5 truncate text-[11px] text-white/70">
               {user.role === "superadmin" ? "슈퍼관리자" : "운영자"}
             </p>
           </div>
@@ -219,17 +219,17 @@ export function AdminNav({ user }: { user: SessionUser }) {
         <div className="mt-3 flex flex-col gap-1">
           <Link
             href="/"
-            className={`flex items-center gap-2 rounded-lg px-2 py-2 text-xs text-[var(--color-surface)]/55 transition-colors hover:bg-white/6 hover:text-[var(--color-surface)] ${focusRing}`}
+            className={`flex items-center gap-2 rounded-lg px-2 py-2 text-xs text-white/80 transition-colors hover:bg-white/6 hover:text-white ${focusRing}`}
           >
-            <ArrowSquareOut className="size-3.5" aria-hidden />
+            <ArrowSquareOut className="size-3.5 text-white" aria-hidden />
             공개 사이트
           </Link>
           <form action={logoutAction}>
             <button
               type="submit"
-              className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-[var(--color-surface)]/55 transition-colors hover:bg-white/6 hover:text-[var(--color-surface)] ${focusRing}`}
+              className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-white/80 transition-colors hover:bg-white/6 hover:text-white ${focusRing}`}
             >
-              <SignOut className="size-3.5" aria-hidden />
+              <SignOut className="size-3.5 text-white" aria-hidden />
               로그아웃
             </button>
           </form>

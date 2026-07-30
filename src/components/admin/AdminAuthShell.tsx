@@ -11,7 +11,7 @@ type Props = {
 export function AdminAuthShell({ children, title, description, footer }: Props) {
   return (
     <div className="grid min-h-[100dvh] bg-[var(--color-stone)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-      <aside className="relative hidden overflow-hidden bg-[var(--color-dark)] text-[var(--color-surface)] lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
+      <aside className="relative hidden overflow-hidden bg-[var(--color-dark)] text-white lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-90"
@@ -29,11 +29,11 @@ export function AdminAuthShell({ children, title, description, footer }: Props) 
               Admin Console
             </p>
           </Link>
-          <p className="mt-6 max-w-[32ch] text-sm leading-relaxed text-[var(--color-surface)]/60">
+          <p className="mt-6 max-w-[32ch] text-sm leading-relaxed text-white/70">
             챕터 콘텐츠와 문의, 권한을 한곳에서 운영합니다.
           </p>
         </div>
-        <p className="relative text-xs text-[var(--color-surface)]/40">
+        <p className="relative text-xs text-white/55">
           SuperAdmin 승인 후 모듈 권한이 부여됩니다.
         </p>
       </aside>
