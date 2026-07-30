@@ -119,6 +119,7 @@ export const en: Messages = {
     title: "Gatherings at AIC Seoul",
     intro:
       "AIC Seoul meets in two ways: monthly meetups to share questions, and one-day classes to go deeper.",
+    eyebrow: "Meetups",
     monthlyTitle: "Monthly meetup",
     monthlyLead:
       "An offline gathering in Seoul each month. We pick one theme and explore AI-era change through expert talks and group discussion — not just listening and leaving, but speaking, hearing, and sharing together.",
@@ -143,15 +144,18 @@ export const en: Messages = {
   people: {
     title: "People building together",
     lead: "AIC Seoul organizers are the members who move first. No role labels — just people.",
+    eyebrow: "People",
   },
   insights: {
     title: "Notes & learning",
     lead: "Conversations fade easily. So we leave short notes from meetups and classes.",
+    eyebrow: "Insights",
     loadMore: "Load more",
   },
   contact: {
     title: "Contact",
     lead: "Partnership, education, community — reach us with the form below.",
+    eyebrow: "Contact",
     types: [
       {
         title: "Partnership · sponsorship",
@@ -191,6 +195,16 @@ export const en: Messages = {
   },
   footer: {
     tagline: "A community where you don’t have to chase the AI era alone",
+  },
+  nav: {
+    primary: "Primary",
+    meetups: "Meetups",
+    people: "People",
+    insights: "Insights",
+    contact: "Contact",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    skipToContent: "Skip to content",
   },
   seo: {
     homeDescription:
