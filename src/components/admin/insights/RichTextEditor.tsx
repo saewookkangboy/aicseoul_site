@@ -11,6 +11,7 @@ type Props = {
   name: string;
   initialHtml?: string;
   required?: boolean;
+  onHtmlChange?: (html: string) => void;
 };
 
 function ToolbarButton({
@@ -41,7 +42,12 @@ function ToolbarButton({
   );
 }
 
-export function RichTextEditor({ name, initialHtml = "", required }: Props) {
+export function RichTextEditor({
+  name,
+  initialHtml = "",
+  required,
+  onHtmlChange,
+}: Props) {
   const [html, setHtml] = useState(initialHtml || "");
 
   const editor = useEditor({
@@ -63,7 +69,9 @@ export function RichTextEditor({ name, initialHtml = "", required }: Props) {
     content: initialHtml || "<p></p>",
     immediatelyRender: false,
     onUpdate: ({ editor: ed }) => {
-      setHtml(ed.getHTML());
+      const next = ed.getHTML();
+      setHtml(next);
+      onHtmlChange?.(next);
     },
     editorProps: {
       attributes: {
