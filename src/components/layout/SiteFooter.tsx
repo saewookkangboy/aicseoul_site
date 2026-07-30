@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { headers } from "next/headers";
-import { LinkedinLogo } from "@phosphor-icons/react/ssr";
+import { CirclesThree, LinkedinLogo } from "@phosphor-icons/react/ssr";
 import { LOCALE_HEADER, defaultLocale, isLocale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/messages";
 import { getSiteSettingsMap } from "@/lib/queries/content";
@@ -34,9 +34,10 @@ export async function SiteFooter() {
         <p className="text-sm text-[var(--color-ink-muted)]">{t.footer.tagline}</p>
         <Link
           href="/admin/login"
-          className="text-xs tracking-wide text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
+          aria-label="운영 콘솔"
+          className="inline-flex size-8 shrink-0 items-center justify-center self-start text-[color-mix(in_srgb,var(--color-ink-muted)_40%,transparent)] transition-colors duration-200 hover:text-[var(--color-gold)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)] md:self-auto"
         >
-          Admin
+          <CirclesThree size={16} weight="fill" aria-hidden />
         </Link>
       </div>
     </footer>
