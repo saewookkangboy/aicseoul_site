@@ -26,7 +26,7 @@ export function AdminStat({ label, value, hint, href }: Props) {
 
   const className = `${panelClass} block p-5 transition-[border-color,transform] duration-200 ${
     href
-      ? "hover:border-[var(--color-gold)] hover:-translate-y-px active:scale-[0.99]"
+      ? "hover:border-[var(--color-gold)] hover:-translate-y-px active:scale-[0.96] motion-reduce:transform-none"
       : ""
   }`;
 

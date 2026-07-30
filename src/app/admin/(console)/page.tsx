@@ -101,9 +101,11 @@ export default async function AdminDashboardPage() {
         <AdminPanel
           title="최근 Insights"
           actions={
-            <Link href="/admin/insights/new" className={btnPrimaryClass}>
-              글 작성
-            </Link>
+            recentInsights.length > 0 ? (
+              <Link href="/admin/insights/new" className={btnPrimaryClass}>
+                글 작성
+              </Link>
+            ) : undefined
           }
         >
           {recentInsights.length > 0 ? (
@@ -124,6 +126,7 @@ export default async function AdminDashboardPage() {
             </ul>
           ) : (
             <AdminEmpty
+              inset
               title="게시된 글이 없습니다"
               description="첫 Insights를 작성해 공개 페이지에 올려 보세요."
               action={

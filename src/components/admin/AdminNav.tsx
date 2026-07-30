@@ -184,7 +184,7 @@ export function AdminNav({ user }: { user: SessionUser }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-[background-color,color,transform] duration-200 active:scale-[0.99] motion-reduce:transform-none ${focusRing} ${
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-[background-color,color,transform] duration-200 active:scale-[0.96] motion-reduce:transform-none ${focusRing} ${
                 active
                   ? "bg-white/12 text-white"
                   : "text-[var(--color-surface)]/65 hover:bg-white/6 hover:text-[var(--color-surface)]"
@@ -244,7 +244,7 @@ export function AdminNav({ user }: { user: SessionUser }) {
         <button
           ref={menuButtonRef}
           type="button"
-          className={`inline-flex min-h-10 items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-ink)] transition-[transform,border-color] active:scale-[0.98] motion-reduce:transform-none ${focusRing}`}
+          className={`inline-flex min-h-10 items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-ink)] transition-[transform,border-color] active:scale-[0.96] motion-reduce:transform-none ${focusRing}`}
           aria-expanded={open}
           aria-controls={titleId}
           onClick={() => setOpen(true)}

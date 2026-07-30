@@ -10,6 +10,9 @@
   --color-dark: #0f0c0a;
   /* Semantic: errors / destructive text — not CTA orange */
   --color-danger: #b42318;
+  /* Semantic: success badges / positive status */
+  --color-success: #3d7a5a;
+  --color-success-fg: #2f5f45;
 
   --color-ink-muted: color-mix(in srgb, var(--color-ink) 62%, transparent);
   --radius: 1rem;
