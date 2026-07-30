@@ -48,7 +48,7 @@ export default async function ContactPage({ params }: Props) {
           <div>
             <Reveal>
               <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
-                Contact
+                {t.contact.eyebrow}
               </p>
               <h1 className="mt-3 text-4xl font-medium tracking-tight md:text-5xl">
                 {t.contact.title}

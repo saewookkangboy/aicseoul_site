@@ -39,6 +39,7 @@ export type Messages = {
   meetups: {
     title: string;
     intro: string;
+    eyebrow: string;
     monthlyTitle: string;
     monthlyLead: string;
     steps: readonly string[];
@@ -55,15 +56,18 @@ export type Messages = {
   people: {
     title: string;
     lead: string;
+    eyebrow: string;
   };
   insights: {
     title: string;
     lead: string;
+    eyebrow: string;
     loadMore: string;
   };
   contact: {
     title: string;
     lead: string;
+    eyebrow: string;
     types: readonly { title: string; body: string }[];
     orEmail: string;
     formTitle: string;
@@ -84,6 +88,16 @@ export type Messages = {
   };
   footer: {
     tagline: string;
+  };
+  nav: {
+    primary: string;
+    meetups: string;
+    people: string;
+    insights: string;
+    contact: string;
+    openMenu: string;
+    closeMenu: string;
+    skipToContent: string;
   };
   seo: {
     homeDescription: string;
@@ -213,6 +227,7 @@ export const ko: Messages = {
     title: "AIC 서울 챕터의 모임",
     intro:
       "AIC 서울 챕터는 두 가지 방식으로 모입니다. 매달 이어지는 정기 모임에서 함께 질문을 나누고, 원데이 클래스에서 한 걸음 더 깊이 배웁니다.",
+    eyebrow: "밋업",
     monthlyTitle: "정기 모임",
     monthlyLead:
       "매달 서울에서 열리는 오프라인 모임입니다. 하나의 주제를 정해, 전문가 발제와 그룹 토론으로 AI 시대의 변화를 함께 해석합니다. 발표만 듣고 헤어지는 자리가 아니라, 모두가 말하고 듣고 나누는 시간을 지향합니다.",
@@ -231,15 +246,18 @@ export const ko: Messages = {
   people: {
     title: "함께 만드는 사람들",
     lead: "AIC 서울 챕터의 운영진은 가장 먼저 움직이는 멤버입니다. 역할 라벨 없이, 사람 그 자체로 소개합니다.",
+    eyebrow: "멤버",
   },
   insights: {
     title: "기록과 배움",
     lead: "대화는 사라지기 쉽습니다. 그래서 모임과 클래스의 배움을 짧게라도 남깁니다.",
+    eyebrow: "인사이트",
     loadMore: "더 보기",
   },
   contact: {
     title: "문의하기",
     lead: "협업·후원, 교육, 커뮤니티 참여 — 무엇이든 아래 폼으로 문의해 주세요.",
+    eyebrow: "문의",
     types: [
       {
         title: "협업 · 후원",
@@ -278,6 +296,16 @@ export const ko: Messages = {
   },
   footer: {
     tagline: "AI 시대를 혼자 따라가지 않아도 되는 커뮤니티",
+  },
+  nav: {
+    primary: "주요 메뉴",
+    meetups: "밋업",
+    people: "멤버",
+    insights: "인사이트",
+    contact: "문의",
+    openMenu: "메뉴 열기",
+    closeMenu: "메뉴 닫기",
+    skipToContent: "본문으로 건너뛰기",
   },
   seo: {
     homeDescription:

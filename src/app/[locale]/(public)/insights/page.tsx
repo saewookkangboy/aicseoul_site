@@ -83,7 +83,7 @@ export default async function InsightsPage({ params, searchParams }: Props) {
       <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
         <Reveal>
           <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
-            Insights
+            {t.insights.eyebrow}
           </p>
           <h1 className="mt-3 text-4xl font-medium tracking-tight md:text-5xl">
             {t.insights.title}

@@ -1,13 +1,16 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import {
   submitContactAction,
   type ContactFormState,
 } from "@/lib/actions/contact";
 import type { Messages } from "@/lib/i18n/messages";
+import { fieldFocusClass, focusRingClass } from "@/lib/ui/focus";
 
 const initial: ContactFormState = {};
+
+const fieldClass = `rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 ${fieldFocusClass}`;
 
 export function ContactForm({
   sla,
@@ -20,6 +23,8 @@ export function ContactForm({
     submitContactAction,
     initial,
   );
+  const errorId = useId();
+  const invalid = Boolean(state.error);
 
   if (state.ok) {
     return (
@@ -33,7 +38,7 @@ export function ContactForm({
   }
 
   return (
-    <form action={formAction} className="flex flex-col gap-5">
+    <form action={formAction} className="flex flex-col gap-5" aria-busy={pending}>
       <fieldset>
         <legend className="mb-3 text-sm text-[var(--color-ink-muted)]">
           {copy.legend}
@@ -42,7 +47,7 @@ export function ContactForm({
           {copy.types.map((t) => (
             <label
               key={t.value}
-              className="flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm has-[:checked]:border-[var(--color-cta)] has-[:checked]:text-[var(--color-cta)]"
+              className={`flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm has-[:checked]:border-[var(--color-cta)] has-[:checked]:text-[var(--color-cta)] ${focusRingClass}`}
             >
               <input
                 type="radio"
@@ -63,16 +68,15 @@ export function ContactForm({
         <input
           name="name"
           required
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 outline-none focus:border-[var(--color-gold)]"
+          className={fieldClass}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? errorId : undefined}
         />
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="text-[var(--color-ink-muted)]">{copy.org}</span>
-        <input
-          name="org"
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 outline-none focus:border-[var(--color-gold)]"
-        />
+        <input name="org" className={fieldClass} />
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm">
@@ -81,7 +85,9 @@ export function ContactForm({
           name="email"
           type="email"
           required
-          className="rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 outline-none focus:border-[var(--color-gold)]"
+          className={fieldClass}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? errorId : undefined}
         />
       </label>
 
@@ -93,7 +99,9 @@ export function ContactForm({
           minLength={10}
           rows={5}
           placeholder={copy.messagePlaceholder}
-          className="resize-y rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 outline-none focus:border-[var(--color-gold)]"
+          className={`resize-y ${fieldClass}`}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? errorId : undefined}
         />
       </label>
 
@@ -107,7 +115,11 @@ export function ContactForm({
       />
 
       {state.error ? (
-        <p className="text-sm text-[var(--color-cta)]" role="alert">
+        <p
+          id={errorId}
+          className="text-sm text-[var(--color-danger)]"
+          role="alert"
+        >
           {state.error}
         </p>
       ) : null}
@@ -115,7 +127,8 @@ export function ContactForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white disabled:opacity-60"
+        aria-busy={pending}
+        className={`rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white disabled:opacity-60 ${focusRingClass}`}
       >
         {pending ? copy.submitting : copy.submit}
       </button>

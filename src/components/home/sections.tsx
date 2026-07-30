@@ -124,7 +124,7 @@ export function HomeHero({ locale, t }: HomeProps) {
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href={localizedPath(locale, "/meetups")}
-              className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
+              className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]"
             >
               {t.ctaMeetups}
             </Link>
@@ -357,7 +357,7 @@ export function HomePartner({ locale, t }: HomeProps) {
         />
         <Link
           href={localizedPath(locale, "/contact")}
-          className="mt-8 inline-flex rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
+          className="mt-8 inline-flex rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]"
         >
           {t.partnerCta}
         </Link>
@@ -391,7 +391,7 @@ export function HomeFinalCta({
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href={localizedPath(locale, "/meetups")}
-              className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
+              className="rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]"
             >
               {t.ctaMeetups}
             </Link>
