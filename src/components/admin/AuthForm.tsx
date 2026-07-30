@@ -1,8 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import type { AuthFormState } from "@/lib/actions/auth";
-import { btnPrimaryClass, fieldClass, labelClass, labelHintClass } from "./ui";
+import {
+  btnPrimaryClass,
+  errorTextClass,
+  fieldClass,
+  labelClass,
+  labelHintClass,
+} from "./ui";
 
 type Props = {
   action: (prev: AuthFormState, formData: FormData) => Promise<AuthFormState>;
@@ -24,9 +30,11 @@ export function AuthForm({
   callbackUrl,
 }: Props) {
   const [state, formAction, pending] = useActionState(action, initial);
+  const errorId = useId();
+  const invalid = Boolean(state.error);
 
   return (
-    <form action={formAction} className="flex w-full flex-col gap-4">
+    <form action={formAction} className="flex w-full flex-col gap-4" aria-busy={pending}>
       {callbackUrl ? (
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
       ) : null}
@@ -55,6 +63,8 @@ export function AuthForm({
           required
           autoComplete="email"
           className={fieldClass}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? errorId : undefined}
         />
       </label>
       <label className={labelClass}>
@@ -66,11 +76,14 @@ export function AuthForm({
           minLength={8}
           autoComplete={includeName ? "new-password" : "current-password"}
           className={fieldClass}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? errorId : undefined}
         />
       </label>
       {state.error ? (
         <p
-          className="rounded-[var(--radius)] bg-[color-mix(in_srgb,var(--color-cta)_10%,transparent)] px-3 py-2 text-sm text-[var(--color-cta)]"
+          id={errorId}
+          className={`rounded-[var(--radius)] bg-[color-mix(in_srgb,var(--color-danger)_10%,transparent)] px-3 py-2 ${errorTextClass}`}
           role="alert"
         >
           {state.error}
@@ -79,9 +92,15 @@ export function AuthForm({
       <button
         type="submit"
         disabled={pending}
+        aria-busy={pending}
         className={`${btnPrimaryClass} mt-2 w-full`}
       >
-        {pending ? "처리 중…" : submitLabel}
+        {submitLabel}
+        {pending ? (
+          <span className="text-white/80" aria-hidden>
+            · 처리 중…
+          </span>
+        ) : null}
       </button>
     </form>
   );

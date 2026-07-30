@@ -55,7 +55,7 @@ export function ArchiveManager({ photos }: { photos: Photo[] }) {
           <p className="mt-3 text-xs text-[var(--color-ink-muted)]">처리 중…</p>
         ) : null}
         {error ? (
-          <p className="mt-3 text-xs text-[var(--color-cta)]" role="alert">
+          <p className="mt-3 text-xs text-[var(--color-danger)]" role="alert">
             {error}
           </p>
         ) : null}

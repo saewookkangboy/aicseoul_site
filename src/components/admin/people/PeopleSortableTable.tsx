@@ -2,6 +2,7 @@
 
 import {
   DndContext,
+  KeyboardSensor,
   PointerSensor,
   closestCenter,
   useSensor,
@@ -11,6 +12,7 @@ import {
 import {
   SortableContext,
   arrayMove,
+  sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
@@ -48,12 +50,12 @@ function SortableRow({ member }: { member: MemberRow }) {
       <td className={`${tdClass} w-10`}>
         <button
           type="button"
-          className="cursor-grab rounded-md p-1 text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-cream)] hover:text-[var(--color-ink)] active:cursor-grabbing"
-          aria-label="순서 변경"
+          className="inline-flex min-h-10 min-w-10 cursor-grab items-center justify-center rounded-md p-1 text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-cream)] hover:text-[var(--color-ink)] active:cursor-grabbing outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-gold)_28%,transparent)]"
+          aria-label={`${member.nameKr} 순서 변경`}
           {...attributes}
           {...listeners}
         >
-          <DotsSixVertical className="size-5" weight="bold" />
+          <DotsSixVertical className="size-5" weight="bold" aria-hidden />
         </button>
       </td>
       <td className={tdClass}>
@@ -73,7 +75,7 @@ function SortableRow({ member }: { member: MemberRow }) {
       <td className={tdClass}>
         <Link
           href={`/admin/people/${member.id}/edit`}
-          className="text-sm font-medium text-[var(--color-cta)]"
+          className="inline-flex min-h-10 items-center text-sm font-medium text-[var(--color-cta)] outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-gold)_28%,transparent)]"
         >
           편집
         </Link>
@@ -85,7 +87,12 @@ function SortableRow({ member }: { member: MemberRow }) {
 export function PeopleSortableTable({ members }: { members: MemberRow[] }) {
   const [items, setItems] = useState(members);
   const [pending, start] = useTransition();
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -101,11 +108,9 @@ export function PeopleSortableTable({ members }: { members: MemberRow[] }) {
 
   return (
     <div>
-      {pending ? (
-        <p className="mb-2 text-xs text-[var(--color-ink-muted)]">
-          순서 저장 중…
-        </p>
-      ) : null}
+      <p className="mb-2 min-h-[1rem] text-xs text-[var(--color-ink-muted)]" role="status">
+        {pending ? "순서 저장 중…" : "\u00a0"}
+      </p>
       <div className={tableWrapClass}>
         <DndContext
           sensors={sensors}
@@ -115,11 +120,15 @@ export function PeopleSortableTable({ members }: { members: MemberRow[] }) {
           <table className={tableClass}>
             <thead>
               <tr>
-                <th className={`${thClass} w-10`} />
+                <th className={`${thClass} w-10`}>
+                  <span className="sr-only">순서</span>
+                </th>
                 <th className={thClass}>이름</th>
                 <th className={thClass}>소개</th>
                 <th className={thClass}>상태</th>
-                <th className={thClass}> </th>
+                <th className={thClass}>
+                  <span className="sr-only">작업</span>
+                </th>
               </tr>
             </thead>
             <SortableContext

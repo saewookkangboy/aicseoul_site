@@ -10,6 +10,7 @@ import {
   AdminBadge,
   btnDangerGhostClass,
   btnGhostClass,
+  errorTextClass,
   tableClass,
   tableWrapClass,
   tdClass,
@@ -30,12 +31,15 @@ type UserRow = {
 };
 
 const MODULE_FIELDS = [
-  ["permPeople", "People"],
-  ["permMeetups", "Meetups"],
-  ["permInsights", "Insights"],
-  ["permContact", "Contact"],
-  ["permSettings", "Settings"],
+  ["permPeople", "멤버"],
+  ["permMeetups", "밋업"],
+  ["permInsights", "인사이트"],
+  ["permContact", "문의"],
+  ["permSettings", "설정"],
 ] as const;
+
+const actionBtnClass =
+  "inline-flex min-h-10 items-center justify-start rounded-lg px-2 text-left text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-gold)_28%,transparent)]";
 
 function statusTone(status: string) {
   switch (status) {
@@ -50,6 +54,30 @@ function statusTone(status: string) {
   }
 }
 
+function statusLabel(status: string) {
+  switch (status) {
+    case "pending":
+      return "대기";
+    case "active":
+      return "활성";
+    case "disabled":
+      return "비활성";
+    default:
+      return status;
+  }
+}
+
+function roleLabel(role: string) {
+  switch (role) {
+    case "superadmin":
+      return "슈퍼관리자";
+    case "operator":
+      return "운영자";
+    default:
+      return role;
+  }
+}
+
 export function UsersTable({
   users,
   currentUserId,
@@ -59,6 +87,7 @@ export function UsersTable({
 }) {
   const [pending, start] = useTransition();
   const [errorById, setErrorById] = useState<Record<string, string>>({});
+  const [confirmDisableId, setConfirmDisableId] = useState<string | null>(null);
   const [superById, setSuperById] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(users.map((u) => [u.id, u.role === "superadmin"])),
   );
@@ -79,6 +108,7 @@ export function UsersTable({
             const isSelf = user.id === currentUserId;
             const isSuper = superById[user.id] ?? user.role === "superadmin";
             const rowError = errorById[user.id];
+            const confirmingDisable = confirmDisableId === user.id;
 
             return (
               <tr key={user.id} className="align-top">
@@ -90,12 +120,12 @@ export function UsersTable({
                     {user.email}
                   </div>
                   <div className="mt-2">
-                    <AdminBadge tone="gold">{user.role}</AdminBadge>
+                    <AdminBadge tone="gold">{roleLabel(user.role)}</AdminBadge>
                   </div>
                 </td>
                 <td className={tdClass}>
                   <AdminBadge tone={statusTone(user.status)}>
-                    {user.status}
+                    {statusLabel(user.status)}
                   </AdminBadge>
                 </td>
                 <td className={tdClass}>
@@ -138,7 +168,7 @@ export function UsersTable({
                             const message =
                               err instanceof Error
                                 ? err.message
-                                : "저장에 실패했습니다";
+                                : "저장에 실패했습니다. 다시 시도해 주세요.";
                             setErrorById((prev) => ({
                               ...prev,
                               [user.id]: message,
@@ -147,7 +177,7 @@ export function UsersTable({
                         });
                       }}
                     >
-                      <label className="flex items-center gap-2 text-xs font-medium">
+                      <label className="flex min-h-10 items-center gap-2 text-xs font-medium">
                         <input
                           type="checkbox"
                           name="isSuperadmin"
@@ -158,25 +188,25 @@ export function UsersTable({
                               [user.id]: e.target.checked,
                             }))
                           }
-                          className="accent-[var(--color-cta)]"
+                          className="size-4 accent-[var(--color-cta)]"
                         />
-                        SuperAdmin
+                        슈퍼관리자
                       </label>
                       <div
                         key={`${user.id}-${isSuper}`}
-                        className="flex flex-col gap-2"
+                        className="flex flex-col gap-1"
                       >
                         {MODULE_FIELDS.map(([name, label]) => (
                           <label
                             key={name}
-                            className="flex items-center gap-2 text-xs"
+                            className="flex min-h-10 items-center gap-2 text-xs"
                           >
                             <input
                               type="checkbox"
                               name={name}
                               defaultChecked={isSuper ? true : user[name]}
                               disabled={isSuper}
-                              className="accent-[var(--color-cta)]"
+                              className="size-4 accent-[var(--color-cta)]"
                             />
                             {label}
                           </label>
@@ -185,15 +215,12 @@ export function UsersTable({
                       <button
                         type="submit"
                         disabled={pending}
-                        className={`${btnGhostClass} mt-1 w-fit text-xs text-[var(--color-cta)]`}
+                        className={`${btnGhostClass} ${actionBtnClass} mt-1 w-fit text-[var(--color-cta)]`}
                       >
                         권한 저장
                       </button>
                       {rowError ? (
-                        <p
-                          className="text-xs text-[var(--color-cta)]"
-                          role="alert"
-                        >
+                        <p className={`text-xs ${errorTextClass}`} role="alert">
                           {rowError}
                         </p>
                       ) : null}
@@ -201,26 +228,56 @@ export function UsersTable({
                   )}
                 </td>
                 <td className={tdClass}>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-1">
                     {user.status === "pending" ? (
                       <button
                         type="button"
                         disabled={pending || isSelf}
-                        className="text-left text-xs font-medium text-[var(--color-cta)]"
+                        className={`${actionBtnClass} text-[var(--color-cta)]`}
                         onClick={() => start(() => approveUser(user.id))}
                       >
                         승인
                       </button>
                     ) : null}
                     {user.status !== "disabled" ? (
-                      <button
-                        type="button"
-                        disabled={pending || isSelf}
-                        className={`${btnDangerGhostClass} text-left text-xs`}
-                        onClick={() => start(() => disableUser(user.id))}
-                      >
-                        비활성
-                      </button>
+                      confirmingDisable ? (
+                        <div className="flex flex-col gap-1 rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-cream)]/50 p-2">
+                          <p className="text-xs text-[var(--color-ink)]">
+                            이 계정을 비활성할까요?
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            <button
+                              type="button"
+                              disabled={pending || isSelf}
+                              className={`${actionBtnClass} text-[var(--color-danger)]`}
+                              onClick={() => {
+                                start(async () => {
+                                  await disableUser(user.id);
+                                  setConfirmDisableId(null);
+                                });
+                              }}
+                            >
+                              비활성 확인
+                            </button>
+                            <button
+                              type="button"
+                              className={`${btnDangerGhostClass} ${actionBtnClass}`}
+                              onClick={() => setConfirmDisableId(null)}
+                            >
+                              취소
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={pending || isSelf}
+                          className={`${btnDangerGhostClass} ${actionBtnClass}`}
+                          onClick={() => setConfirmDisableId(user.id)}
+                        >
+                          비활성
+                        </button>
+                      )
                     ) : null}
                   </div>
                 </td>
