@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
+  <title id="title">How AIC Seoul works</title>
+  <desc id="desc">Visitors browse public pages and submit contact forms. Operators manage content in Admin CMS. Postgres stores data; Vercel serves the site.</desc>
+
+  <rect width="1200" height="340" rx="26" fill="#0F0C0A"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#C7A77E"/>
+
+  <text x="56" y="52" fill="#C7A77E" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" letter-spacing="2">HOW IT WORKS</text>
+
+  <g transform="translate(56 84)">
+    <rect width="250" height="196" rx="16" fill="#171310" stroke="#2A2520" stroke-width="1.5"/>
+    <circle cx="36" cy="40" r="16" fill="#C7A77E"/>
+    <text x="36" y="46" text-anchor="middle" fill="#0F0C0A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="700">1</text>
+    <text x="64" y="46" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22">Visit</text>
+    <text x="28" y="92" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Browse /ko or /en</text>
+    <text x="28" y="122" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Home  /  Meetups</text>
+    <text x="28" y="152" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">People  /  Insights</text>
+    <text x="28" y="182" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Send a Contact form</text>
+  </g>
+
+  <path d="M318 182 L368 182" stroke="#C7A77E" stroke-width="2" fill="none"/>
+  <path d="M360 174 L372 182 L360 190" stroke="#C7A77E" stroke-width="2" fill="none"/>
+
+  <g transform="translate(384 84)">
+    <rect width="250" height="196" rx="16" fill="#171310" stroke="#2A2520" stroke-width="1.5"/>
+    <circle cx="36" cy="40" r="16" fill="#FF640D"/>
+    <text x="36" y="46" text-anchor="middle" fill="#0F0C0A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="700">2</text>
+    <text x="64" y="46" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22">Operate</text>
+    <text x="28" y="92" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Sign in at /admin</text>
+    <text x="28" y="122" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Edit people and meetups</text>
+    <text x="28" y="152" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Publish insights</text>
+    <text x="28" y="182" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Upload media  /  CSV</text>
+  </g>
+
+  <path d="M646 182 L696 182" stroke="#C7A77E" stroke-width="2" fill="none"/>
+  <path d="M688 174 L700 182 L688 190" stroke="#C7A77E" stroke-width="2" fill="none"/>
+
+  <g transform="translate(712 84)">
+    <rect width="250" height="196" rx="16" fill="#171310" stroke="#2A2520" stroke-width="1.5"/>
+    <circle cx="36" cy="40" r="16" fill="#C7A77E"/>
+    <text x="36" y="46" text-anchor="middle" fill="#0F0C0A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="700">3</text>
+    <text x="64" y="46" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22">Ship</text>
+    <text x="28" y="92" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Postgres via Prisma</text>
+    <text x="28" y="122" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Cloudinary  /  Resend</text>
+    <text x="28" y="152" fill="#B8B0A4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">SEO  /  sitemap  /  llms.txt</text>
+    <text x="28" y="182" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Deploy on Vercel</text>
+  </g>
+
+  <g opacity="0.85" transform="translate(1008 148)">
+    <circle cx="10" cy="10" r="8" fill="none" stroke="#C7A77E" stroke-width="1.75"/>
+    <circle cx="30" cy="10" r="8" fill="none" stroke="#FF640D" stroke-width="1.75"/>
+    <line x1="18" y1="10" x2="22" y2="10" stroke="#EEE9DF" stroke-width="1.5" opacity="0.45"/>
+  </g>
+</svg>
