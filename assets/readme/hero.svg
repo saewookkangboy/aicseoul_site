@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="title desc">
+  <title id="title">AIC Seoul - official chapter website</title>
+  <desc id="desc">The AI Collective Seoul chapter site for meetups, people, insights, contact, and an Admin CMS. Built with Next.js, Korean and English locales.</desc>
+
+  <defs>
+    <linearGradient id="bgFade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F0C0A"/>
+      <stop offset="100%" stop-color="#1A1612"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="380" rx="26" fill="url(#bgFade)"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#C7A77E"/>
+
+  <g opacity="0.9" transform="translate(56 48)">
+    <circle cx="10" cy="10" r="7" fill="none" stroke="#C7A77E" stroke-width="1.75"/>
+    <circle cx="28" cy="10" r="7" fill="none" stroke="#FF640D" stroke-width="1.75"/>
+    <line x1="17" y1="10" x2="21" y2="10" stroke="#EEE9DF" stroke-width="1.5" opacity="0.45"/>
+  </g>
+
+  <g id="title-block" transform="translate(56 78)">
+    <text x="0" y="0" fill="#C7A77E" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" letter-spacing="2.4">THE AI COLLECTIVE  /  SEOUL CHAPTER</text>
+    <text x="0" y="62" fill="#EEE9DF" font-family="Georgia, 'Times New Roman', serif" font-size="56">AIC Seoul</text>
+    <text x="0" y="108" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" opacity="0.92">Monthly meetups, people, insights,</text>
+    <text x="0" y="138" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" opacity="0.92">and contact - with an Admin CMS.</text>
+    <text x="0" y="188" fill="#8B8378" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">Next.js 16  |  KR / EN  |  Auth.js  |  Postgres</text>
+  </g>
+
+  <g id="project-proof" transform="translate(640 56)">
+    <rect x="0" y="0" width="504" height="268" rx="18" fill="#171310" stroke="#2A2520" stroke-width="1.5"/>
+
+    <text x="28" y="38" fill="#C7A77E" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" letter-spacing="1.6">PUBLIC</text>
+    <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#EEE9DF">
+      <rect x="28" y="54" width="96" height="40" rx="10" fill="#221E1A" stroke="#3A342E" stroke-width="1"/>
+      <text x="76" y="80" text-anchor="middle">Home</text>
+      <rect x="136" y="54" width="104" height="40" rx="10" fill="#221E1A" stroke="#3A342E" stroke-width="1"/>
+      <text x="188" y="80" text-anchor="middle">Meetups</text>
+      <rect x="252" y="54" width="96" height="40" rx="10" fill="#221E1A" stroke="#3A342E" stroke-width="1"/>
+      <text x="300" y="80" text-anchor="middle">People</text>
+      <rect x="360" y="54" width="116" height="40" rx="10" fill="#221E1A" stroke="#3A342E" stroke-width="1"/>
+      <text x="418" y="80" text-anchor="middle">Insights</text>
+      <rect x="28" y="106" width="104" height="40" rx="10" fill="#221E1A" stroke="#3A342E" stroke-width="1"/>
+      <text x="80" y="132" text-anchor="middle">Contact</text>
+    </g>
+
+    <line x1="28" y1="164" x2="476" y2="164" stroke="#2A2520" stroke-width="1"/>
+
+    <text x="28" y="196" fill="#FF640D" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" letter-spacing="1.6">ADMIN CMS</text>
+    <text x="28" y="228" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">People / Meetups / Insights</text>
+    <text x="28" y="254" fill="#EEE9DF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18">Contact / Users / Settings</text>
+  </g>
+</svg>
