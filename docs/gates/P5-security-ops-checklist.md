@@ -5,7 +5,7 @@
 - 범위: 출시 직전 **플랫폼·env** 점검 (코드 Turnstile/Redis 아님)
 - 예외: **`SUPERADMIN_SEED_PASSWORD` Vercel 삭제는 진행하지 않음** (사용자 지시)
 - 선행: 앱 레벨 하드닝 스펙 `docs/superpowers/specs/2026-07-29-p5-security-hardening-design.md`
-- 프로젝트: Vercel `aicseoul-site` · Supabase 호스팅 Postgres (프로젝트 ref는 대시보드에서만 확인)
+- 프로젝트: Vercel `aicseoul-site` · 호스팅 Postgres SoT → **Railway** (컷오버: [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md); 과거 Supabase 점검 기록은 아래 유지)
 
 ---
 
@@ -52,7 +52,7 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 
 | Key | Prod | 조치 |
 |---|---|---|
-| `DATABASE_URL` | ✅ | aic-seoul pooler인지 대시보드에서 재확인 (타 프로젝트 `POSTGRES_*` 혼입 금지) |
+| `DATABASE_URL` / `DIRECT_URL` | ✅ | Railway 공개 URL (둘 다 동일). 컷오버: [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md). 타 프로젝트 `POSTGRES_*` 혼입 금지 |
 | `AUTH_SECRET` | ✅ | 유지 |
 | `AUTH_URL` | ✅ | 실제 접속 URL과 일치하는지 확인 (Production / Preview 호스트) |
 | `SUPERADMIN_EMAILS` | ✅ | 실운영 메일 ≤3 |
@@ -79,7 +79,7 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 1. [x] ~~Vercel에서 `SUPERADMIN_SEED_PASSWORD` 삭제~~ → **스킵** (사용자: 삭제 진행하지 않음)
 2. [ ] SuperAdmin 계정으로 로그인 → **비밀번호 변경** (운영 판단)
 3. [ ] `AUTH_URL`이 실제 canonical URL과 일치하는지 확인
-4. [ ] `DATABASE_URL`이 `aic-seoul` pooler인지 재확인
+4. [ ] `DATABASE_URL` / `DIRECT_URL`이 Railway 공개 URL(동일 값)인지 재확인 — [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md)
 5. [ ] (권장) Cloudinary + Resend 등록
 6. [ ] (권장) 중복 `SUPABASE_*` 서버 키 정리
 
