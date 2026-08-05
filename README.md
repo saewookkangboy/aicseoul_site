@@ -49,7 +49,7 @@
 | 영역 | 선택 |
 |---|---|
 | 앱 | Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 |
-| 데이터 | PostgreSQL · Prisma 6 · Supabase(호스팅 Postgres, Auth.js 전용) |
+| 데이터 | PostgreSQL · Prisma 6 · Railway Postgres(호스팅 DB) · Auth.js |
 | Auth | Auth.js (NextAuth v5) Credentials + bcrypt |
 | 미디어 / 메일 | Cloudinary · Resend |
 | 배포 | Vercel · Web Analytics |
@@ -88,8 +88,8 @@ pnpm dev
 
 | 변수 | 용도 |
 |---|---|
-| `DATABASE_URL` | Prisma 런타임 (로컬 5433 / 프로덕션 pooler) |
-| `DIRECT_URL` | 마이그레이션용 직접 연결 |
+| `DATABASE_URL` | Prisma 런타임 (로컬 5433 / 프로덕션 Railway 공개 URL) |
+| `DIRECT_URL` | 마이그레이션용 — 프로덕션에서는 `DATABASE_URL`과 동일 |
 | `AUTH_SECRET` / `AUTH_URL` | Auth.js |
 | `NEXT_PUBLIC_SITE_URL` | canonical / OG 절대 URL |
 | `SUPERADMIN_EMAILS` | SuperAdmin (최대 3) |
@@ -141,6 +141,7 @@ assets/readme/            # README 비주얼
 - [`docs/PROCESS.md`](./docs/PROCESS.md) — 개발 프로세스
 - [`docs/gates/`](./docs/gates/) — P0~P5 게이트
 - [`docs/gates/P5-vercel-setup.md`](./docs/gates/P5-vercel-setup.md) — Vercel env·빌드
+- [`docs/gates/P5-railway-postgres-cutover.md`](./docs/gates/P5-railway-postgres-cutover.md) — Supabase→Railway dump/restore
 - [`docs/gates/P5-tier-a-checklist.md`](./docs/gates/P5-tier-a-checklist.md) — Tier A 체크리스트
 - [`docs/gates/P5-security-ops-checklist.md`](./docs/gates/P5-security-ops-checklist.md) — 보안 운영
 - [`docs/superpowers/`](./docs/superpowers/) — Superpowers × Gates
