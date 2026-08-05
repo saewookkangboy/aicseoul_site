@@ -2,7 +2,7 @@
 
 - 작성일: 2026-08-05
 - 상태: **approved** (2026-08-05 사용자 설계 승인: A/B/A · 방식 1)
-- 플랜: (구현 플랜 작성 예정) `docs/superpowers/plans/2026-08-05-railway-postgres-cutover.md`
+- 플랜: `docs/superpowers/plans/2026-08-05-railway-postgres-cutover.md`
 - 관련: Prisma `DATABASE_URL` / `DIRECT_URL`, Vercel 배포, P5 환경설정, Supabase(호스팅 Postgres → 잔여 클라이언트만)
 
 ## 1. 문제
