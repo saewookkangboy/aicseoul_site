@@ -37,7 +37,7 @@ vercel link --yes --scope chunghyos-projects
 | `postinstall` | `prisma generate` |
 | `sharp` | **dependencies** (서버 업로드 폴백용) |
 
-→ Production에 `DATABASE_URL`이 있어야 빌드 시 migrate가 성공합니다.
+→ Production에 `DATABASE_URL`과 `DIRECT_URL`(동일 Railway 공개 URL)이 있어야 빌드 시 migrate가 성공합니다.
 
 ---
 
@@ -49,23 +49,23 @@ vercel link --yes --scope chunghyos-projects
 
 | Key | Example / 생성 | Notes |
 |---|---|---|
-| `DATABASE_URL` | Supabase `aic-seoul` **Transaction** pooler (`…pooler…:6543`, `pgbouncer=true`, `connection_limit=1`, `sslmode=require`) | Prisma Client 런타임. Session(`:5432`)는 서버리스에서 EMAXCONNSESSION 위험 |
-| `DIRECT_URL` | 동일 프로젝트 **Session** pooler 또는 `db.*:5432` (`sslmode=require`, **pgbouncer 없음**) | `prisma migrate` 전용. Transaction(6543)으로 migrate 시 `prepared statement already exists` |
+| `DATABASE_URL` | Railway Postgres **공개** URL (`sslmode=require` 등) | Prisma Client 런타임. Private Network URL은 Vercel에서 사용 불가 |
+| `DIRECT_URL` | **`DATABASE_URL`과 동일** | `prisma migrate`용. Railway에는 Supabase식 `:6543`/`:5432` 분리가 없음 |
 | `AUTH_SECRET` | `openssl rand -base64 32` | 필수 |
 | `AUTH_URL` | `https://<project>.vercel.app` | 커스텀 도메인 확정 시 교체 |
 | `SUPERADMIN_EMAILS` | `a@…,b@…,c@…` | 최대 3, 실운영 메일 |
 | `SUPERADMIN_SEED_PASSWORD` | 강한 임시 비번 | 시드 후 즉시 변경 |
 
-### Supabase (Postgres 호스트 only)
+### Supabase 잔여 env (선택 · DB SoT 아님)
 
-Auth.js + Prisma 스택. Supabase Auth/Storage는 사용하지 않음. Data API는 RLS로 잠김.
+Auth.js + Prisma. Supabase Auth/Storage 미사용. 호스팅 Postgres SoT는 **Railway**.
 
 | Key | Notes |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Dashboard → Project URL (호스팅 Postgres와 동일 프로젝트) |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Dashboard publishable key (동일 프로젝트) |
+| `NEXT_PUBLIC_SUPABASE_URL` | 잔여 클라이언트용. 비워 둬도 됨. 키는 템플릿에 유지 |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 동일 |
 
-Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`가 `DATABASE_URL` 폴백을 오염시킬 수 있음 → Integration 해제 또는 해당 변수 삭제.
+Vercel Marketplace의 타 프로젝트 `POSTGRES_*`가 `DATABASE_URL`을 오염시키지 않게 Integration/변수를 점검한다.
 
 ### 강력 권장 (프로덕션 이미지·알림)
 
@@ -93,21 +93,19 @@ Vercel Marketplace로 **다른** Supabase 프로젝트가 붙으면 `POSTGRES_*`
 
 ---
 
-## 4. 호스팅 DB (Supabase)
+## 4. 호스팅 DB (Railway Postgres)
 
-1. 대시보드에서 운영 Postgres 프로젝트 확인 (리전: ap-northeast-2 권장)
-2. Session/Transaction pooler connection → Vercel `DATABASE_URL` (`aic_app` 권장)
-   - **서버리스(Vercel)는 Transaction pooler (`:6543` + `pgbouncer=true` + `connection_limit=1`) 권장**
-   - Session pooler(`:5432`)는 동시 연결 한도(EMAXCONNSESSION)로 공개 페이지 500이 날 수 있음
-3. 스키마 변경 SoT: **Prisma migrate**. RLS/권한만 `supabase/migrations`
-4. DDL(인덱스 등)이 `aic_app`에서 owner 오류면 Dashboard SQL / MCP로 적용 후 `prisma migrate resolve --applied`
-5. 로컬 시드:
+1. Railway에서 Postgres 생성 → **공개** connection URL 확보 (컷오버 상세: [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md))
+2. Vercel `DATABASE_URL`과 `DIRECT_URL`에 **동일** URL 등록
+3. 스키마 변경 SoT: **Prisma migrate**. `supabase/migrations`는 레거시/보조로 남을 수 있으나 운영 DB SoT는 Railway
+4. Supabase → Railway 데이터 이전은 dump/restore 런북을 따른다 (빈 DB에 `db:seed:prod`만 하는 것은 데이터 이관이 아님)
+5. 로컬 시드(빈 DB일 때만):
 
 ```bash
-DATABASE_URL="<prod>" pnpm db:seed:prod
+DATABASE_URL="<railway-or-local>" DIRECT_URL="<same>" pnpm db:seed:prod
 ```
 
-> 예전 문서의 Neon 예시는 동일하게 `DATABASE_URL`만 맞으면 동작합니다. 현재 운영 SoT는 Supabase입니다.
+> 과거 Neon/Supabase pooler 안내는 폐기. 현재 운영 SoT는 **Railway Postgres**입니다.
 
 ---
 
@@ -122,7 +120,8 @@ Tier A가 모이면 G6b로 배포·스모크를 진행합니다.
 
 체크리스트: [P5-tier-a-checklist.md](./P5-tier-a-checklist.md)  
 콘텐츠 스펙: [P5-content-guide.md](./P5-content-guide.md)  
-보안 운영(P0): [P5-security-ops-checklist.md](./P5-security-ops-checklist.md)
+보안 운영(P0): [P5-security-ops-checklist.md](./P5-security-ops-checklist.md)  
+DB 컷오버: [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md)
 
 ---
 
