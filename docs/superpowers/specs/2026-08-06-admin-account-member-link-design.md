@@ -1,8 +1,8 @@
 # Admin 본인 계정·비밀번호·People 프로필 연동 — Design Spec
 
 - 작성일: 2026-08-06
-- 상태: **draft** (사용자 설계 방향 승인: A / Member 필드 1 / 비밀번호 현재 확인 필수 / User↔Member 1:1)
-- 플랜: (승인 후) `docs/superpowers/plans/2026-08-06-admin-account-member-link.md`
+- 상태: **approved** (2026-08-06 사용자 스펙 검토 승인)
+- 플랜: `docs/superpowers/plans/2026-08-06-admin-account-member-link.md`
 - 관련: Auth.js Credentials, `/admin/users`, `Member` CMS, P5 운영 비밀번호 변경 절차
 
 ## 1. 문제
@@ -134,4 +134,4 @@ model Member {
 - [x] Member 본인 필드 = 소개 중심 (CMS 관리 플래그 제외)
 - [x] 비밀번호 = 현재 비밀번호 확인 필수
 - [x] 이메일 변경 비범위
-- [ ] 사용자 스펙 파일 검토 승인 → 플랜 작성
+- [x] 사용자 스펙 파일 검토 승인 → 플랜 작성
