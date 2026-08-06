@@ -5,6 +5,8 @@ import {
   approveUser,
   approveUserWithInvitePermissions,
   disableUser,
+  linkUserMember,
+  unlinkUserMember,
   updateUserPermissions,
 } from "@/lib/actions/users";
 import {
@@ -18,11 +20,18 @@ import {
   btnGhostClass,
   btnSecondaryClass,
   errorTextClass,
+  fieldClass,
   tableClass,
   tableWrapClass,
   tdClass,
   thClass,
 } from "@/components/admin/ui";
+
+type MemberOption = {
+  id: string;
+  nameKr: string;
+  nameEn: string;
+};
 
 type UserRow = {
   id: string;
@@ -30,6 +39,8 @@ type UserRow = {
   name: string | null;
   role: string;
   status: string;
+  memberId: string | null;
+  member?: MemberOption | null;
   permPeople: boolean;
   permMeetups: boolean;
   permInsights: boolean;
@@ -107,13 +118,20 @@ function roleLabel(role: string) {
 export function UsersTable({
   users,
   currentUserId,
+  members,
+  linkedMemberIds,
 }: {
   users: UserRow[];
   currentUserId: string;
+  members: MemberOption[];
+  linkedMemberIds: string[];
 }) {
   const [pending, start] = useTransition();
   const [errorById, setErrorById] = useState<Record<string, string>>({});
   const [confirmDisableId, setConfirmDisableId] = useState<string | null>(null);
+  const [selectedMemberById, setSelectedMemberById] = useState<
+    Record<string, string>
+  >({});
   const [superById, setSuperById] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(users.map((u) => [u.id, u.role === "superadmin"])),
   );
@@ -163,6 +181,94 @@ export function UsersTable({
                   </div>
                   <div className="mt-2">
                     <AdminBadge tone="gold">{roleLabel(user.role)}</AdminBadge>
+                  </div>
+                  <div className="mt-3 flex flex-col gap-1.5">
+                    {user.memberId && user.member ? (
+                      <>
+                        <p className="text-xs text-[var(--color-ink-muted)]">
+                          People: {user.member.nameKr}
+                        </p>
+                        <button
+                          type="button"
+                          disabled={pending}
+                          className={`${btnDangerGhostClass} ${actionBtnClass} w-fit`}
+                          onClick={() =>
+                            start(async () => {
+                              clearRowError(user.id);
+                              try {
+                                await unlinkUserMember(user.id);
+                              } catch (err) {
+                                const message =
+                                  err instanceof Error
+                                    ? err.message
+                                    : "연결 해제에 실패했습니다. 다시 시도해 주세요.";
+                                setRowError(user.id, message);
+                              }
+                            })
+                          }
+                        >
+                          연결 해제
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <select
+                          value={selectedMemberById[user.id] ?? ""}
+                          disabled={pending}
+                          className={`${fieldClass} py-1.5 text-xs`}
+                          onChange={(e) =>
+                            setSelectedMemberById((prev) => ({
+                              ...prev,
+                              [user.id]: e.target.value,
+                            }))
+                          }
+                        >
+                          <option value="">멤버 선택</option>
+                          {members
+                            .filter(
+                              (m) =>
+                                !linkedMemberIds.includes(m.id) ||
+                                m.id === user.memberId,
+                            )
+                            .map((m) => (
+                              <option key={m.id} value={m.id}>
+                                {m.nameKr}
+                                {m.nameEn ? ` (${m.nameEn})` : ""}
+                              </option>
+                            ))}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={
+                            pending || !(selectedMemberById[user.id] ?? "")
+                          }
+                          className={`${btnGhostClass} ${actionBtnClass} w-fit text-[var(--color-cta)]`}
+                          onClick={() => {
+                            const memberId = selectedMemberById[user.id] ?? "";
+                            if (!memberId) return;
+                            start(async () => {
+                              clearRowError(user.id);
+                              try {
+                                await linkUserMember(user.id, memberId);
+                              } catch (err) {
+                                const message =
+                                  err instanceof Error
+                                    ? err.message
+                                    : "연결에 실패했습니다. 다시 시도해 주세요.";
+                                setRowError(user.id, message);
+                              }
+                            });
+                          }}
+                        >
+                          연결
+                        </button>
+                      </>
+                    )}
+                    {rowError ? (
+                      <p className={`text-xs ${errorTextClass}`} role="alert">
+                        {rowError}
+                      </p>
+                    ) : null}
                   </div>
                 </td>
                 <td className={tdClass}>

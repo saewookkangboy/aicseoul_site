@@ -77,7 +77,7 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 ### 3.3 운영자 필수 액션 (P0 잔여)
 
 1. [x] ~~Vercel에서 `SUPERADMIN_SEED_PASSWORD` 삭제~~ → **스킵** (사용자: 삭제 진행하지 않음)
-2. [ ] SuperAdmin 계정으로 로그인 → **비밀번호 변경** (운영 판단)
+2. [ ] SuperAdmin 로그인 → `/admin/account`에서 비밀번호 변경
 3. [ ] `AUTH_URL`이 실제 canonical URL과 일치하는지 확인
 4. [ ] `DATABASE_URL` / `DIRECT_URL`이 Railway 공개 URL(동일 값)인지 재확인 — [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md)
 5. [ ] (권장) Cloudinary + Resend 등록

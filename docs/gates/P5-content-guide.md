@@ -19,7 +19,7 @@
 | 원데이 클래스 | **DB** `Meetup` (type=class) | Admin → Meetups |
 | 사진벽 | **DB** `ArchivePhoto` | Admin → 사진벽 |
 | Insights 글 | **DB** `InsightPost` | Admin → Insights |
-| SuperAdmin | **DB** `User` | env 시드 후 비밀번호 교체 |
+| SuperAdmin | **DB** `User` | env 시드 후 `/admin/account`에서 비밀번호 변경 |
 
 → **이미지·운영 텍스트의 “적재” = SiteSetting + Member + Meetup + Archive + Insights.**
 

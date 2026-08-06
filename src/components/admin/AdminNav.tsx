@@ -8,6 +8,7 @@ import {
   House,
   SignOut,
   SquaresFour,
+  UserCircle,
   Users,
   UsersThree,
   X,
@@ -227,6 +228,16 @@ export function AdminNav({ user }: { user: SessionUser }) {
           </div>
         </div>
         <div className="mt-3 flex flex-col gap-1">
+          <Link
+            href="/admin/account"
+            style={whiteStyle}
+            className={`flex items-center gap-2 rounded-lg px-2 py-2 text-xs hover:bg-white/6 ${focusRing} ${
+              isActive(pathname, "/admin/account") ? "bg-white/12" : ""
+            }`}
+          >
+            <UserCircle className="size-3.5" aria-hidden />
+            <span style={whiteStyle}>내 계정</span>
+          </Link>
           <Link
             href="/"
             style={whiteStyle}
