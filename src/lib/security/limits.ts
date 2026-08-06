@@ -1,6 +1,7 @@
 export const RATE = {
   contact: { limit: 5, windowMs: 10 * 60_000 },
   login: { limit: 10, windowMs: 15 * 60_000 },
+  passwordChange: { limit: 10, windowMs: 15 * 60_000 },
   signup: { limit: 5, windowMs: 60 * 60_000 },
   upload: { limit: 30, windowMs: 10 * 60_000 },
 } as const;
