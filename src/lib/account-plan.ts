@@ -31,7 +31,7 @@ export function planLinkUserMember(input: {
   userId: string;
   memberId: string;
   existingOwnerUserId: string | null;
-}): PlanResult<Record<string, never>> {
+}): PlanResult<{ linked: true }> {
   if (
     input.existingOwnerUserId &&
     input.existingOwnerUserId !== input.userId
@@ -44,17 +44,17 @@ export function planLinkUserMember(input: {
   if (!input.memberId.trim()) {
     return { ok: false, error: "멤버를 선택해 주세요." };
   }
-  return { ok: true };
+  return { ok: true, linked: true };
 }
 
 export function planUnlinkUserMember(input: {
   userId: string;
   currentMemberId: string | null;
-}): PlanResult<Record<string, never>> {
+}): PlanResult<{ unlinked: true }> {
   if (!input.currentMemberId) {
     return { ok: false, error: "연결된 멤버가 없습니다." };
   }
-  return { ok: true };
+  return { ok: true, unlinked: true };
 }
 
 export function assertLinkedMemberOwnership(input: {
