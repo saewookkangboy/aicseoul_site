@@ -79,7 +79,7 @@ Site Settings UI에서 `contact.email` / 통계 / LinkedIn도 실값으로 교�
 4. **Vercel** 프로젝트 import · env 등록 · Root Directory = repo root  
 5. Production 배포  
 6. `AUTH_URL`을 실제 Production URL로 맞춘 뒤 재배포(필요 시)  
-7. SuperAdmin 로그인 → 비밀번호 변경(가입 계정으로 재생성 또는 DB 업데이트) · 운영진 초대/승인  
+7. SuperAdmin 로그인 → `/admin/account`에서 비밀번호 변경 · 운영진 초대/승인  
 8. 스모크 QA  
 9. (도메인 확정 시) Vercel Domain + DNS → `AUTH_URL`·Resend 도메인 인증 업데이트  
 
