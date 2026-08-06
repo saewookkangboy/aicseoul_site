@@ -41,15 +41,19 @@ export async function POST(req: Request) {
 
   const form = await req.formData();
   const file = form.get("file");
-  const permissionModule = String(form.get("module") ?? "") as PermissionModule;
+  const permissionModule = String(form.get("module") ?? "");
   const folder = String(form.get("folder") || permissionModule || "general");
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "file required" }, { status: 400 });
   }
-  if (
-    !MODULES.has(permissionModule) ||
-    !canAccessModule(session.user, permissionModule)
+
+  const isAccountSelfUpload = permissionModule === "account";
+  if (isAccountSelfUpload) {
+    // active session already verified above
+  } else if (
+    !MODULES.has(permissionModule as PermissionModule) ||
+    !canAccessModule(session.user, permissionModule as PermissionModule)
   ) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -63,7 +67,7 @@ export async function POST(req: Request) {
         publicId: uploaded.publicId ?? null,
         width: uploaded.width ?? null,
         height: uploaded.height ?? null,
-        module: permissionModule,
+        module: isAccountSelfUpload ? "account" : permissionModule,
         folder,
         mimeType: file.type || null,
         byteSize: file.size,

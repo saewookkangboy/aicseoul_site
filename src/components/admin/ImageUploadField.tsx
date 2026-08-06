@@ -16,7 +16,7 @@ import {
 } from "@/lib/media/upload-client";
 
 type Props = {
-  module: "people" | "meetups" | "insights" | "settings";
+  module: "people" | "meetups" | "insights" | "settings" | "account";
   folder?: string;
   value?: string;
   onUploaded: (url: string) => void;

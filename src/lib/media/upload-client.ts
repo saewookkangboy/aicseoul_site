@@ -16,7 +16,7 @@ export type UploadResult = {
 
 export type UploadAdminImageOptions = {
   file: File | Blob;
-  module: "people" | "meetups" | "insights" | "settings";
+  module: "people" | "meetups" | "insights" | "settings" | "account";
   folder?: string;
   filename?: string;
   onProgress?: (percent: number) => void;
