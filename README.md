@@ -39,7 +39,7 @@
 
 - **운영진이 직접 편집** — 코드 배포 없이 모임·멤버·인사이트·문의를 CMS로 관리
 - **KR / EN** — locale 라우팅 + Gemini 번역 캐시(키 없으면 원문 폴백)
-- **출시 준비 보안** — rate limit, CSP, 업로드 검증, 프로덕션 signup fail-closed
+- **출시 준비 보안** — rate limit, CSP, 업로드 검증, 미디어 업로드 fail-closed
 - **SEO / GEO** — canonical·OG·JSON-LD·sitemap·robots·`llms.txt`
 
 <p align="center">
@@ -94,7 +94,7 @@ pnpm dev
 | `NEXT_PUBLIC_SITE_URL` | canonical / OG 절대 URL |
 | `SUPERADMIN_EMAILS` | SuperAdmin (최대 3) |
 | `SUPERADMIN_SEED_PASSWORD` | 시드용 임시 비밀번호 |
-| `ADMIN_SIGNUP_INVITE_CODE` | Admin 가입 초대 코드 |
+| `ADMIN_SIGNUP_INVITE_CODE` | Admin 공유 초대 코드 (미설정 시 공개 가입→pending) |
 | `CLOUDINARY_*` | 원격 업로드 |
 | `RESEND_API_KEY` / `RESEND_FROM` / `NOTIFY_EMAILS` | 문의 알림 |
 | `GEMINI_API_KEY` / `GEMINI_TRANSLATE_MODEL` | CMS 자동 번역 |
