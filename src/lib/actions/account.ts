@@ -136,5 +136,6 @@ export async function updateLinkedMemberProfile(formData: FormData) {
   });
   revalidatePath("/admin/account");
   revalidatePath("/admin/people");
+  revalidatePath("/people");
   return { ok: true as const };
 }
