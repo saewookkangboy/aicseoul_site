@@ -45,6 +45,8 @@ export default async function UsersPage() {
       name: true,
       role: true,
       status: true,
+      memberId: true,
+      member: { select: { id: true, nameKr: true, nameEn: true } },
       permPeople: true,
       permMeetups: true,
       permInsights: true,
@@ -52,6 +54,14 @@ export default async function UsersPage() {
       permSettings: true,
     },
   });
+
+  const members = await prisma.member.findMany({
+    orderBy: [{ sortOrder: "asc" }, { nameKr: "asc" }],
+    select: { id: true, nameKr: true, nameEn: true },
+  });
+  const linkedMemberIds = new Set(
+    users.filter((u) => u.memberId).map((u) => u.memberId as string),
+  );
 
   const acceptedInvites = await prisma.adminInvite.findMany({
     where: {
@@ -104,6 +114,8 @@ export default async function UsersPage() {
       <UsersTable
         users={usersWithInvitePerms}
         currentUserId={session.user.id}
+        members={members}
+        linkedMemberIds={[...linkedMemberIds]}
       />
     </div>
   );

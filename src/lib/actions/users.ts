@@ -1,6 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import {
+  planLinkUserMember,
+  planUnlinkUserMember,
+} from "@/lib/account-plan";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isSuperAdmin } from "@/lib/permissions";
@@ -117,4 +121,56 @@ export async function approveUserWithInvitePermissions(userId: string) {
   });
 
   revalidatePath("/admin/users");
+}
+
+export async function linkUserMember(userId: string, memberId: string) {
+  const session = await auth();
+  if (!session?.user || !isSuperAdmin(session.user)) {
+    throw new Error("Forbidden");
+  }
+
+  const owner = await prisma.user.findFirst({
+    where: { memberId },
+    select: { id: true },
+  });
+  const planned = planLinkUserMember({
+    userId,
+    memberId,
+    existingOwnerUserId: owner?.id ?? null,
+  });
+  if (!planned.ok) throw new Error(planned.error);
+
+  const member = await prisma.member.findUnique({ where: { id: memberId } });
+  if (!member) throw new Error("멤버를 찾을 수 없습니다.");
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { memberId },
+  });
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/account");
+}
+
+export async function unlinkUserMember(userId: string) {
+  const session = await auth();
+  if (!session?.user || !isSuperAdmin(session.user)) {
+    throw new Error("Forbidden");
+  }
+
+  const target = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { memberId: true },
+  });
+  const planned = planUnlinkUserMember({
+    userId,
+    currentMemberId: target?.memberId ?? null,
+  });
+  if (!planned.ok) throw new Error(planned.error);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { memberId: null },
+  });
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/account");
 }
