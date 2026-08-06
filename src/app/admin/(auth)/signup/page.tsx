@@ -51,7 +51,7 @@ export default async function SignupPage({ searchParams }: Props) {
     ? "이메일 초대 링크로 접속하셨습니다. 초대된 이메일로만 가입할 수 있습니다."
     : requireInvite
       ? "운영진 계정은 가입 후 SuperAdmin 승인·권한 부여가 필요합니다. 초대 코드가 있는 분만 가입할 수 있습니다."
-      : "운영진 계정은 가입 후 SuperAdmin 승인·권한 부여가 필요합니다.";
+      : "운영진 계정은 가입 후 SuperAdmin 승인·권한 부여가 필요합니다. 이메일 초대를 받은 경우 초대 링크로 가입해 주세요.";
 
   return (
     <AdminAuthShell

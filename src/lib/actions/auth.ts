@@ -17,8 +17,10 @@ import {
   planSuperadminSeatOnAccept,
 } from "@/lib/admin-invite-plan";
 import { hashInviteToken } from "@/lib/admin-invite-token";
-import { getAdminSignupInviteCode } from "@/lib/admin-signup";
-import { isProd } from "@/lib/env";
+import {
+  getAdminSignupInviteCode,
+  planSharedSignupAccess,
+} from "@/lib/admin-signup";
 import { safeAdminCallbackUrl } from "@/lib/security/callback-url";
 
 const signupSchema = z.object({
@@ -156,15 +158,12 @@ export async function signupAction(
   }
 
   const requiredInvite = getAdminSignupInviteCode();
-  // Fail-closed: in production, an unset invite code must NOT fall through to
-  // open registration. Require the code to be configured before allowing signup.
-  if (isProd && !requiredInvite) {
-    return {
-      error: "회원가입이 비활성화되어 있습니다. 관리자에게 문의하세요.",
-    };
-  }
-  if (requiredInvite && parsed.data.inviteCode !== requiredInvite) {
-    return { error: "초대 코드가 올바르지 않습니다." };
+  const sharedAccess = planSharedSignupAccess({
+    requiredInviteCode: requiredInvite,
+    providedInviteCode: parsed.data.inviteCode,
+  });
+  if (!sharedAccess.ok) {
+    return { error: sharedAccess.error };
   }
 
   const superEmails = parseSuperAdminEmails(process.env.SUPERADMIN_EMAILS);
