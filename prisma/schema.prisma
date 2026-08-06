@@ -66,6 +66,8 @@ model User {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   lastLoginAt  DateTime?
+  memberId        String?       @unique
+  member          Member?       @relation(fields: [memberId], references: [id], onDelete: SetNull)
   invitesSent     AdminInvite[] @relation("InvitesSent")
   inviteAccepted  AdminInvite[] @relation("InviteAccepted")
   mediaAssets     MediaAsset[]
@@ -86,6 +88,7 @@ model Member {
   isVisible    Boolean     @default(true)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+  linkedUser   User?
 }
 
 model Meetup {
