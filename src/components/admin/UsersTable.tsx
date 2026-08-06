@@ -264,7 +264,7 @@ export function UsersTable({
                         </button>
                       </>
                     )}
-                    {isSelf && rowError ? (
+                    {rowError ? (
                       <p className={`text-xs ${errorTextClass}`} role="alert">
                         {rowError}
                       </p>
