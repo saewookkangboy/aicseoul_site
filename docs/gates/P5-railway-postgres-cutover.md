@@ -12,6 +12,23 @@
 - Supabase 클라이언트 env/패키지는 레포에 잔류 (제거하지 않음)
 - 스키마 SoT: Prisma (`_prisma_migrations`가 dump에 포함되면 복원 후 `migrate deploy`는 no-op)
 
+## 주의 — Railway에 Next.js 앱을 배포하지 말 것
+
+Railway 프로젝트에는 **Postgres 서비스만** 둔다. GitHub 리포를 Railway **웹 서비스**에 연결하면 Railpack이 `pnpm build`를 돌리고, 빌드 중 `DATABASE_URL`이 `postgres.railway.internal:5432`(Private Network)를 가리키면 다음으로 실패한다.
+
+```text
+Error: P1001: Can't reach database server at `postgres.railway.internal:5432`
+```
+
+이 오류는 앱/코드 버그가 아니다. **잘못된 Railway 웹 서비스 자동 배포**다. Vercel Production과는 무관하다.
+
+조치:
+
+1. Railway 대시보드에서 Postgres가 **아닌** 서비스(Node/Railpack/웹)를 연다
+2. **Settings → Service → Delete** 하거나, GitHub 연결을 끊고 Deploy를 비활성화한다
+3. 남기는 서비스: **Postgres**만
+4. Vercel의 `DATABASE_URL` / `DIRECT_URL`은 Postgres **Public** URL(`*.proxy.rlwy.net` 등)인지 확인한다 (`*.railway.internal` 금지)
+
 ## 0. 컷오버 전 기록
 
 Supabase(직접/Session `:5432`, **not** Transaction `:6543`)에서:
