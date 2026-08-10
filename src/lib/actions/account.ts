@@ -11,6 +11,10 @@ import {
 } from "@/lib/account-plan";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import {
+  optionalMediaUrlSchema,
+  resolveMemberPhotoFields,
+} from "@/lib/media/media-guard";
 import { getClientIpFromHeaders } from "@/lib/security/client-ip";
 import { RATE, RATE_LIMIT_MESSAGE } from "@/lib/security/limits";
 import { checkRateLimit } from "@/lib/security/rate-limit";
@@ -19,7 +23,7 @@ const memberSelfSchema = z.object({
   nameKr: z.string().trim().min(1).max(40),
   nameEn: z.string().trim().min(1).max(80),
   bio: z.string().trim().min(1).max(80),
-  photoUrl: z.string().optional(),
+  photoUrl: optionalMediaUrlSchema,
   photoAssetId: z.string().optional(),
   linkedinUrl: z.string().url().optional().or(z.literal("")),
   websiteUrl: z.string().url().optional().or(z.literal("")),
@@ -109,6 +113,11 @@ export async function updateLinkedMemberProfile(formData: FormData) {
   });
   if (!owned.ok) return owned;
 
+  const current = await prisma.member.findUnique({
+    where: { id: owned.memberId },
+    select: { photoAssetId: true },
+  });
+
   const parsed = memberSelfSchema.safeParse({
     nameKr: formData.get("nameKr"),
     nameEn: formData.get("nameEn"),
@@ -122,14 +131,29 @@ export async function updateLinkedMemberProfile(formData: FormData) {
     return { ok: false as const, error: "입력값을 확인해 주세요." };
   }
 
+  let photo: { photoUrl: string | null; photoAssetId: string | null };
+  try {
+    photo = await resolveMemberPhotoFields({
+      photoUrl: parsed.data.photoUrl,
+      photoAssetId: parsed.data.photoAssetId,
+      requireUploadedById: user.id,
+      existingPhotoAssetId: current?.photoAssetId,
+    });
+  } catch (e) {
+    return {
+      ok: false as const,
+      error: e instanceof Error ? e.message : "사진 정보를 확인해 주세요.",
+    };
+  }
+
   await prisma.member.update({
     where: { id: owned.memberId },
     data: {
       nameKr: parsed.data.nameKr,
       nameEn: parsed.data.nameEn,
       bio: parsed.data.bio,
-      photoUrl: parsed.data.photoUrl ?? null,
-      photoAssetId: parsed.data.photoAssetId ?? null,
+      photoUrl: photo.photoUrl,
+      photoAssetId: photo.photoAssetId,
       linkedinUrl: parsed.data.linkedinUrl || null,
       websiteUrl: parsed.data.websiteUrl || null,
     },

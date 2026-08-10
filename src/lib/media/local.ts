@@ -3,6 +3,7 @@ import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 import type { MediaUploader, UploadedMedia } from "@/lib/media/index";
+import { sanitizeUploadFolder } from "@/lib/media/media-url";
 import { assertImageUpload } from "@/lib/security/upload";
 
 export async function saveLocalUpload(
@@ -13,7 +14,7 @@ export async function saveLocalUpload(
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const year = new Date().getFullYear().toString();
-  const folder = options?.folder ?? "general";
+  const folder = sanitizeUploadFolder(options?.folder);
   const dir = path.join(process.cwd(), "public", "uploads", year, folder);
   await mkdir(dir, { recursive: true });
 

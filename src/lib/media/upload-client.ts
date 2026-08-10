@@ -39,7 +39,7 @@ export function uploadAdminImage(
   if (file instanceof File) {
     validateImageFile(file);
   } else if (file.size > MAX_UPLOAD_BYTES) {
-    throw new Error("파일 크기는 5MB 이하여야 합니다.");
+    validateImageFile({ type: "image/jpeg", size: file.size });
   }
 
   const body = new FormData();
