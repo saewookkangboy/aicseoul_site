@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import type { MediaUploader, UploadedMedia } from "@/lib/media/index";
+import { sanitizeUploadFolder } from "@/lib/media/media-url";
 import { assertImageUpload } from "@/lib/security/upload";
 
 function configured() {
@@ -30,9 +31,11 @@ export const cloudinaryUploader: MediaUploader = {
     });
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const folder =
-      process.env.CLOUDINARY_FOLDER ||
-      `aic-seoul/${options?.folder ?? "general"}`;
+    const root = (process.env.CLOUDINARY_FOLDER || "aic-seoul").replace(
+      /\/+$/,
+      "",
+    );
+    const folder = `${root}/${sanitizeUploadFolder(options?.folder)}`;
 
     const result = await new Promise<{
       secure_url: string;

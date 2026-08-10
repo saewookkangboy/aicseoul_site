@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireModule } from "@/lib/admin";
 import { prisma } from "@/lib/db";
+import { optionalMediaUrlSchema } from "@/lib/media/media-guard";
 import { looksLikeHtml, sanitizeInsightHtml } from "@/lib/sanitize-html";
 
 function emptyToUndef(v: FormDataEntryValue | null) {
@@ -21,7 +22,7 @@ const insightSchema = z.object({
   category: z.string().trim().min(1).max(80),
   summary: z.string().trim().min(1).max(500),
   body: z.string().trim().min(1),
-  thumbnailUrl: z.string().optional(),
+  thumbnailUrl: optionalMediaUrlSchema,
   author: z.string().trim().min(1).max(80),
   publishedAt: z.string().optional(),
   status: z.enum(["draft", "published"]),

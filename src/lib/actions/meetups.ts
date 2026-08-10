@@ -6,6 +6,10 @@ import { z } from "zod";
 import { assertModule, requireModule } from "@/lib/admin";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import {
+  assertAllowedMediaUrls,
+  optionalMediaUrlSchema,
+} from "@/lib/media/media-guard";
 
 function emptyToUndef(v: FormDataEntryValue | null) {
   const s = String(v ?? "").trim();
@@ -20,9 +24,9 @@ const classSchema = z.object({
   quote1: z.string().trim().max(500).optional(),
   quote2: z.string().trim().max(500).optional(),
   status: z.enum(["draft", "published"]),
-  photo1: z.string().optional(),
-  photo2: z.string().optional(),
-  photo3: z.string().optional(),
+  photo1: optionalMediaUrlSchema,
+  photo2: optionalMediaUrlSchema,
+  photo3: optionalMediaUrlSchema,
 });
 
 export async function updateMeetupCtaAction(formData: FormData) {
@@ -140,6 +144,7 @@ export async function addArchivePhotosAction(urls: string[]) {
   if (!session?.user) throw new Error("Unauthorized");
   assertModule(session.user, "meetups");
   if (urls.length === 0) return;
+  assertAllowedMediaUrls(urls);
   await prisma.archivePhoto.createMany({
     data: urls.map((imageUrl) => ({ imageUrl })),
   });

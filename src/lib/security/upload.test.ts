@@ -3,13 +3,14 @@ import { describe, it } from "node:test";
 import { assertImageUpload, MAX_UPLOAD_BYTES } from "./upload";
 
 describe("assertImageUpload", () => {
-  it("accepts jpeg under 5MB", () => {
+  it("accepts jpeg under the size limit", () => {
     assert.doesNotThrow(() =>
       assertImageUpload({ type: "image/jpeg", size: 1024 }),
     );
   });
 
-  it("accepts png at exactly 5MB", () => {
+  it("accepts png at exactly 4MB", () => {
+    assert.equal(MAX_UPLOAD_BYTES, 4 * 1024 * 1024);
     assert.doesNotThrow(() =>
       assertImageUpload({ type: "image/png", size: MAX_UPLOAD_BYTES }),
     );
@@ -43,7 +44,7 @@ describe("assertImageUpload", () => {
           type: "image/png",
           size: MAX_UPLOAD_BYTES + 1,
         }),
-      /5MB/,
+      /4MB/,
     );
   });
 });

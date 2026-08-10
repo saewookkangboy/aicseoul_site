@@ -7,6 +7,10 @@ import { assertModule, requireModule } from "@/lib/admin";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import {
+  optionalMediaUrlSchema,
+  resolveMemberPhotoFields,
+} from "@/lib/media/media-guard";
+import {
   DEFAULT_PEOPLE_INTRO,
   PEOPLE_INTRO_SETTING_KEY,
   serializePeopleIntro,
@@ -17,7 +21,7 @@ const memberSchema = z.object({
   nameKr: z.string().trim().min(1).max(40),
   nameEn: z.string().trim().min(1).max(80),
   bio: z.string().trim().min(1).max(80),
-  photoUrl: z.string().optional(),
+  photoUrl: optionalMediaUrlSchema,
   photoAssetId: z.string().optional(),
   linkedinUrl: z.string().url().optional().or(z.literal("")),
   websiteUrl: z.string().url().optional().or(z.literal("")),
@@ -47,14 +51,19 @@ export async function createMemberAction(formData: FormData) {
   });
   if (!parsed.success) throw new Error("입력값을 확인해 주세요.");
 
+  const photo = await resolveMemberPhotoFields({
+    photoUrl: parsed.data.photoUrl,
+    photoAssetId: parsed.data.photoAssetId,
+  });
+
   const max = await prisma.member.aggregate({ _max: { sortOrder: true } });
   await prisma.member.create({
     data: {
       nameKr: parsed.data.nameKr,
       nameEn: parsed.data.nameEn,
       bio: parsed.data.bio,
-      photoUrl: parsed.data.photoUrl,
-      photoAssetId: parsed.data.photoAssetId ?? null,
+      photoUrl: photo.photoUrl,
+      photoAssetId: photo.photoAssetId,
       linkedinUrl: parsed.data.linkedinUrl || null,
       websiteUrl: parsed.data.websiteUrl || null,
       isVisible: parsed.data.isVisible ?? true,
@@ -84,14 +93,19 @@ export async function updateMemberAction(id: string, formData: FormData) {
   });
   if (!parsed.success) throw new Error("입력값을 확인해 주세요.");
 
+  const photo = await resolveMemberPhotoFields({
+    photoUrl: parsed.data.photoUrl,
+    photoAssetId: parsed.data.photoAssetId,
+  });
+
   await prisma.member.update({
     where: { id },
     data: {
       nameKr: parsed.data.nameKr,
       nameEn: parsed.data.nameEn,
       bio: parsed.data.bio,
-      photoUrl: parsed.data.photoUrl,
-      photoAssetId: parsed.data.photoAssetId ?? null,
+      photoUrl: photo.photoUrl,
+      photoAssetId: photo.photoAssetId,
       linkedinUrl: parsed.data.linkedinUrl || null,
       websiteUrl: parsed.data.websiteUrl || null,
       isVisible: parsed.data.isVisible ?? true,
