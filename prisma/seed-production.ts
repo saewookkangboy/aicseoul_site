@@ -1,6 +1,11 @@
 import "dotenv/config";
 import { PrismaClient, UserRole, UserStatus } from "@prisma/client";
 import { hash } from "bcryptjs";
+import {
+  DEFAULT_PEOPLE_INTRO,
+  PEOPLE_INTRO_SETTING_KEY,
+  serializePeopleIntro,
+} from "../src/lib/people/intro";
 import { assertStrongSeedPassword } from "../src/lib/security/weak-seed";
 
 /**
@@ -24,6 +29,14 @@ async function main() {
       value:
         process.env.SEED_LINKEDIN_URL ??
         "https://www.linkedin.com/company/117154975",
+    },
+    {
+      key: "social.openchat",
+      value: process.env.SEED_OPENCHAT_URL ?? "https://open.kakao.com/o/gR2bJLdi",
+    },
+    {
+      key: PEOPLE_INTRO_SETTING_KEY,
+      value: serializePeopleIntro(DEFAULT_PEOPLE_INTRO),
     },
     { key: "meetup.ctaUrl", value: process.env.SEED_MEETUP_CTA ?? "/contact" },
   ];

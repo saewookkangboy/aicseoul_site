@@ -1,5 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  ChatsCircle,
+  Handshake,
+  Megaphone,
+  Question,
+  UsersThree,
+} from "@phosphor-icons/react/ssr";
 import { Reveal } from "@/components/motion/Reveal";
 import type { Locale } from "@/lib/i18n/config";
 import { formatDate } from "@/lib/i18n/format-date";
@@ -7,6 +14,14 @@ import type { Messages } from "@/lib/i18n/messages";
 import { localizedPath } from "@/lib/i18n/path";
 
 type MeetupsT = Messages["meetups"];
+
+const STEP_ICONS = [
+  Handshake,
+  Megaphone,
+  ChatsCircle,
+  UsersThree,
+  Question,
+] as const;
 
 export function MeetupsIntro({ t }: { t: MeetupsT }) {
   return (
@@ -40,41 +55,48 @@ export function MonthlyFormat({
 
   return (
     <section className="border-y border-[var(--color-border)] bg-[var(--color-surface)]">
-      <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
-        <Reveal>
-          <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
-            Monthly Meetup
-          </p>
-          <h2 className="mt-3 text-3xl font-medium tracking-tight">
-            {t.monthlyTitle}
-          </h2>
-          <p className="mt-4 max-w-[60ch] text-[var(--color-ink-muted)]">
-            {t.monthlyLead}
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <div className="mt-10 flex flex-wrap items-center gap-2 md:gap-3">
-            {t.steps.map((step, i) => (
-              <div key={step} className="flex items-center gap-2 md:gap-3">
-                <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-stone)] px-4 py-2 text-sm">
-                  {step}
-                </span>
-                {i < t.steps.length - 1 ? (
-                  <span className="text-[var(--color-ink-muted)]" aria-hidden>
-                    →
+      <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-16 md:grid-cols-2 md:items-start md:gap-16 md:px-8 md:py-20">
+        <div>
+          <Reveal>
+            <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
+              {t.monthlyEyebrow}
+            </p>
+            <h2 className="mt-3 text-3xl font-medium tracking-tight">
+              {t.monthlyTitle}
+            </h2>
+            <p className="mt-4 max-w-[60ch] text-[var(--color-ink-muted)]">
+              {t.monthlyLead}
+            </p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <Link
+              href={href}
+              className="mt-10 inline-flex rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]"
+            >
+              {t.applyCta}
+            </Link>
+          </Reveal>
+        </div>
+        <Reveal delay={0.08}>
+          <ol className="flex flex-col gap-3">
+            {t.steps.map((step, i) => {
+              const Icon = STEP_ICONS[i] ?? Handshake;
+              return (
+                <li
+                  key={step}
+                  className="flex items-center gap-4 border border-[var(--color-border)] bg-[var(--color-cream)]/60 px-4 py-3"
+                >
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-stone)] text-[var(--color-gold)]">
+                    <Icon size={20} weight="duotone" aria-hidden />
                   </span>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        </Reveal>
-        <Reveal delay={0.16}>
-          <Link
-            href={href}
-            className="mt-10 inline-flex rounded-full bg-[var(--color-cta)] px-6 py-3 text-sm font-medium text-white"
-          >
-            {t.applyCta}
-          </Link>
+                  <span className="font-[family-name:var(--font-space-grotesk)] text-xs text-[var(--color-ink-muted)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm font-medium md:text-base">{step}</span>
+                </li>
+              );
+            })}
+          </ol>
         </Reveal>
       </div>
     </section>
@@ -107,7 +129,7 @@ export function ClassHighlight({
     <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
       <Reveal>
         <p className="font-[family-name:var(--font-space-grotesk)] text-xs tracking-[0.18em] text-[var(--color-gold)]">
-          One-day Class
+          {t.classEyebrow}
         </p>
         <h2 className="mt-3 text-3xl font-medium tracking-tight">{t.classTitle}</h2>
         <p className="mt-4 max-w-[60ch] text-[var(--color-ink-muted)]">

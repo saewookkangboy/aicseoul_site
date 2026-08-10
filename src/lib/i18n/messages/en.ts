@@ -4,10 +4,10 @@ export const en: Messages = {
   home: {
     kicker: "The AI Collective · Seoul Chapter",
     headline: "In the AI era,\nbetter questions come from conversation.",
-    subheadline: "AI 시대, 좋은 질문은 대화에서 나옵니다.",
+    subheadline: "Gather in Seoul to ask, talk, and learn together.",
     body: [
-      "The AI Collective Seoul Chapter is a community where you don’t have to chase AI alone.",
-      "Each month in Seoul, we gather to talk about how AI is changing work, careers, organizations, and society — and learn from one another’s experience.",
+      "The AI Collective Seoul Chapter is a community\nwhere you don’t have to chase AI alone.",
+      "Each month in Seoul, we gather to talk about how AI is changing\nwork, careers, organizations, and society —\nand learn from one another’s experience.",
     ],
     aux: [
       "You don’t need special expertise.",
@@ -69,7 +69,7 @@ export const en: Messages = {
           "We unpack one theme through expert talks and group discussion.",
         ],
         href: "/meetups",
-        cta: "See the next meetup →",
+        cta: "See the next meetup",
       },
       {
         tag: "One-day Class",
@@ -79,7 +79,7 @@ export const en: Messages = {
           "It deepens the conversations from our meetups.",
         ],
         href: "/meetups",
-        cta: "Browse past classes →",
+        cta: "Browse past classes",
       },
       {
         tag: "Team & Corporate",
@@ -89,16 +89,17 @@ export const en: Messages = {
           "we design tailored programs together.",
         ],
         href: "/contact",
-        cta: "Get in touch →",
+        cta: "Get in touch",
       },
     ],
+    peopleEyebrow: "Members",
     peopleTitle: "The people building AIC Seoul",
     peopleBody: [
       "Our organizers aren’t administrators — they’re members who move first.",
       "Some shape direction, some keep conversations from vanishing, some welcome first-timers.",
       "And all of us are learners together in front of AI.",
     ],
-    peopleCta: "Meet the organizers →",
+    peopleCta: "Meet the organizers",
     partnerEyebrow: "Partner",
     partnerTitle: "Partners welcome",
     partnerBody: [
@@ -114,12 +115,14 @@ export const en: Messages = {
     ctaMeetups: "See the next meetup",
     ctaContact: "Contact",
     ctaLinkedin: "Follow on LinkedIn",
+    ctaOpenchat: "Join open chat",
   },
   meetups: {
     title: "Gatherings at AIC Seoul",
     intro:
       "AIC Seoul meets in two ways: monthly meetups to share questions, and one-day classes to go deeper.",
     eyebrow: "Meetups",
+    monthlyEyebrow: "Monthly Meetup",
     monthlyTitle: "Monthly meetup",
     monthlyLead:
       "An offline gathering in Seoul each month. We pick one theme and explore AI-era change through expert talks and group discussion — not just listening and leaving, but speaking, hearing, and sharing together.",
@@ -131,6 +134,7 @@ export const en: Messages = {
       "Open Q&A",
     ],
     applyCta: "Apply for the next meetup →",
+    classEyebrow: "One-day Class",
     classTitle: "One-day class",
     classLead:
       "Focused learning for applying AI to your work. If monthly meetups open questions broadly, one-day classes go deep on a single topic.",
@@ -145,6 +149,9 @@ export const en: Messages = {
     title: "People building together",
     lead: "AIC Seoul organizers are the members who move first. No role labels — just people.",
     eyebrow: "People",
+    manifestoEyebrow: "Before we introduce",
+    rolesEyebrow: "How we move",
+    membersEyebrow: "The people",
   },
   insights: {
     title: "Notes & learning",

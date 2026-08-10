@@ -6,6 +6,12 @@ import { z } from "zod";
 import { assertModule, requireModule } from "@/lib/admin";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import {
+  DEFAULT_PEOPLE_INTRO,
+  PEOPLE_INTRO_SETTING_KEY,
+  serializePeopleIntro,
+  type PeopleIntroCopy,
+} from "@/lib/people/intro";
 
 const memberSchema = z.object({
   nameKr: z.string().trim().min(1).max(40),
@@ -128,6 +134,7 @@ export async function updateSettingsAction(formData: FormData) {
     "contact.email",
     "contact.sla",
     "social.linkedin",
+    "social.openchat",
     "meetup.ctaUrl",
   ] as const;
 
@@ -143,4 +150,47 @@ export async function updateSettingsAction(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/meetups");
   revalidatePath("/contact");
+}
+
+export async function updatePeopleIntroAction(formData: FormData) {
+  await requireModule("people");
+
+  const manifesto = String(formData.get("manifesto") ?? "")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  const roles = [0, 1, 2, 3].map((i) => ({
+    title: String(formData.get(`roleTitle${i}`) ?? "").trim(),
+    lead: String(formData.get(`roleLead${i}`) ?? "").trim(),
+    body: String(formData.get(`roleBody${i}`) ?? "").trim(),
+  }));
+
+  if (
+    manifesto.length === 0 ||
+    roles.some((r) => !r.title || !r.lead || !r.body)
+  ) {
+    throw new Error("소개 카피 입력을 확인해 주세요.");
+  }
+
+  const copy: PeopleIntroCopy = {
+    manifesto,
+    roles,
+    bridge:
+      String(formData.get("bridge") ?? "").trim() ||
+      DEFAULT_PEOPLE_INTRO.bridge,
+    closing:
+      String(formData.get("closing") ?? "").trim() ||
+      DEFAULT_PEOPLE_INTRO.closing,
+  };
+
+  const value = serializePeopleIntro(copy);
+  await prisma.siteSetting.upsert({
+    where: { key: PEOPLE_INTRO_SETTING_KEY },
+    create: { key: PEOPLE_INTRO_SETTING_KEY, value },
+    update: { value },
+  });
+
+  revalidatePath("/admin/people");
+  revalidatePath("/people");
 }
