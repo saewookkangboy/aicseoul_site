@@ -90,8 +90,8 @@ pnpm dev
 |---|---|
 | `DATABASE_URL` | Prisma 런타임 (로컬 5433 / 프로덕션 Railway 공개 URL) |
 | `DIRECT_URL` | 마이그레이션용 — 프로덕션에서는 `DATABASE_URL`과 동일 |
-| `AUTH_SECRET` / `AUTH_URL` | Auth.js |
-| `NEXT_PUBLIC_SITE_URL` | canonical / OG 절대 URL |
+| `AUTH_SECRET` / `AUTH_URL` | Auth.js (Prod: `https://aickr.vercel.app`) |
+| `NEXT_PUBLIC_SITE_URL` | canonical / OG / sitemap / llms (Prod: `https://aickr.vercel.app`) |
 | `SUPERADMIN_EMAILS` | SuperAdmin (최대 3) |
 | `SUPERADMIN_SEED_PASSWORD` | 시드용 임시 비밀번호 |
 | `ADMIN_SIGNUP_INVITE_CODE` | Admin 공유 초대 코드 (미설정 시 공개 가입→pending) |

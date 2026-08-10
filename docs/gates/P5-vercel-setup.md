@@ -52,7 +52,8 @@ vercel link --yes --scope chunghyos-projects
 | `DATABASE_URL` | Railway Postgres **공개** URL (`sslmode=require` 등) | Prisma Client 런타임. Private Network URL은 Vercel에서 사용 불가 |
 | `DIRECT_URL` | **`DATABASE_URL`과 동일** | `prisma migrate`용. Railway에는 Supabase식 `:6543`/`:5432` 분리가 없음 |
 | `AUTH_SECRET` | `openssl rand -base64 32` | 필수 |
-| `AUTH_URL` | `https://<project>.vercel.app` | 커스텀 도메인 확정 시 교체 |
+| `AUTH_URL` | Prod/Preview: `https://aickr.vercel.app` · Dev: `http://localhost:3000` | canonical과 일치. `aicseoul-site.vercel.app` 사용 금지(2차 별칭·Challenge) |
+| `NEXT_PUBLIC_SITE_URL` | `https://aickr.vercel.app` | sitemap/canonical/OG/llms. 예정 커스텀 `https://aic.kr` |
 | `SUPERADMIN_EMAILS` | `a@…,b@…,c@…` | 최대 3, 실운영 메일 |
 | `SUPERADMIN_SEED_PASSWORD` | 강한 임시 비번 | 시드 후 즉시 변경 |
 
