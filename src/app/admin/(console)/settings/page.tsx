@@ -21,6 +21,7 @@ export default async function SettingsPage() {
     { key: "contact.email", label: "문의 이메일" },
     { key: "contact.sla", label: "응답 SLA 문구" },
     { key: "social.linkedin", label: "LinkedIn URL" },
+    { key: "social.openchat", label: "카카오 오픈채팅 URL" },
     { key: "meetup.ctaUrl", label: "모임 신청 CTA URL" },
   ] as const;
 

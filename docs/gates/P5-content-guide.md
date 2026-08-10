@@ -60,6 +60,8 @@ Admin `/admin/settings` 또는 시드.
 | `contact.email` | 실주소 확보 전: `hello@aic-seoul.example` 유지 / 확보 후 실메일 | UI에 그대로 노출됨 |
 | `contact.sla` | 실제 응답 기준 (예: `3~5일`) | 운영진 합의 후 |
 | `social.linkedin` | `https://www.linkedin.com/company/117154975` | 없으면 빈 문자열 → Footer·Final CTA에서 링크 숨김 |
+| `social.openchat` | `https://open.kakao.com/o/gR2bJLdi` | Final CTA 「오픈채팅 입장」 |
+| `people.introJson` | 운영진 소개 매니페스토·역할 4칸 JSON | Admin People에서 편집. 비면 코드 기본값 |
 | `meetup.ctaUrl` | 외부 신청(Luma 등) 있으면 그 URL, 없으면 `/contact` | P0 기본 Contact |
 
 **추천 시드 정책 (P5-A):** Settings만 실값으로 upsert, 데모 Member/Insights는 Admin으로 교체.

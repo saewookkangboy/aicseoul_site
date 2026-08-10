@@ -7,6 +7,11 @@ import {
   UserStatus,
 } from "@prisma/client";
 import { hash } from "bcryptjs";
+import {
+  DEFAULT_PEOPLE_INTRO,
+  PEOPLE_INTRO_SETTING_KEY,
+  serializePeopleIntro,
+} from "../src/lib/people/intro";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +26,11 @@ async function seedSettings() {
     { key: "contact.email", value: PLACEHOLDER_EMAIL },
     { key: "contact.sla", value: "3~5일" },
     { key: "social.linkedin", value: "https://www.linkedin.com/company/117154975" },
+    { key: "social.openchat", value: "https://open.kakao.com/o/gR2bJLdi" },
+    {
+      key: PEOPLE_INTRO_SETTING_KEY,
+      value: serializePeopleIntro(DEFAULT_PEOPLE_INTRO),
+    },
     { key: "meetup.ctaUrl", value: "/contact" },
   ];
 
