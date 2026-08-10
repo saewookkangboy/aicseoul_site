@@ -54,7 +54,8 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 |---|---|---|
 | `DATABASE_URL` / `DIRECT_URL` | ✅ | Railway 공개 URL (둘 다 동일). 컷오버: [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md). 타 프로젝트 `POSTGRES_*` 혼입 금지 |
 | `AUTH_SECRET` | ✅ | 유지 |
-| `AUTH_URL` | ✅ | 실제 접속 URL과 일치하는지 확인 (Production / Preview 호스트) |
+| `AUTH_URL` | ✅ | **2026-08-10**: Prod/Preview=`https://aickr.vercel.app`, Dev=`http://localhost:3000`. `aicseoul-site.vercel.app` 제거 |
+| `NEXT_PUBLIC_SITE_URL` | ✅ | Prod=`https://aickr.vercel.app` (canonical). 예정 `https://aic.kr` |
 | `SUPERADMIN_EMAILS` | ✅ | 실운영 메일 ≤3 |
 | `SUPERADMIN_SEED_PASSWORD` | ⚠️ **잔류 (유지)** | 사용자 지시로 **삭제하지 않음**. 시드·운영 절차에서 강한 값·비번 변경은 별도 판단 |
 | `NEXT_PUBLIC_SUPABASE_URL` | ✅ | `DATABASE_URL`과 동일 프로젝트인지 확인 |
@@ -71,14 +72,15 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 | Key | Preview | 조치 |
 |---|---|---|
 | `DATABASE_URL` | ✅ | **가능하면 Production과 분리**된 DB/브랜치 |
-| `AUTH_SECRET` / `AUTH_URL` / `SUPERADMIN_EMAILS` | ✅ | Preview `AUTH_URL`은 해당 Preview 호스트에 맞게 |
+| `AUTH_SECRET` / `AUTH_URL` / `SUPERADMIN_EMAILS` | ✅ | Preview `AUTH_URL`=`https://aickr.vercel.app` (2차 별칭 Challenge 회피) |
 | `SUPERADMIN_SEED_PASSWORD` | ⚠️ 잔류 (유지) | 삭제 미실시 — Production과 동일 정책 |
 
 ### 3.3 운영자 필수 액션 (P0 잔여)
 
 1. [x] ~~Vercel에서 `SUPERADMIN_SEED_PASSWORD` 삭제~~ → **스킵** (사용자: 삭제 진행하지 않음)
 2. [ ] SuperAdmin 로그인 → `/admin/account`에서 비밀번호 변경
-3. [ ] `AUTH_URL`이 실제 canonical URL과 일치하는지 확인
+3. [x] `AUTH_URL`이 실제 canonical URL과 일치하는지 확인 — **2026-08-10** `aickr.vercel.app`로 정리
+3b. [x] Firewall Challenge 점검 — Attack Mode **Off**, System Mitigations Active. 1차 호스트 `aickr.vercel.app` 익명 200. 2차 `aicseoul-site.vercel.app`는 domain redirect→aickr 설정돼 있으나 익명 요청은 Challenge(429)가 redirect보다 선행. SEO/공개 링크는 `aickr`만 사용.
 4. [ ] `DATABASE_URL` / `DIRECT_URL`이 Railway 공개 URL(동일 값)인지 재확인 — [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md)
 5. [ ] (권장) Cloudinary + Resend 등록
 6. [ ] (권장) 중복 `SUPABASE_*` 서버 키 정리
