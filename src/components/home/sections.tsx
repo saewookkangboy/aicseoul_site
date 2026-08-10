@@ -8,6 +8,7 @@ import {
   Users,
 } from "@phosphor-icons/react/ssr";
 import { Reveal } from "@/components/motion/Reveal";
+import { HeroAmbient } from "@/components/home/HeroAmbient";
 import type { Locale } from "@/lib/i18n/config";
 import type { Messages } from "@/lib/i18n/messages";
 import { localizedPath } from "@/lib/i18n/path";
@@ -95,13 +96,7 @@ export function HomeHero({ locale, t }: HomeProps) {
 
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-dark)] text-[var(--color-cream)]">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 70% 20%, color-mix(in srgb, var(--color-gold) 35%, transparent), transparent 60%)",
-        }}
-      />
+      <HeroAmbient />
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col items-center justify-center px-5 py-24 text-center md:px-8 md:py-32">
         <div className="flex w-full max-w-[52rem] flex-col items-center">
           <Reveal>
