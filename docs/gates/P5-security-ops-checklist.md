@@ -71,7 +71,7 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 
 | Key | Preview | 조치 |
 |---|---|---|
-| `DATABASE_URL` | ✅ | **가능하면 Production과 분리**된 DB/브랜치 |
+| `DATABASE_URL` / `DIRECT_URL` | ✅ | **2026-08-10**: Railway 공개 URL로 맞춤 (구 Supabase pooler는 `P3009` failed migration으로 Preview `pnpm build` 실패). 이상적으로는 Prod와 분리 DB; 현재는 Railway SoT와 동일 값 |
 | `AUTH_SECRET` / `AUTH_URL` / `SUPERADMIN_EMAILS` | ✅ | Preview `AUTH_URL`=`https://aickr.vercel.app` (2차 별칭 Challenge 회피) |
 | `SUPERADMIN_SEED_PASSWORD` | ⚠️ 잔류 (유지) | 삭제 미실시 — Production과 동일 정책 |
 
@@ -81,7 +81,7 @@ Supabase MCP get_advisors(project_id=<YOUR_PROJECT_REF>, type=security)
 2. [ ] SuperAdmin 로그인 → `/admin/account`에서 비밀번호 변경
 3. [x] `AUTH_URL`이 실제 canonical URL과 일치하는지 확인 — **2026-08-10** `aickr.vercel.app`로 정리
 3b. [x] Firewall Challenge 점검 — Attack Mode **Off**, System Mitigations Active. 1차 호스트 `aickr.vercel.app` 익명 200. 2차 `aicseoul-site.vercel.app`는 domain redirect→aickr 설정돼 있으나 익명 요청은 Challenge(429)가 redirect보다 선행. SEO/공개 링크는 `aickr`만 사용.
-4. [ ] `DATABASE_URL` / `DIRECT_URL`이 Railway 공개 URL(동일 값)인지 재확인 — [P5-railway-postgres-cutover.md](./P5-railway-postgres-cutover.md)
+4. [x] `DATABASE_URL` / `DIRECT_URL`이 Railway 공개 URL(동일 값)인지 재확인 — **2026-08-10**: Production·Preview·Development 모두 Railway. Preview 실패 원인(구 Supabase P3009) 해소
 5. [ ] (권장) Cloudinary + Resend 등록
 6. [ ] (권장) 중복 `SUPABASE_*` 서버 키 정리
 
